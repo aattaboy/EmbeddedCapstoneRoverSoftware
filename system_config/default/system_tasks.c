@@ -56,6 +56,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_definitions.h"
 #include "uart_receiver.h"
 #include "uart_transmitter.h"
+#include "encoders.h"
 
 
 // *****************************************************************************
@@ -67,6 +68,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 static void _SYS_Tasks ( void );
 static void _UART_RECEIVER_Tasks(void);
 static void _UART_TRANSMITTER_Tasks(void);
+static void _ENCODERS_Tasks(void);
 
 
 // *****************************************************************************
@@ -98,6 +100,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for UART_TRANSMITTER Tasks. */
     xTaskCreate((TaskFunction_t) _UART_TRANSMITTER_Tasks,
                 "UART_TRANSMITTER Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for ENCODERS Tasks. */
+    xTaskCreate((TaskFunction_t) _ENCODERS_Tasks,
+                "ENCODERS Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -161,6 +168,23 @@ static void _UART_TRANSMITTER_Tasks(void)
     while(1)
     {
         UART_TRANSMITTER_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _ENCODERS_Tasks ( void )
+
+  Summary:
+    Maintains state machine of ENCODERS.
+*/
+
+static void _ENCODERS_Tasks(void)
+{
+    while(1)
+    {
+        ENCODERS_Tasks();
     }
 }
 

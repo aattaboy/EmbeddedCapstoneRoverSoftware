@@ -80,16 +80,9 @@ void UART_RECEIVER_Tasks(void) {
   // Receive the first byte of the frame delimiter word. If the received byte
   // does not match, stay in this state.
   case UART_RECEIVER_FRAME_START_1: {
-    uint8_t test_char = receive_and_unpack();
-    struct UART_TRANSMITTER_VARIANT var;
-    var.type = TEST_CHAR;
-    var.data.test_char = test_char;
-    sendToUartQueue(&var);
-#if 0
     if (receive_and_unpack() == frameSequence[0]) {
       uart_receiverData.state = UART_RECEIVER_FRAME_START_2;
     }
-#endif
   } break;
 
   // Receive the second byte of the frame delimiter word. If the received byte

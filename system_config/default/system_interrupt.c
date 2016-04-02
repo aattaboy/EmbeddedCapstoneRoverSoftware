@@ -2,8 +2,29 @@
 #include <sys/attribs.h>
 #include "debug.h"
 #include "debug_codes.h"
+#include "encoders_public.h"
 #include "uart_receiver_public.h"
 #include "system_definitions.h"
+
+void IntHandlerDrvTmrInstance0(void)
+{
+  BaseType_t higherPriorityTaskWoken = pdFALSE;
+  
+  sendToEncodersQueueFromISR(LEFT, &higherPriorityTaskWoken);
+  PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
+  
+  portEND_SWITCHING_ISR(higherPriorityTaskWoken);
+} 
+
+void IntHandlerDrvTmrInstance1(void)
+{
+  BaseType_t higherPriorityTaskWoken = pdFALSE;
+  
+  sendToEncodersQueueFromISR(RIGHT, &higherPriorityTaskWoken);
+  PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
+  
+  portEND_SWITCHING_ISR(higherPriorityTaskWoken);
+}
 
 void IntHandlerDrvUsartInstance0(void)
 {
@@ -25,7 +46,7 @@ void IntHandlerDrvUsartInstance0(void)
 
       sendToUartReceiverQueueFromISR(&testChar, &higherPriorityTaskWoken);
 
-      writeToDebug(testChar);
+      //writeToDebug(testChar);
       //writeToDebug(RECEIVER_ISR_BYTE);
     }
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_RECEIVE);

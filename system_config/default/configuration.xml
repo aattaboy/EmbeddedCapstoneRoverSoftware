@@ -2,7 +2,7 @@
 <configuration version="1.0.7.16">
   <General>
     <HarmonyPath path="../../microchip/harmony/v1_06"/>
-    <ForceOptimization flag="true"/>
+    <ForceOptimization flag="false"/>
   </General>
   <Manifest>
     <Files>
@@ -15,16 +15,16 @@
         <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>projdefs.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
       </File>
       <File>
         <Name>list.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>sys_common.h</Name>
-        <Path>Header Files/framework/system/common</Path>
+        <Name>projdefs.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>portable.h</Name>
@@ -39,16 +39,16 @@
         <Path>Source Files/framework/system/ports/src</Path>
       </File>
       <File>
-        <Name>ISR_Support.h</Name>
-        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+        <Name>tasks.c</Name>
+        <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>port.c</Name>
         <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
-        <Name>tasks.c</Name>
-        <Path>Source Files/FreeRTOS</Path>
+        <Name>ISR_Support.h</Name>
+        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
         <Name>event_groups.c</Name>
@@ -123,12 +123,12 @@
         <Path>Source Files/FreeRTOS/portable/MemMang</Path>
       </File>
       <File>
-        <Name>FreeRTOS.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
-      </File>
-      <File>
         <Name>sys_int_pic32.c</Name>
         <Path>Source Files/framework/system/int/src</Path>
+      </File>
+      <File>
+        <Name>FreeRTOS.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -156,7 +156,7 @@
       <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>C8391BF39B2748C71072A7F8C3BEDEE5</Checksum>
+        <Checksum>80E64CD070DEE36DEFED925F552B6C81</Checksum>
       </Template>
       <Template>
         <Name>uart_receiver.c</Name>
@@ -183,7 +183,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>187072CB60DA16391101DBEEE55C9DE5</Checksum>
+        <Checksum>D1A44EE3FC83FCE105DB0B9B97E91747</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -203,7 +203,12 @@
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>1F09C20F5A3C4ECC72FCC64628807A42</Checksum>
+        <Checksum>E148AD5CB20CA4B278B7531E4C261BE5</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_tmr_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/driver/tmr/src</Path>
+        <Checksum>C00B090A3DB69B18DDEB24E16C0784A8</Checksum>
       </Template>
       <Template>
         <Name>FreeRTOSConfig.h</Name>
@@ -211,14 +216,18 @@
         <Checksum>F6A837A680C12BC37BE2F440DE23FA08</Checksum>
       </Template>
       <Template>
+        <Name>encoders.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>FFEEAB59BF706A9868C716F3F940E047</Checksum>
+        <Checksum>90C2F66B991BBCFB68BE4737DF29B6AB</Checksum>
       </Template>
       <Template>
         <Name>system_interrupt_a.S</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>5C0D911C19B5E425D7F0FB89E579F457</Checksum>
+        <Checksum>1FFB29BA55FBFF7A699B342C477E5119</Checksum>
       </Template>
       <Template>
         <Name>drv_usart_static.c</Name>
@@ -226,14 +235,23 @@
         <Checksum>5A4C8C1C8EDBCE5DD5180195BDA80EB1</Checksum>
       </Template>
       <Template>
+        <Name>drv_tmr_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/driver/tmr</Path>
+        <Checksum>177FC65128845C63C95944989D7BF4D8</Checksum>
+      </Template>
+      <Template>
         <Name>sys_clk_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/system/clk/src</Path>
         <Checksum>1B968DA82B5DD869A6119C3B7628D753</Checksum>
       </Template>
       <Template>
+        <Name>encoders.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>D9A638E24C35D4316C723D9D93D70459</Checksum>
+        <Checksum>072C26C51D835DA92C9365C96638679A</Checksum>
       </Template>
     </Templates>
     <CompilerItems>
