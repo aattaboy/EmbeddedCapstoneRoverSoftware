@@ -65,6 +65,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "FreeRTOS.h"
 #include "task.h"
 #include "uart_receiver.h"
+#include "uart_transmitter.h"
 
 
 // DOM-IGNORE-BEGIN

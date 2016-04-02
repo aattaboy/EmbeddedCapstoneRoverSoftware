@@ -163,6 +163,10 @@
         <Path>Source Files/app</Path>
       </Template>
       <Template>
+        <Name>uart_transmitter.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
         <Name>rtos_hooks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
         <Checksum>FA52743264536E5207D2ADBE57B48D05</Checksum>
@@ -179,7 +183,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>0732F93E246F4F06B1BEA8E34C6C21EA</Checksum>
+        <Checksum>187072CB60DA16391101DBEEE55C9DE5</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -193,9 +197,13 @@
         <Checksum>999179DADE9ECD59953526F5E9F83ACC</Checksum>
       </Template>
       <Template>
+        <Name>uart_transmitter.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>1FBD5223CCB17BF5610A4D6677BAE2F5</Checksum>
+        <Checksum>1F09C20F5A3C4ECC72FCC64628807A42</Checksum>
       </Template>
       <Template>
         <Name>FreeRTOSConfig.h</Name>
@@ -205,7 +213,7 @@
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>55949294D3EAB4B75262CCADE449BDAA</Checksum>
+        <Checksum>FFEEAB59BF706A9868C716F3F940E047</Checksum>
       </Template>
       <Template>
         <Name>system_interrupt_a.S</Name>
@@ -225,7 +233,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>9208E524409B5DEBCBF0829480B49449</Checksum>
+        <Checksum>D9A638E24C35D4316C723D9D93D70459</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

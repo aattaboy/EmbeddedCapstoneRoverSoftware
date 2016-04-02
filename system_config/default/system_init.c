@@ -190,6 +190,7 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the Application */
     UART_RECEIVER_Initialize();
+    UART_TRANSMITTER_Initialize();
 }
 
 
