@@ -1,0 +1,3 @@
+message WiFlyStringWireFormat {
+  string[100] msg = 1;
+}

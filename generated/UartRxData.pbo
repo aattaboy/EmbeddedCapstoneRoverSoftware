@@ -1,0 +1,3 @@
+message UartRxData {
+  int8 charData = 1;
+}

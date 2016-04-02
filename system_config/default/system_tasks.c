@@ -86,7 +86,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for Sys Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
-                1024, NULL, 1, NULL);
+                1024, NULL, 0, NULL);
 
     /* Create OS Thread for UART_RECEIVER Tasks. */
     xTaskCreate((TaskFunction_t) _UART_RECEIVER_Tasks,

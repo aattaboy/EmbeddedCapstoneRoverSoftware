@@ -98,7 +98,7 @@
 #define configUSE_RECURSIVE_MUTEXES             0
 #define configUSE_COUNTING_SEMAPHORES           1
 #define configUSE_TASK_NOTIFICATIONS            1
-#define configQUEUE_REGISTRY_SIZE               0
+#define configQUEUE_REGISTRY_SIZE               8
 #define configUSE_QUEUE_SETS                    0
 #define configUSE_TIME_SLICING                  1
 #define configUSE_NEWLIB_REENTRANT              0
@@ -136,7 +136,7 @@
 
 /* The maximum interrupt priority from which FreeRTOS.org API functions can be called.  
 Only API functions that end in ...FromISR() can be used within interrupts. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    1
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    3
 
 /* Optional functions - most linkers will remove unused functions anyway. */
 #define INCLUDE_vTaskPrioritySet                1

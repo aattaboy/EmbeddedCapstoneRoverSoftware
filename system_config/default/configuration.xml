@@ -19,12 +19,12 @@
         <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>sys_common.h</Name>
-        <Path>Header Files/framework/system/common</Path>
-      </File>
-      <File>
         <Name>list.c</Name>
         <Path>Source Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
       </File>
       <File>
         <Name>portable.h</Name>
@@ -123,12 +123,12 @@
         <Path>Source Files/FreeRTOS/portable/MemMang</Path>
       </File>
       <File>
-        <Name>sys_int_pic32.c</Name>
-        <Path>Source Files/framework/system/int/src</Path>
-      </File>
-      <File>
         <Name>FreeRTOS.h</Name>
         <Path>Header Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>sys_int_pic32.c</Name>
+        <Path>Source Files/framework/system/int/src</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -154,13 +154,13 @@
         <Checksum>C111969CA43D6CEA1E9E33A6164E7AE0</Checksum>
       </Template>
       <Template>
-        <Name>uart_receiver.c</Name>
-        <Path>Source Files/app</Path>
-      </Template>
-      <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
         <Checksum>C8391BF39B2748C71072A7F8C3BEDEE5</Checksum>
+      </Template>
+      <Template>
+        <Name>uart_receiver.c</Name>
+        <Path>Source Files/app</Path>
       </Template>
       <Template>
         <Name>rtos_hooks.c</Name>
@@ -177,9 +177,10 @@
         <Path>Header Files/app</Path>
       </Template>
       <Template>
-        <Name>sys_clk_static.h</Name>
-        <Path>Header Files/app/system_config/default/framework/system/clk</Path>
-        <Checksum>999179DADE9ECD59953526F5E9F83ACC</Checksum>
+        <Name>system_interrupt.c</Name>
+        <Path>Source Files/app/system_config/default</Path>
+        <Checksum>0732F93E246F4F06B1BEA8E34C6C21EA</Checksum>
+        <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
         <Name>sys_ports_static.c</Name>
@@ -187,19 +188,19 @@
         <Checksum>A2DF5CE79555D9A65327EB8038B85FC5</Checksum>
       </Template>
       <Template>
-        <Name>system_interrupt.c</Name>
-        <Path>Source Files/app/system_config/default</Path>
-        <Checksum>0732F93E246F4F06B1BEA8E34C6C21EA</Checksum>
+        <Name>sys_clk_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/system/clk</Path>
+        <Checksum>999179DADE9ECD59953526F5E9F83ACC</Checksum>
       </Template>
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>5234B78B6C53D2C8579DB13E74079CE2</Checksum>
+        <Checksum>1FBD5223CCB17BF5610A4D6677BAE2F5</Checksum>
       </Template>
       <Template>
         <Name>FreeRTOSConfig.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>6C8514A47F01AAE58A72F404F3131C39</Checksum>
+        <Checksum>F6A837A680C12BC37BE2F440DE23FA08</Checksum>
       </Template>
       <Template>
         <Name>system_init.c</Name>

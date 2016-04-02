@@ -1,0 +1,39 @@
+#ifndef DEBUG_CODES_H
+#define DEBUG_CODES_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define TRANSMITTER_TIMER_BYTE (0x01)
+#define TRANSMITTER_QUEUE_RECEIVE_BYTE (0x02)
+#define TRANSMITTER_WRITE_TO_UART_BYTE (0x03)
+
+#define RECEIVER_ISR_BYTE (0x04)
+#define RECEIVER_QUEUE_RECEIVE_BYTE (0x05)
+
+#define SENSOR1_RECEIVE_BYTE (0x06)
+
+#define RSSI_COLLECTOR_RECEIVE_BYTE (0x07)
+
+#define ENCODER1_RECEIVE_BYTE (0x08)
+
+#define ENCODER2_RECEIVE_BYTE (0x09)
+
+#define POSITION_CALCULATOR_RECEIVE_BYTE (0x0a)
+
+#define PID_RECEIVE_BYTE (0x0b)
+
+#define MOTOR1_RECEIVE_BYTE (0x0c)
+
+#define MOTOR2_RECEIVE_BYTE (0x0d)
+
+#define SENSOR1_ISR_BYTE (0x0e)
+
+#define RSI_COLLECTOR_ISR (0xf)
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* DEBUG_CODES_H */
