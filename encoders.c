@@ -24,7 +24,7 @@ void ENCODERS_Initialize(void) {
   encodersData.rightCount = 0;
 
   encodersData.encoders_callbacks_idx = 0;
-  
+
   DRV_TMR0_Start();
   DRV_TMR1_Start();
 }
@@ -40,7 +40,7 @@ int registerEncodersCallback(encoders_callback_t callback) {
 
 static void sendToEncodersCallbacks(struct EncoderCounts *counts) {
   size_t i;
-  for (i=0; i<encodersData.encoders_callbacks_idx; i++) {
+  for (i = 0; i < encodersData.encoders_callbacks_idx; i++) {
     encodersData.callbacks[i](counts);
   }
 }
@@ -67,7 +67,7 @@ void ENCODERS_Tasks(void) {
       counts.left = encodersData.leftCount;
       counts.right = encodersData.rightCount;
       sendToEncodersCallbacks(&counts);
-      
+
       PORTE = encodersData.leftCount;
     }
   } break;

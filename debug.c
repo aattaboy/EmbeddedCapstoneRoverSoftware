@@ -30,7 +30,7 @@ void writeToDebug(char val) {
   var.writeChar = val;
   sendToUartQueue(&var);
 #else
-  //Write a char out to PORT E
+  // Write a char out to PORT E
   PLIB_PORTS_Write(PORTS_ID_0, PORT_CHANNEL_E, val);
 #endif
 }

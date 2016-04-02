@@ -49,13 +49,14 @@ void UART_RECEIVER_Initialize(void) {
   // Initialize callback vector
   uart_receiverData.uart_receiver_callbacks_idx = 0;
   // Initialize input queue
-  uart_receiverData.uartReceiverQueue = xQueueCreate(
-      UART_RECEIVER_QUEUE_SIZE, sizeof(uint8_t));
+  uart_receiverData.uartReceiverQueue =
+      xQueueCreate(UART_RECEIVER_QUEUE_SIZE, sizeof(uint8_t));
   // If we fail to create the queue, die.
   if (uart_receiverData.uartReceiverQueue == 0) {
     errorCheck(__FILE__, __LINE__);
   }
-  vQueueAddToRegistry(uart_receiverData.uartReceiverQueue, "Uart Receiver Qeueue");
+  vQueueAddToRegistry(uart_receiverData.uartReceiverQueue,
+                      "Uart Receiver Qeueue");
 }
 
 // Consume a message from the receive queue and unpack it as a char.
