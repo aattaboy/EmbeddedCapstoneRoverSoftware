@@ -57,6 +57,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "uart_receiver.h"
 #include "uart_transmitter.h"
 #include "encoders.h"
+#include "motor1.h"
 
 
 // *****************************************************************************
@@ -69,6 +70,7 @@ static void _SYS_Tasks ( void );
 static void _UART_RECEIVER_Tasks(void);
 static void _UART_TRANSMITTER_Tasks(void);
 static void _ENCODERS_Tasks(void);
+static void _MOTOR1_Tasks(void);
 
 
 // *****************************************************************************
@@ -105,6 +107,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for ENCODERS Tasks. */
     xTaskCreate((TaskFunction_t) _ENCODERS_Tasks,
                 "ENCODERS Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for MOTOR1 Tasks. */
+    xTaskCreate((TaskFunction_t) _MOTOR1_Tasks,
+                "MOTOR1 Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -185,6 +192,23 @@ static void _ENCODERS_Tasks(void)
     while(1)
     {
         ENCODERS_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _MOTOR1_Tasks ( void )
+
+  Summary:
+    Maintains state machine of MOTOR1.
+*/
+
+static void _MOTOR1_Tasks(void)
+{
+    while(1)
+    {
+        MOTOR1_Tasks();
     }
 }
 

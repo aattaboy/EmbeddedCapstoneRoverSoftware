@@ -55,10 +55,10 @@ void ENCODERS_Tasks(void) {
     EncoderID id;
     if (xQueueReceive(encodersData.encodersQueue, &id, portMAX_DELAY)) {
       switch (id) {
-      case LEFT: {
+      case ENCODERS_LEFT: {
         encodersData.leftCount++;
       } break;
-      case RIGHT: {
+      case ENCODERS_RIGHT: {
         encodersData.rightCount++;
       } break;
       default: { errorCheck(__FILE__, __LINE__); }

@@ -7,14 +7,16 @@ extern "C" {
 
 #include <FreeRTOS.h>
 #include <generated/UartRxData.pbo.h>
+#include <generated/MotorCommand.pbo.h>
 #include <queue.h>
 
-typedef enum { UART_RX_DATA, STRING } UART_RECEIVER_VARIANT_TYPE;
+typedef enum { UART_RX_DATA, STRING, MOTOR_MESSAGE } UART_RECEIVER_VARIANT_TYPE;
 
 struct UART_RECEIVER_VARIANT {
   union {
     UartRxData rx_data;
     WiFlyStringWireFormat string;
+    MotorCommand motorMessage;
   } data;
   UART_RECEIVER_VARIANT_TYPE type;
 };

@@ -9,7 +9,7 @@
 void IntHandlerDrvTmrInstance0(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
-  sendToEncodersQueueFromISR(LEFT, &higherPriorityTaskWoken);
+  sendToEncodersQueueFromISR(ENCODERS_LEFT, &higherPriorityTaskWoken);
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
@@ -18,7 +18,7 @@ void IntHandlerDrvTmrInstance0(void) {
 void IntHandlerDrvTmrInstance1(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
-  sendToEncodersQueueFromISR(RIGHT, &higherPriorityTaskWoken);
+  sendToEncodersQueueFromISR(ENCODERS_RIGHT, &higherPriorityTaskWoken);
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
@@ -51,4 +51,8 @@ void IntHandlerDrvUsartInstance0(void) {
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_ERROR);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
+}
+
+void IntHandlerDrvTmrInstance2(void) {
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_2);
 }

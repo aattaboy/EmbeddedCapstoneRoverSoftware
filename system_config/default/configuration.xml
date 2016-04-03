@@ -15,16 +15,16 @@
         <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>sys_common.h</Name>
-        <Path>Header Files/framework/system/common</Path>
+        <Name>projdefs.h</Name>
+        <Path>Header Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>list.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
-        <Name>projdefs.h</Name>
-        <Path>Header Files/FreeRTOS</Path>
+        <Name>sys_common.h</Name>
+        <Path>Header Files/framework/system/common</Path>
       </File>
       <File>
         <Name>portable.h</Name>
@@ -39,16 +39,16 @@
         <Path>Source Files/framework/system/ports/src</Path>
       </File>
       <File>
-        <Name>tasks.c</Name>
-        <Path>Source Files/FreeRTOS</Path>
+        <Name>ISR_Support.h</Name>
+        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
         <Name>port.c</Name>
         <Path>Source Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
       </File>
       <File>
-        <Name>ISR_Support.h</Name>
-        <Path>Header Files/FreeRTOS/portable/MPLAB/PIC32MX</Path>
+        <Name>tasks.c</Name>
+        <Path>Source Files/FreeRTOS</Path>
       </File>
       <File>
         <Name>event_groups.c</Name>
@@ -111,6 +111,10 @@
         <Path>Header Files/framework/system</Path>
       </File>
       <File>
+        <Name>driver.h</Name>
+        <Path>Header Files/framework/driver</Path>
+      </File>
+      <File>
         <Name>croutine.c</Name>
         <Path>Source Files/FreeRTOS</Path>
       </File>
@@ -123,12 +127,12 @@
         <Path>Source Files/FreeRTOS/portable/MemMang</Path>
       </File>
       <File>
-        <Name>sys_int_pic32.c</Name>
-        <Path>Source Files/framework/system/int/src</Path>
-      </File>
-      <File>
         <Name>FreeRTOS.h</Name>
         <Path>Header Files/FreeRTOS</Path>
+      </File>
+      <File>
+        <Name>sys_int_pic32.c</Name>
+        <Path>Source Files/framework/system/int/src</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -156,7 +160,56 @@
       <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>80E64CD070DEE36DEFED925F552B6C81</Checksum>
+        <Checksum>A4E169F8C4F67206369BF7E54538E3D3</Checksum>
+      </Template>
+      <Template>
+        <Name>rtos_hooks.c</Name>
+        <Path>Source Files/app/system_config/default</Path>
+        <Checksum>FA52743264536E5207D2ADBE57B48D05</Checksum>
+      </Template>
+      <Template>
+        <Name>uart_receiver.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>sys_ports_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/system/ports/src</Path>
+        <Checksum>DAD83841B052F3779FBAA88134F858D5</Checksum>
+      </Template>
+      <Template>
+        <Name>uart_transmitter.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>encoders.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>system_init.c</Name>
+        <Path>Source Files/app/system_config/default</Path>
+        <Checksum>E5F9353555FF6884137BF344D3B5F4CC</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_usart_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/driver/usart</Path>
+        <Checksum>5A4C8C1C8EDBCE5DD5180195BDA80EB1</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_tmr_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/driver/tmr</Path>
+        <Checksum>B9BBCD3BAFE7DE3D1D35D12D13379E76</Checksum>
+      </Template>
+      <Template>
+        <Name>motor1.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
+        <Name>encoders.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
+        <Name>motor1.h</Name>
+        <Path>Header Files/app</Path>
       </Template>
       <Template>
         <Name>uart_receiver.c</Name>
@@ -167,29 +220,15 @@
         <Path>Source Files/app</Path>
       </Template>
       <Template>
-        <Name>rtos_hooks.c</Name>
-        <Path>Source Files/app/system_config/default</Path>
-        <Checksum>FA52743264536E5207D2ADBE57B48D05</Checksum>
-      </Template>
-      <Template>
         <Name>drv_usart_static.h</Name>
         <Path>Header Files/app/system_config/default/framework/driver/usart</Path>
         <Checksum>66C127084540B78CD4F78E2FBCC6D29F</Checksum>
       </Template>
       <Template>
-        <Name>uart_receiver.h</Name>
-        <Path>Header Files/app</Path>
-      </Template>
-      <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>D1A44EE3FC83FCE105DB0B9B97E91747</Checksum>
+        <Checksum>58A9CD3D1F8B6A411832FAB887055D25</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
-      </Template>
-      <Template>
-        <Name>sys_ports_static.c</Name>
-        <Path>Source Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum>A2DF5CE79555D9A65327EB8038B85FC5</Checksum>
       </Template>
       <Template>
         <Name>sys_clk_static.h</Name>
@@ -197,18 +236,24 @@
         <Checksum>999179DADE9ECD59953526F5E9F83ACC</Checksum>
       </Template>
       <Template>
-        <Name>uart_transmitter.h</Name>
-        <Path>Header Files/app</Path>
+        <Name>drv_oc_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/driver/oc/src</Path>
+        <Checksum>CFBFAA547FAFBDDF0E95946761AD2CB2</Checksum>
       </Template>
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>E148AD5CB20CA4B278B7531E4C261BE5</Checksum>
+        <Checksum>D85BFD6D6D1B00FB75B1ACE2B8C623D0</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum>C00B090A3DB69B18DDEB24E16C0784A8</Checksum>
+        <Checksum>DDADA6E2806B386C1D5C16C04893E1F5</Checksum>
+      </Template>
+      <Template>
+        <Name>drv_oc_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/driver/oc</Path>
+        <Checksum>30853D3035027DABD2A7C0A53DD06E62</Checksum>
       </Template>
       <Template>
         <Name>FreeRTOSConfig.h</Name>
@@ -216,28 +261,9 @@
         <Checksum>F6A837A680C12BC37BE2F440DE23FA08</Checksum>
       </Template>
       <Template>
-        <Name>encoders.h</Name>
-        <Path>Header Files/app</Path>
-      </Template>
-      <Template>
-        <Name>system_init.c</Name>
-        <Path>Source Files/app/system_config/default</Path>
-        <Checksum>90C2F66B991BBCFB68BE4737DF29B6AB</Checksum>
-      </Template>
-      <Template>
         <Name>system_interrupt_a.S</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>1FFB29BA55FBFF7A699B342C477E5119</Checksum>
-      </Template>
-      <Template>
-        <Name>drv_usart_static.c</Name>
-        <Path>Source Files/app/system_config/default/framework/driver/usart</Path>
-        <Checksum>5A4C8C1C8EDBCE5DD5180195BDA80EB1</Checksum>
-      </Template>
-      <Template>
-        <Name>drv_tmr_static.h</Name>
-        <Path>Header Files/app/system_config/default/framework/driver/tmr</Path>
-        <Checksum>177FC65128845C63C95944989D7BF4D8</Checksum>
+        <Checksum>47EE3FB5D861418E3C36338DD9F6EBF6</Checksum>
       </Template>
       <Template>
         <Name>sys_clk_static.c</Name>
@@ -245,13 +271,9 @@
         <Checksum>1B968DA82B5DD869A6119C3B7628D753</Checksum>
       </Template>
       <Template>
-        <Name>encoders.c</Name>
-        <Path>Source Files/app</Path>
-      </Template>
-      <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>072C26C51D835DA92C9365C96638679A</Checksum>
+        <Checksum>0D122684E8B5C1DBF5813BFAAB7CBCBA</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

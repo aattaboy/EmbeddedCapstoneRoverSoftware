@@ -188,8 +188,17 @@ void SYS_Initialize ( void* data )
     DRV_TMR0_Initialize();
     /*Initialize TMR1 */
     DRV_TMR1_Initialize();
+    /*Initialize TMR2 */
+    DRV_TMR2_Initialize();
  
      DRV_USART0_Initialize();
+
+
+    /*Initialize OC0 */
+    DRV_OC0_Initialize();
+
+    /*Initialize OC1 */
+    DRV_OC1_Initialize();
 
     /* Initialize System Services */
     SYS_INT_Initialize();  
@@ -200,6 +209,7 @@ void SYS_Initialize ( void* data )
     UART_RECEIVER_Initialize();
     UART_TRANSMITTER_Initialize();
     ENCODERS_Initialize();
+    MOTOR1_Initialize();
 }
 
 

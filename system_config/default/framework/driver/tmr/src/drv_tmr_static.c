@@ -162,6 +162,63 @@ uint32_t DRV_TMR1_CounterValueGet(void)
     return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_4);
 }
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Instance 2 static driver functions
+// *****************************************************************************
+// *****************************************************************************
+void DRV_TMR2_Initialize(void)
+{	
+    /* Initialize Timer Instance2 */
+    /* Disable Timer */
+    PLIB_TMR_Stop(TMR_ID_2);
+    /* Select clock source */
+    PLIB_TMR_ClockSourceSelect(TMR_ID_2, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK);
+    /* Select prescalar value */
+    PLIB_TMR_PrescaleSelect(TMR_ID_2, TMR_PRESCALE_VALUE_256);
+    /* Enable 16 bit mode */
+    PLIB_TMR_Mode16BitEnable(TMR_ID_2);
+    /* Clear counter */	
+    PLIB_TMR_Counter16BitClear(TMR_ID_2);
+    /*Set period */	
+    PLIB_TMR_Period16BitSet(TMR_ID_2, 0);
+
+    /* Setup Interrupt */   
+    PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_2);
+    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T2, INT_PRIORITY_LEVEL1);
+    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T2, INT_SUBPRIORITY_LEVEL0);          
+}
+
+inline void DRV_TMR2_Start(void)
+{
+    /* Start Timer*/
+    PLIB_TMR_Start(TMR_ID_2);
+}
+
+inline void DRV_TMR2_Stop(void)
+{
+    /* Stop Timer*/
+    PLIB_TMR_Stop(TMR_ID_2);
+}
+
+inline void DRV_TMR2_CounterClear(void)
+{
+    /* Clear 16-bit counter value */
+    PLIB_TMR_Counter16BitClear(TMR_ID_2);    
+}
+
+void DRV_TMR2_CounterValueSet(uint32_t value)
+{
+    /* Set 16-bit counter value*/
+    PLIB_TMR_Counter16BitSet(TMR_ID_2, (uint16_t)value);
+}
+
+uint32_t DRV_TMR2_CounterValueGet(void)
+{
+    /* Get 16-bit counter value*/
+    return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_2);
+}
+
  
  
 /*******************************************************************************
