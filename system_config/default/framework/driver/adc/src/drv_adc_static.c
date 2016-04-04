@@ -73,7 +73,7 @@ void DRV_ADC_Initialize(void)
     /* Select Sampling Mode */
     PLIB_ADC_SamplingModeSelect(DRV_ADC_ID_1, ADC_SAMPLING_MODE_MUXA);
     /* Number of Samples Per Interrupt */
-    PLIB_ADC_SamplesPerInterruptSelect(DRV_ADC_ID_1, ADC_1SAMPLE_PER_INTERRUPT);
+    PLIB_ADC_SamplesPerInterruptSelect(DRV_ADC_ID_1, ADC_3SAMPLES_PER_INTERRUPT);
 
     /* Conversion Selections */
     /* Select Trigger Source */
@@ -97,11 +97,6 @@ void DRV_ADC_Initialize(void)
  
     /* Select Scan Input 2 */
     PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN2);
- 
-
-    /* MUX A Positive Input Select */
-    PLIB_ADC_MuxChannel0InputPositiveSelect(DRV_ADC_ID_1, ADC_MUX_A, ADC_INPUT_POSITIVE_AN3);
- 
  
     /* Initialize ADC Interrupt */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);

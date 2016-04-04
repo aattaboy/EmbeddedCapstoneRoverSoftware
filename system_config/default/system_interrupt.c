@@ -63,13 +63,12 @@ void IntHandlerDrvAdc(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
   struct sensorInterrupt isr_data;
 
-  isr_data.center = ADC1BUF0;
-  isr_data.left = ADC1BUF1;
-  isr_data.right = ADC1BUF2;
+  isr_data.center = DRV_ADC_SamplesRead(0);
+  isr_data.left = DRV_ADC_SamplesRead(1);
+  isr_data.right = DRV_ADC_SamplesRead(2);
 
   sendToSensor1QueueFromISR(&isr_data, &higherPriorityTaskWoken);
-
-  DRV_ADC_Close();
+    
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
   
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);

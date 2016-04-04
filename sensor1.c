@@ -43,8 +43,8 @@ static void sendMessageToCallbacks(IRSensorData *info) {
 }
 
 static void sensor1TimerCallback(TimerHandle_t timer __attribute__((unused))) {
+  DRV_ADC_Initialize();
   DRV_ADC_Open();
-  PLIB_ADC_MuxAInputScanEnable(ADC_ID_1);
   DRV_ADC_Start();
 }
 
