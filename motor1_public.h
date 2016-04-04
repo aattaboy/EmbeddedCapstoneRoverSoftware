@@ -6,6 +6,17 @@ extern "C" {
 #endif
 
 #include "generated/MotorCommand.pbo.h"
+  
+enum MOTOR1DIRECTION {
+  MOTOR_TESTING,
+  MOTOR_COMMAND_SET,
+  MOTOR_PID_SET,
+  MOTOR_FORWARD,
+  MOTOR_BACKWARD,
+  MOTOR_LEFT,
+  MOTOR_RIGHT,
+  MOTOR_STOP
+};
 
 BaseType_t sendToMotor1Queue(MotorCommand *info);
 BaseType_t sendToMotor1QueueFromISR(MotorCommand *info,

@@ -29,17 +29,6 @@ typedef struct {
 
 } MOTOR1_DATA;
 
-enum {
-  MOTOR_TESTING,
-  MOTOR_COMMAND_SET,
-  MOTOR_PID_SET,
-  MOTOR_FORWARD,
-  MOTOR_BACKWARD,
-  MOTOR_LEFT,
-  MOTOR_RIGHT,
-  MOTOR_STOP
-};
-
 void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty);
 
 int Motor_Command_Callback(struct UART_RECEIVER_VARIANT *data);

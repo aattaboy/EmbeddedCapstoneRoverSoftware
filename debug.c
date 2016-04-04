@@ -31,7 +31,7 @@ void writeToDebug(char val) {
   sendToUartQueue(&var);
 #else
   // Write a char out to PORT E
-  PLIB_PORTS_Write(PORTS_ID_0, PORT_CHANNEL_E, val);
+  //PLIB_PORTS_Write(PORTS_ID_0, PORT_CHANNEL_E, val);
 #endif
 }
 

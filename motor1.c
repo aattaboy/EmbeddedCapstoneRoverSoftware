@@ -82,6 +82,7 @@ void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
     leftDuty = 0;
     rightDuty = 0;
   } else {
+    // TODO: figure out how to persist direction cmds
     errorCheck(__FILE__, __LINE__);
   }
 
