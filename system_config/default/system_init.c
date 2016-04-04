@@ -184,6 +184,8 @@ void SYS_Initialize ( void* data )
     SYS_PORTS_Initialize();
 
     /* Initialize Drivers */
+    /* Initialize ADC */
+    DRV_ADC_Initialize();
     /*Initialize TMR0 */
     DRV_TMR0_Initialize();
     /*Initialize TMR1 */
@@ -210,6 +212,7 @@ void SYS_Initialize ( void* data )
     UART_TRANSMITTER_Initialize();
     ENCODERS_Initialize();
     MOTOR1_Initialize();
+    SENSOR1_Initialize();
 }
 
 

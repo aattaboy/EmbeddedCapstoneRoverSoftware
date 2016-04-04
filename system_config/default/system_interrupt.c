@@ -4,6 +4,7 @@
 #include "debug_codes.h"
 #include "encoders_public.h"
 #include "uart_receiver_public.h"
+#include "sensor1_public.h"
 #include "system_definitions.h"
 
 void IntHandlerDrvTmrInstance0(void) {
@@ -55,4 +56,21 @@ void IntHandlerDrvUsartInstance0(void) {
 
 void IntHandlerDrvTmrInstance2(void) {
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_2);
+}
+
+void IntHandlerDrvAdc(void) {
+  PORTGINV = 1 << 6;
+  BaseType_t higherPriorityTaskWoken = pdFALSE;
+  struct sensorInterrupt isr_data;
+
+  isr_data.center = ADC1BUF0;
+  isr_data.left = ADC1BUF1;
+  isr_data.right = ADC1BUF2;
+
+  sendToSensor1QueueFromISR(&isr_data, &higherPriorityTaskWoken);
+
+  DRV_ADC_Close();
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
+  
+  portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }

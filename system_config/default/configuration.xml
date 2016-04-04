@@ -158,9 +158,14 @@
         <Checksum>C111969CA43D6CEA1E9E33A6164E7AE0</Checksum>
       </Template>
       <Template>
+        <Name>drv_adc_static.c</Name>
+        <Path>Source Files/app/system_config/default/framework/driver/adc/src</Path>
+        <Checksum>A24A9D888DE1FEA99020903E0FA977FA</Checksum>
+      </Template>
+      <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>A4E169F8C4F67206369BF7E54538E3D3</Checksum>
+        <Checksum>3B7D8A18958E9AEF1317A251EA2AEA8C</Checksum>
       </Template>
       <Template>
         <Name>rtos_hooks.c</Name>
@@ -174,11 +179,16 @@
       <Template>
         <Name>sys_ports_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum>DAD83841B052F3779FBAA88134F858D5</Checksum>
+        <Checksum>9A14C1F9379D38032BB5DD61DF35C62E</Checksum>
       </Template>
       <Template>
         <Name>uart_transmitter.h</Name>
         <Path>Header Files/app</Path>
+      </Template>
+      <Template>
+        <Name>drv_adc_static.h</Name>
+        <Path>Header Files/app/system_config/default/framework/driver/adc</Path>
+        <Checksum>B476AC7F1D37B00B627275F01595DFD3</Checksum>
       </Template>
       <Template>
         <Name>encoders.h</Name>
@@ -187,7 +197,7 @@
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>E5F9353555FF6884137BF344D3B5F4CC</Checksum>
+        <Checksum>A7FA643C1970E47760BCEBC83436A33B</Checksum>
       </Template>
       <Template>
         <Name>drv_usart_static.c</Name>
@@ -227,7 +237,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>58A9CD3D1F8B6A411832FAB887055D25</Checksum>
+        <Checksum>EBAF97BBFD6734164B15BA7B0C98778E</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -241,9 +251,13 @@
         <Checksum>CFBFAA547FAFBDDF0E95946761AD2CB2</Checksum>
       </Template>
       <Template>
+        <Name>sensor1.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>D85BFD6D6D1B00FB75B1ACE2B8C623D0</Checksum>
+        <Checksum>570E4C4C7EFF7A938047AE6A684E504A</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.c</Name>
@@ -258,12 +272,16 @@
       <Template>
         <Name>FreeRTOSConfig.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>F6A837A680C12BC37BE2F440DE23FA08</Checksum>
+        <Checksum>54769FC7889C577E5782B1088FC323D2</Checksum>
       </Template>
       <Template>
         <Name>system_interrupt_a.S</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>47EE3FB5D861418E3C36338DD9F6EBF6</Checksum>
+        <Checksum>6CC939D3854D32FB540FAA5243097F90</Checksum>
+      </Template>
+      <Template>
+        <Name>sensor1.c</Name>
+        <Path>Source Files/app</Path>
       </Template>
       <Template>
         <Name>sys_clk_static.c</Name>
@@ -273,7 +291,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>0D122684E8B5C1DBF5813BFAAB7CBCBA</Checksum>
+        <Checksum>BB643DC36EFDBDE0FC65A2F8766B2EE4</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

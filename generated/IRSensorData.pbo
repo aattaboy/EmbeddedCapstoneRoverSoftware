@@ -1,0 +1,5 @@
+message IRSensorData {
+  int16 front = 1;
+  int16 left = 2;
+  int16 right = 3;
+}
