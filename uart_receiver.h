@@ -20,11 +20,7 @@ extern "C" {
 
 typedef enum {
   UART_RECEIVER_STATE_INIT = 0,
-  UART_RECEIVER_FRAME_START_1,
-  UART_RECEIVER_FRAME_START_2,
-  UART_RECEIVER_FRAME_START_3,
-  UART_RECEIVER_FRAME_START_4,
-  UART_RECEIVER_STATE_RECEIVE,
+  UART_RECEIVER_STATE_RX,
 } UART_RECEIVER_STATES;
 
 #define UART_RECEIVER_CALLBACKS_VECTOR_SIZE (10)
@@ -39,10 +35,6 @@ typedef struct {
   // Callbacks vector members
   size_t uart_receiver_callbacks_idx;
   uart_receiver_callback_t callbacks[UART_RECEIVER_CALLBACKS_VECTOR_SIZE];
-
-  // Receive buffer members
-  size_t receive_buf_idx;
-  char receive_buf[sizeof(WiFlyStringWireFormat)];
 } UART_RECEIVER_DATA;
 
 void UART_RECEIVER_Initialize(void);

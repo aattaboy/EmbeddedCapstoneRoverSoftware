@@ -12,7 +12,7 @@ extern "C" {
 
 typedef enum { UART_RX_DATA, STRING, MOTOR_MESSAGE } UART_RECEIVER_VARIANT_TYPE;
 
-struct UART_RECEIVER_VARIANT {
+struct __attribute__((packed)) UART_RECEIVER_VARIANT {
   union {
     UartRxData rx_data;
     WiFlyStringWireFormat string;
@@ -25,8 +25,8 @@ typedef int (*uart_receiver_callback_t)(struct UART_RECEIVER_VARIANT *);
 
 int registerUartReceiverCallback(uart_receiver_callback_t callback);
 
-BaseType_t sendToUartReceiverQueue(uint8_t *info);
-BaseType_t sendToUartReceiverQueueFromISR(uint8_t *info,
+BaseType_t sendToUartReceiverQueue(struct UART_RECEIVER_VARIANT *info);
+BaseType_t sendToUartReceiverQueueFromISR(struct UART_RECEIVER_VARIANT *info,
                                           BaseType_t *higherPriorityTaskWoken);
 
 #ifdef __cplusplus

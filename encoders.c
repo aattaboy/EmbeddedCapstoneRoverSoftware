@@ -49,10 +49,10 @@ static void sendToEncodersCallbacks(struct EncoderCounts *counts) {
 static int32_t constrain(int val, int max, int min) {
   if (val > max) {
     val = max;
-    PORTE = 0x1;
+    //PORTE = 0x1;
   } else if (val < min) {
     val = min;
-    PORTE = 0x2;
+    //PORTE = 0x2;
   }
   return val;
 }
@@ -60,28 +60,34 @@ static int32_t constrain(int val, int max, int min) {
 static size_t state_sequence_idx = 0;
 
 const enum MOTOR1DIRECTION state_sequence[] = {
-  MOTOR_FORWARD, MOTOR_LEFT, MOTOR_FORWARD, MOTOR_LEFT, MOTOR_FORWARD, MOTOR_LEFT, MOTOR_FORWARD, MOTOR_LEFT, 
-  MOTOR_FORWARD, MOTOR_RIGHT, MOTOR_FORWARD, MOTOR_RIGHT, MOTOR_FORWARD, MOTOR_RIGHT, MOTOR_FORWARD, MOTOR_RIGHT,
-  MOTOR_BACKWARD, MOTOR_RIGHT, MOTOR_BACKWARD, MOTOR_RIGHT, MOTOR_BACKWARD, MOTOR_RIGHT, MOTOR_BACKWARD, MOTOR_RIGHT, 
-  MOTOR_BACKWARD, MOTOR_LEFT, MOTOR_BACKWARD, MOTOR_LEFT, MOTOR_BACKWARD, MOTOR_LEFT, MOTOR_BACKWARD, MOTOR_LEFT
+  MOTOR_FORWARD,  MOTOR_LEFT,  MOTOR_FORWARD,  MOTOR_LEFT,
+  MOTOR_FORWARD,  MOTOR_LEFT,  MOTOR_FORWARD,  MOTOR_LEFT,
+  MOTOR_FORWARD,  MOTOR_RIGHT, MOTOR_FORWARD,  MOTOR_RIGHT,
+  MOTOR_FORWARD,  MOTOR_RIGHT, MOTOR_FORWARD,  MOTOR_RIGHT,
+  MOTOR_BACKWARD, MOTOR_RIGHT, MOTOR_BACKWARD, MOTOR_RIGHT,
+  MOTOR_BACKWARD, MOTOR_RIGHT, MOTOR_BACKWARD, MOTOR_RIGHT,
+  MOTOR_BACKWARD, MOTOR_LEFT,  MOTOR_BACKWARD, MOTOR_LEFT,
+  MOTOR_BACKWARD, MOTOR_LEFT,  MOTOR_BACKWARD, MOTOR_LEFT
 };
 
-#define BASE_DUTY_CYCLE (70)
+uint8_t encoders_base_duty_cycle = 0;
 
 void ENCODERS_Tasks(void) {
   switch (encodersData.state) {
   case ENCODERS_STATE_INIT: {
+    uint8_t atomic_duty_cycle =
+        __sync_fetch_and_add(&encoders_base_duty_cycle, 0);
     MotorCommand command_set;
     MotorCommand_init(&command_set);
     MotorCommand_set_mode(&command_set, MOTOR_COMMAND_SET);
     MotorCommand_set_direction(&command_set, MOTOR_FORWARD);
-    MotorCommand_set_dutyCycle(&command_set, BASE_DUTY_CYCLE);
-    MotorCommand_to_bytes(&command_set, (char*)&command_set, 0);
+    MotorCommand_set_dutyCycle(&command_set, atomic_duty_cycle);
+    MotorCommand_to_bytes(&command_set, (char *)&command_set, 0);
     sendToMotor1Queue(&command_set);
     MotorCommand_set_mode(&command_set, MOTOR_PID_SET);
     MotorCommand_set_direction(&command_set, MOTOR_FORWARD);
-    MotorCommand_set_dutyCycle(&command_set, BASE_DUTY_CYCLE);
-    MotorCommand_to_bytes(&command_set, (char*)&command_set, 0);
+    MotorCommand_set_dutyCycle(&command_set, atomic_duty_cycle);
+    MotorCommand_to_bytes(&command_set, (char *)&command_set, 0);
     sendToMotor1Queue(&command_set);
     encodersData.state = ENCODERS_STATE_RECEIVE;
   } break;
@@ -95,28 +101,27 @@ void ENCODERS_Tasks(void) {
       } break;
       case ENCODERS_RIGHT: {
         encodersData.rightCount++;
+#if 0
         if (encodersData.rightCount % 57 == 0) {
           state_sequence_idx++;
-          if (state_sequence_idx == (sizeof(state_sequence)/sizeof(state_sequence[0]))) {
+          if (state_sequence_idx ==
+              (sizeof(state_sequence) / sizeof(state_sequence[0]))) {
             state_sequence_idx = 0;
-                MotorCommand command_set;
-                MotorCommand_init(&command_set);
-                MotorCommand_set_mode(&command_set, MOTOR_COMMAND_SET);
-                MotorCommand_set_direction(&command_set, MOTOR_FORWARD);
-                MotorCommand_set_dutyCycle(&command_set, BASE_DUTY_CYCLE);
-                MotorCommand_to_bytes(&command_set, (char*)&command_set, 0);
-                sendToMotor1Queue(&command_set);
-                MotorCommand_set_mode(&command_set, MOTOR_PID_SET);
-                MotorCommand_set_direction(&command_set, MOTOR_FORWARD);
-                MotorCommand_set_dutyCycle(&command_set, BASE_DUTY_CYCLE);
-                MotorCommand_to_bytes(&command_set, (char*)&command_set, 0);
-                sendToMotor1Queue(&command_set);
+            uint8_t atomic_duty_cycle =
+                __sync_fetch_and_add(&encoders_base_duty_cycle, 0);
+            MotorCommand command_set;
+            MotorCommand_set_mode(&command_set, MOTOR_PID_SET);
+            MotorCommand_set_direction(&command_set, MOTOR_FORWARD);
+            MotorCommand_set_dutyCycle(&command_set, atomic_duty_cycle);
+            MotorCommand_to_bytes(&command_set, (char *)&command_set, 0);
+            sendToMotor1Queue(&command_set);
           }
         }
+#endif
       } break;
       default: { errorCheck(__FILE__, __LINE__); }
       }
-      
+
       struct EncoderCounts counts;
       counts.left = encodersData.leftCount;
       counts.right = encodersData.rightCount;
@@ -125,15 +130,18 @@ void ENCODERS_Tasks(void) {
       int32_t diff = counts.left - counts.right;
       static int32_t integral;
       integral += diff;
-      int32_t pid = 10*diff;
-      //PORTE = diff;
-      
+      int32_t pid = 30* diff;
+      PORTE = diff;
+
+      uint8_t atomic_duty_cycle =
+          __sync_fetch_and_add(&encoders_base_duty_cycle, 0);
       MotorCommand pid_set;
       MotorCommand_init(&pid_set);
       MotorCommand_set_direction(&pid_set, state_sequence[state_sequence_idx]);
       MotorCommand_set_mode(&pid_set, MOTOR_PID_SET);
-      MotorCommand_set_dutyCycle(&pid_set, constrain(BASE_DUTY_CYCLE + pid, 0, 100));
-      MotorCommand_to_bytes(&pid_set, (char*)&pid_set, 0);
+      MotorCommand_set_dutyCycle(&pid_set,
+                                 constrain(atomic_duty_cycle + pid, 0, 100));
+      MotorCommand_to_bytes(&pid_set, (char *)&pid_set, 0);
       sendToMotor1Queue(&pid_set);
     }
   } break;

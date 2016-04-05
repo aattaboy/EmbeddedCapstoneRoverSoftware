@@ -15,4 +15,6 @@ typedef int (*encoders_callback_t)(struct EncoderCounts *);
 
 int registerEncodersCallback(encoders_callback_t callback);
 
+extern uint8_t encoders_base_duty_cycle;
+
 #endif /* ENCODERS_PUBLIC_H */

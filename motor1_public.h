@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include "generated/MotorCommand.pbo.h"
-  
+
 enum MOTOR1DIRECTION {
   MOTOR_TESTING,
   MOTOR_COMMAND_SET,

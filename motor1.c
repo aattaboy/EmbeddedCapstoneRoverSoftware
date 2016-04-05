@@ -26,6 +26,12 @@ BaseType_t sendToMotor1QueueFromISR(MotorCommand *info,
   return retval;
 }
 
+int Motor_Command_Callback(struct UART_RECEIVER_VARIANT *info) {
+  if (info->type == MOTOR_MESSAGE)
+    sendToMotor1Queue(&info->data.motorMessage);
+  return 0;
+}
+
 // Internal functions
 void MOTOR1_Initialize(void) {
   motor1Data.state = MOTOR1_STATE_INIT;
@@ -51,20 +57,12 @@ void MOTOR1_Initialize(void) {
   PLIB_TMR_Period16BitSet(1, MOTORPERIOD);
 
   PLIB_OC_PulseWidth16BitSet(OC_ID_1, 0);
-  PLIB_OC_PulseWidth16BitSet(OC_ID_2,0);
-  
-  moveRover(MOTOR_FORWARD, 50, 50);
-}
-
-int Motor_Command_Callback(struct UART_RECEIVER_VARIANT *info) {
-  if (info->type == MOTOR_MESSAGE)
-    sendToMotor1Queue(&info->data.motorMessage);
-  return 0;
+  PLIB_OC_PulseWidth16BitSet(OC_ID_2, 0);
 }
 
 void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
-  DRV_OC0_Enable();
-  DRV_OC1_Enable();
+  //DRV_OC0_Enable();
+  //DRV_OC1_Enable();
 
   if (direction == MOTOR_FORWARD) {
     PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_G, PORTS_BIT_POS_1);
@@ -86,7 +84,7 @@ void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
     errorCheck(__FILE__, __LINE__);
   }
 
-  PLIB_OC_PulseWidth16BitSet(OC_ID_1, leftDuty * MOTORPERIOD / 100); // left
+  PLIB_OC_PulseWidth16BitSet(OC_ID_1, leftDuty * MOTORPERIOD / 100);  // left
   PLIB_OC_PulseWidth16BitSet(OC_ID_2, rightDuty * MOTORPERIOD / 100); // right
 }
 
@@ -109,6 +107,7 @@ void MOTOR1_Tasks(void) {
         // TODO: notify
       }
       seq_expected++;
+      static uint8_t old_direction = MOTOR_FORWARD;
 
       if (MotorCommand_mode(&received) == MOTOR_TESTING) {
         moveRover(MotorCommand_direction(&received),
@@ -116,18 +115,21 @@ void MOTOR1_Tasks(void) {
                   MotorCommand_dutyCycle(&received));
       } else if (MotorCommand_mode(&received) == MOTOR_COMMAND_SET) {
         leftDutyCycle = MotorCommand_dutyCycle(&received);
-        moveRover(MotorCommand_direction(&received), leftDutyCycle,
-                  rightDutyCycle);
-      } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
         rightDutyCycle = MotorCommand_dutyCycle(&received);
         moveRover(MotorCommand_direction(&received), leftDutyCycle,
+                  rightDutyCycle);
+        encoders_base_duty_cycle = leftDutyCycle;
+        old_direction = MotorCommand_direction(&received);
+      } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
+        rightDutyCycle = MotorCommand_dutyCycle(&received);
+        moveRover(old_direction, leftDutyCycle,
                   rightDutyCycle);
       } else {
         errorCheck(__FILE__, __LINE__);
       }
 
-      // Debug information
-      // TODO: re-enable
+// Debug information
+// TODO: re-enable
 #if 0
       DebugInfo info;
       DebugInfo_init(&info);
