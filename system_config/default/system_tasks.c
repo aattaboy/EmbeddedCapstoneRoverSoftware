@@ -59,6 +59,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "encoders.h"
 #include "motor1.h"
 #include "sensor1.h"
+#include "pid.h"
 
 
 // *****************************************************************************
@@ -73,6 +74,7 @@ static void _UART_TRANSMITTER_Tasks(void);
 static void _ENCODERS_Tasks(void);
 static void _MOTOR1_Tasks(void);
 static void _SENSOR1_Tasks(void);
+static void _PID_Tasks(void);
 
 
 // *****************************************************************************
@@ -119,6 +121,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for SENSOR1 Tasks. */
     xTaskCreate((TaskFunction_t) _SENSOR1_Tasks,
                 "SENSOR1 Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for PID Tasks. */
+    xTaskCreate((TaskFunction_t) _PID_Tasks,
+                "PID Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -233,6 +240,23 @@ static void _SENSOR1_Tasks(void)
     while(1)
     {
         SENSOR1_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _PID_Tasks ( void )
+
+  Summary:
+    Maintains state machine of PID.
+*/
+
+static void _PID_Tasks(void)
+{
+    while(1)
+    {
+        PID_Tasks();
     }
 }
 

@@ -1,0 +1,5 @@
+message RoverPose {
+  int32 xPosition = 1;
+  int32 yPosition = 2;
+  int16 yaw = 3;
+}

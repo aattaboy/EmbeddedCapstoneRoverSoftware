@@ -57,7 +57,7 @@ static int32_t constrain(int val, int max, int min) {
   return val;
 }
 
-static size_t state_sequence_idx = 0;
+//static size_t state_sequence_idx = 0;
 
 const enum MOTOR1DIRECTION state_sequence[] = {
   MOTOR_FORWARD,  MOTOR_LEFT,  MOTOR_FORWARD,  MOTOR_LEFT,
@@ -90,6 +90,8 @@ void ENCODERS_Tasks(void) {
     MotorCommand_to_bytes(&command_set, (char *)&command_set, 0);
     sendToMotor1Queue(&command_set);
     encodersData.state = ENCODERS_STATE_RECEIVE;
+    encodersData.leftCount = 0;
+    encodersData.rightCount = 0;
   } break;
 
   case ENCODERS_STATE_RECEIVE: {
@@ -127,6 +129,7 @@ void ENCODERS_Tasks(void) {
       counts.right = encodersData.rightCount;
       sendToEncodersCallbacks(&counts);
 
+#if 0
       int32_t diff = counts.left - counts.right;
       static int32_t integral;
       integral += diff;
@@ -143,6 +146,7 @@ void ENCODERS_Tasks(void) {
                                  constrain(atomic_duty_cycle + pid, 0, 100));
       MotorCommand_to_bytes(&pid_set, (char *)&pid_set, 0);
       sendToMotor1Queue(&pid_set);
+#endif
     }
   } break;
 

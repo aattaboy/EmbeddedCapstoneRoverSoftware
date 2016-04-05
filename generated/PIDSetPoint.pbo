@@ -1,0 +1,4 @@
+message PIDSetPoint {
+  int32 targetX = 1;
+  int32 targetY = 2;
+}

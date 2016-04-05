@@ -67,7 +67,7 @@ void DRV_USART0_Initialize(void)
     PLIB_USART_OperationModeSelect(USART_ID_1, USART_ENABLE_TX_RX_USED);
     PLIB_USART_LineControlModeSelect(USART_ID_1, USART_8N1);
     PLIB_USART_TransmitterEnable(USART_ID_1);
-    PLIB_USART_TransmitterInterruptModeSelect(USART_ID_1, USART_TRANSMIT_FIFO_NOT_FULL);
+    PLIB_USART_TransmitterInterruptModeSelect(USART_ID_1, USART_TRANSMIT_FIFO_EMPTY);
     PLIB_USART_ReceiverEnable(USART_ID_1);
     PLIB_USART_ReceiverInterruptModeSelect(USART_ID_1, USART_RECEIVE_FIFO_ONE_CHAR);
     /* Initialize interrupts */

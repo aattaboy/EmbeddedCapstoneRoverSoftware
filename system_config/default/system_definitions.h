@@ -74,6 +74,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "encoders.h"
 #include "motor1.h"
 #include "sensor1.h"
+#include "pid.h"
 
 
 // DOM-IGNORE-BEGIN

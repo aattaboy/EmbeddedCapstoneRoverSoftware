@@ -191,18 +191,26 @@
         <Checksum>FAB1B9BACE0BBD3A438EAE2FFAACBD83</Checksum>
       </Template>
       <Template>
+        <Name>pid.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
         <Name>encoders.h</Name>
         <Path>Header Files/app</Path>
       </Template>
       <Template>
+        <Name>pid.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>A7FA643C1970E47760BCEBC83436A33B</Checksum>
+        <Checksum>EFA3F60346E06820EEC7AD0E11329027</Checksum>
       </Template>
       <Template>
         <Name>drv_usart_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/usart</Path>
-        <Checksum>5A4C8C1C8EDBCE5DD5180195BDA80EB1</Checksum>
+        <Checksum>5FDB538D3F0C6D3D5062860FDDBD46DD</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.h</Name>
@@ -237,7 +245,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>EBAF97BBFD6734164B15BA7B0C98778E</Checksum>
+        <Checksum>2A441D781241887F18E98312B98015EE</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -257,7 +265,7 @@
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>570E4C4C7EFF7A938047AE6A684E504A</Checksum>
+        <Checksum>D5F96A5AC77C16297E7A69487AFEBA95</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.c</Name>
@@ -291,7 +299,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>BB643DC36EFDBDE0FC65A2F8766B2EE4</Checksum>
+        <Checksum>01E431539C4F9578994A343520D3AEB9</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

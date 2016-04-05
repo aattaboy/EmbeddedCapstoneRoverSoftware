@@ -213,6 +213,7 @@ void SYS_Initialize ( void* data )
     ENCODERS_Initialize();
     MOTOR1_Initialize();
     SENSOR1_Initialize();
+    PID_Initialize();
 }
 
 
