@@ -12,6 +12,6 @@ void packAndSendDebugInfo(int32_t task_id, int32_t event_id, int32_t value) {
   __asm__ __volatile__("mfc0 %0, $9\r\n" : "=r"(ticks));
   DebugInfo_set_cpuTicks(&info, ticks);
   static uint32_t seq;
-  DebugInfo_to_bytes(&info, (char *)&info, seq++);
+  DebugInfo_to_bytes(&info, (char *)&info, __sync_fetch_and_add(&seq, 1));
   sendDebugInfo(&info);
 }
