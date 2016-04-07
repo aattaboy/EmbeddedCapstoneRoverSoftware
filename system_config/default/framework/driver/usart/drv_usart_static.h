@@ -61,6 +61,16 @@ uint8_t DRV_USART0_ReadByte(void);
 bool DRV_USART0_ReceiverBufferIsEmpty(void);
 void DRV_USART0_WriteByte(const uint8_t byte);
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Interface Headers for Instance 1 for the static driver
+// *****************************************************************************
+// *****************************************************************************
+
+void DRV_USART1_Initialize(void);
+uint8_t DRV_USART1_ReadByte(void);
+bool DRV_USART1_ReceiverBufferIsEmpty(void);
+
 #endif // #ifndef _DRV_USART_STATIC_H
 
 /*******************************************************************************

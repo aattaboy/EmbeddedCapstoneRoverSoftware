@@ -123,7 +123,6 @@ void MOTOR1_Tasks(void) {
         pidBaseDutyCycle = leftDutyCycle;
         old_direction = MotorCommand_direction(&received);
       } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
-        PORTGINV = 1 << 6;
         rightDutyCycle = MotorCommand_dutyCycle(&received);
         moveRover(old_direction, leftDutyCycle, rightDutyCycle);
       } else {

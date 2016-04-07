@@ -60,6 +60,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "motor1.h"
 #include "sensor1.h"
 #include "pid.h"
+#include "rssi_collector.h"
 
 
 // *****************************************************************************
@@ -75,6 +76,7 @@ static void _ENCODERS_Tasks(void);
 static void _MOTOR1_Tasks(void);
 static void _SENSOR1_Tasks(void);
 static void _PID_Tasks(void);
+static void _RSSI_COLLECTOR_Tasks(void);
 
 
 // *****************************************************************************
@@ -126,6 +128,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for PID Tasks. */
     xTaskCreate((TaskFunction_t) _PID_Tasks,
                 "PID Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for RSSI_COLLECTOR Tasks. */
+    xTaskCreate((TaskFunction_t) _RSSI_COLLECTOR_Tasks,
+                "RSSI_COLLECTOR Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -257,6 +264,23 @@ static void _PID_Tasks(void)
     while(1)
     {
         PID_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _RSSI_COLLECTOR_Tasks ( void )
+
+  Summary:
+    Maintains state machine of RSSI_COLLECTOR.
+*/
+
+static void _RSSI_COLLECTOR_Tasks(void)
+{
+    while(1)
+    {
+        RSSI_COLLECTOR_Tasks();
     }
 }
 

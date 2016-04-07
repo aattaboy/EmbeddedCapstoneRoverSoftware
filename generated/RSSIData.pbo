@@ -1,0 +1,4 @@
+message RSSIData {
+  string[20] bssid = 1;
+  int16 rssi = 2;
+}

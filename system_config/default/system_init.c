@@ -196,6 +196,7 @@ void SYS_Initialize ( void* data )
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
  
      DRV_USART0_Initialize();
+    DRV_USART1_Initialize();
 
 
     /*Initialize OC0 */
@@ -216,6 +217,7 @@ void SYS_Initialize ( void* data )
     MOTOR1_Initialize();
     SENSOR1_Initialize();
     PID_Initialize();
+    RSSI_COLLECTOR_Initialize();
 }
 
 

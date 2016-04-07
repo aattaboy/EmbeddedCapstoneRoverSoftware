@@ -101,7 +101,7 @@ void SENSOR1_Tasks(void) {
       DebugInfo_set_identifier(&info, SENSOR1_IDENTIFIER);
       DebugInfo_set_data(&info, received.center);
       DebugInfo_to_bytes(&info, (char *)&info, seq++);
-      sendDebugInfo(&info);
+      //sendDebugInfo(&info);
     }
     break;
   default: { break; }

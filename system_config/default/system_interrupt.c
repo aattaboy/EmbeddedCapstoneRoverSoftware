@@ -3,9 +3,10 @@
 #include "debug.h"
 #include "debug_codes.h"
 #include "encoders_public.h"
-#include "uart_receiver_public.h"
+#include "rssi_collector_public.h"
 #include "sensor1_public.h"
 #include "system_definitions.h"
+#include "uart_receiver_public.h"
 
 void IntHandlerDrvTmrInstance0(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
@@ -114,6 +115,75 @@ void IntHandlerDrvAdc(void) {
   sendToSensor1QueueFromISR(&isr_data, &higherPriorityTaskWoken);
 
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
+
+  portEND_SWITCHING_ISR(higherPriorityTaskWoken);
+}
+
+
+const uint8_t frame_sequence[] = {0xab, 0xcd, 0xef, 0x12};
+
+void IntHandlerDrvUsartInstance1(void)
+{
+  PORTGINV = 1 << 6;
+  BaseType_t higherPriorityTaskWoken = pdFALSE;
+  static char rx_buf[sizeof(RSSIData)] __attribute__((unused));
+  static size_t rx_idx;
+  
+  static enum {
+    FRAME_START_1,
+    FRAME_START_2,
+    FRAME_START_3,
+    FRAME_START_4,
+    RX
+  } state;
+  
+  if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_2_RECEIVE)) {
+    while (PLIB_USART_ReceiverDataIsAvailable(USART_ID_2)) {
+      uint8_t rxed_char = PLIB_USART_ReceiverByteReceive(USART_ID_2);
+      
+      switch (state) {
+        case FRAME_START_1: {
+          if (rxed_char == frame_sequence[0]) {
+            state = FRAME_START_2;
+          }
+        } break;
+        case FRAME_START_2: {
+          if (rxed_char == frame_sequence[1]) {
+            state = FRAME_START_3;
+          } else {
+            state = FRAME_START_1;
+          }
+        } break;
+        case FRAME_START_3: {
+          if (rxed_char == frame_sequence[2]) {
+            state = FRAME_START_4;
+          } else {
+            state = FRAME_START_1;
+          }
+        } break;
+        case FRAME_START_4: {
+          if (rxed_char == frame_sequence[3]) {
+            rx_idx = 0;
+            state = RX;
+          } else {
+            state = FRAME_START_1;
+          }
+        } break;
+        case RX: {
+          rx_buf[rx_idx++] = rxed_char;
+          if (rx_idx == sizeof(RSSIData)) {
+            state = FRAME_START_1;
+            sendToRSSICollectorQueueFromISR((RSSIData*)rx_buf, &higherPriorityTaskWoken);
+          }
+        } break;
+      }
+    }
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_2_RECEIVE);
+  }
+  
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_2_TRANSMIT);
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_2_ERROR);
+  U2STACLR = 1 << 1;
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
