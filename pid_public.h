@@ -26,6 +26,8 @@ BaseType_t sendToPIDQueue(struct PID_VARIANT *info);
 BaseType_t sendToPIDQueueFromISR(struct PID_VARIANT *info,
                                  BaseType_t *higherPriorityTaskWoken);
 
+extern int32_t pidBaseDutyCycle;
+
 #ifdef __cplusplus
 }
 #endif

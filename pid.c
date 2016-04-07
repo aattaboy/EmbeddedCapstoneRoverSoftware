@@ -13,9 +13,10 @@ PID_DATA pidData;
 #define MAX (100)
 #define MIN (0)
 #define KP (10.)
-#define KI (0.5)
-#define KD (1.)
-#define BASE_DUTY_CYCLE (70)
+#define KI (1.)
+#define KD (0.)
+
+int32_t pidBaseDutyCycle;
 
 // Public Functions
 
@@ -66,7 +67,7 @@ void PID_Initialize(void) {
   }
   vQueueAddToRegistry(pidData.pidQueue, "PID Queue");
 
-  //registerEncodersCallback(PID_encoder_count_cb);
+  registerEncodersCallback(PID_encoder_count_cb);
 }
 
 static int32_t constrain(int val, int max, int min) {
@@ -98,8 +99,8 @@ void PID_Tasks(void) {
         int32_t derivative;
         int32_t pid;
 
-        error = received.data.encoder_counts.left -
-                received.data.encoder_counts.right;
+        error = received.data.encoder_counts.right -
+                received.data.encoder_counts.left;
 
         // Check to see if error is too small
         if (abs(error) > EPSILON) {
@@ -111,27 +112,19 @@ void PID_Tasks(void) {
         // Update error
         pre_error = error;
 
+        int32_t atomicBaseDutyCycle = __sync_fetch_and_add(&pidBaseDutyCycle, 0);
+        
         // send to Motor1Queue
         MotorCommand pid_set;
         MotorCommand_init(&pid_set);
         MotorCommand_set_direction(&pid_set, MOTOR_FORWARD);
         MotorCommand_set_mode(&pid_set, MOTOR_PID_SET);
         MotorCommand_set_dutyCycle(&pid_set,
-                                   constrain(BASE_DUTY_CYCLE + pid, MIN, MAX));
+                                   constrain(atomicBaseDutyCycle + pid, MAX, MIN));
         MotorCommand_to_bytes(&pid_set, (char *)&pid_set, 0);
         sendToMotor1Queue(&pid_set);
 
-        MotorCommand command;
-        MotorCommand_init(&command);
-        MotorCommand_set_mode(&command, MOTOR_PID_SET);
-        MotorCommand_set_direction(&command, MOTOR_FORWARD);
-        MotorCommand_set_dutyCycle(&command, 75);
-        static uint32_t seq3;
-        MotorCommand_to_bytes(&command, (char *)&command, seq3++);
-
         writeToDebug(PID_RECEIVE_BYTE);
-
-        sendMessageToCallbacks(&command);
       } break;
       default: { errorCheck(__FILE__, __LINE__); }
       } // switch (received.type)

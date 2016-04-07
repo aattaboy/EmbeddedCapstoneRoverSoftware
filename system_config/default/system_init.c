@@ -190,8 +190,10 @@ void SYS_Initialize ( void* data )
     DRV_TMR0_Initialize();
     /*Initialize TMR1 */
     DRV_TMR1_Initialize();
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
     /*Initialize TMR2 */
     DRV_TMR2_Initialize();
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
  
      DRV_USART0_Initialize();
 

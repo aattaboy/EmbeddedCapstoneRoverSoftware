@@ -104,7 +104,6 @@ void IntHandlerDrvTmrInstance2(void) {
 }
 
 void IntHandlerDrvAdc(void) {
-  PORTGINV = 1 << 6;
   BaseType_t higherPriorityTaskWoken = pdFALSE;
   struct sensorInterrupt isr_data;
 

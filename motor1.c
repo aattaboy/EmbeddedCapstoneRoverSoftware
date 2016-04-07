@@ -1,7 +1,7 @@
 #include "debug.h"
 #include "debug_codes.h"
 #include "generated/MotorCommand.pbo.h"
-//#include "debuginfo.h"
+#include "debuginfo.h"
 #include "motor1.h"
 #include "motor1_public.h"
 #include "peripheral/oc/plib_oc.h"
@@ -9,8 +9,8 @@
 #define MOTORPERIOD (500)
 MOTOR1_DATA motor1Data;
 
-uint8_t leftDutyCycle = 80;
-uint8_t rightDutyCycle = 80;
+uint8_t leftDutyCycle = 0;
+uint8_t rightDutyCycle = 0;
 
 // Public Functions
 BaseType_t sendToMotor1Queue(MotorCommand *info) {
@@ -53,15 +53,15 @@ void MOTOR1_Initialize(void) {
   PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_G, PORTS_BIT_POS_1);
   PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_14);
 
-  PLIB_TMR_Period16BitSet(1, MOTORPERIOD);
+  PLIB_TMR_Period16BitSet(TMR_ID_2, MOTORPERIOD);
 
   PLIB_OC_PulseWidth16BitSet(OC_ID_1, 0);
   PLIB_OC_PulseWidth16BitSet(OC_ID_2, 0);
 }
 
 void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
-  // DRV_OC0_Enable();
-  // DRV_OC1_Enable();
+  DRV_OC0_Enable();
+  DRV_OC1_Enable();
 
   if (direction == MOTOR_FORWARD) {
     PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_G, PORTS_BIT_POS_1);
@@ -76,15 +76,18 @@ void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
     PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_G, PORTS_BIT_POS_1);
     PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_C, PORTS_BIT_POS_14);
   } else if (direction == MOTOR_STOP) {
-    leftDuty = 0;
-    rightDuty = 0;
+    leftDutyCycle = 0;
+    rightDutyCycle = 0;
   } else {
     // TODO: figure out how to persist direction cmds
     errorCheck(__FILE__, __LINE__);
   }
+  
+  int32_t tempLeft = leftDuty * MOTORPERIOD / 100;
+  int32_t tempRight = rightDuty * MOTORPERIOD / 100;
 
-  PLIB_OC_PulseWidth16BitSet(OC_ID_1, leftDuty * MOTORPERIOD / 100);  // left
-  PLIB_OC_PulseWidth16BitSet(OC_ID_2, rightDuty * MOTORPERIOD / 100); // right
+  PLIB_OC_PulseWidth16BitSet(OC_ID_1, tempLeft);  // left
+  PLIB_OC_PulseWidth16BitSet(OC_ID_2, tempRight); // right
 }
 
 void MOTOR1_Tasks(void) {
@@ -117,18 +120,16 @@ void MOTOR1_Tasks(void) {
         rightDutyCycle = MotorCommand_dutyCycle(&received);
         moveRover(MotorCommand_direction(&received), leftDutyCycle,
                   rightDutyCycle);
-        encoders_base_duty_cycle = leftDutyCycle;
+        pidBaseDutyCycle = leftDutyCycle;
         old_direction = MotorCommand_direction(&received);
       } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
+        PORTGINV = 1 << 6;
         rightDutyCycle = MotorCommand_dutyCycle(&received);
         moveRover(old_direction, leftDutyCycle, rightDutyCycle);
       } else {
         errorCheck(__FILE__, __LINE__);
       }
 
-// Debug information
-// TODO: re-enable
-#if 0
       DebugInfo info;
       DebugInfo_init(&info);
       DebugInfo_set_identifier(&info, MOTOR1_IDENTIFIER);
@@ -137,7 +138,7 @@ void MOTOR1_Tasks(void) {
       uint32_t seq2 = 0;
       DebugInfo_to_bytes(&info, (char *)&info, seq2++);
       sendDebugInfo(&info);
-#endif
+
       writeToDebug(MOTOR1_RECEIVE_BYTE);
 
     } else {
