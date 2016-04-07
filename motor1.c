@@ -122,21 +122,16 @@ void MOTOR1_Tasks(void) {
                   rightDutyCycle);
         pidBaseDutyCycle = leftDutyCycle;
         old_direction = MotorCommand_direction(&received);
+        packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1CommandDutyCycleSet,
+                             MotorCommand_dutyCycle(&received));
       } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
         rightDutyCycle = MotorCommand_dutyCycle(&received);
         moveRover(old_direction, leftDutyCycle, rightDutyCycle);
+        packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1PIDDutyCycleSet,
+                             MotorCommand_dutyCycle(&received));
       } else {
         errorCheck(__FILE__, __LINE__);
       }
-
-      DebugInfo info;
-      DebugInfo_init(&info);
-      DebugInfo_set_identifier(&info, MOTOR1_IDENTIFIER);
-      DebugInfo_set_debugID(&info, Motor1ReceivedMessage);
-      DebugInfo_set_data(&info, MotorCommand_dutyCycle(&received));
-      uint32_t seq2 = 0;
-      DebugInfo_to_bytes(&info, (char *)&info, seq2++);
-      sendDebugInfo(&info);
 
       writeToDebug(MOTOR1_RECEIVE_BYTE);
 

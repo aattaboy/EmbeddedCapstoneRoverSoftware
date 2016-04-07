@@ -14,7 +14,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#define DebugInfo_FIELD_MAX (3)
+#define DebugInfo_FIELD_MAX (4)
 typedef struct __attribute__((packed)) {
   uint32_t magic;
   uint64_t siphash;
@@ -23,6 +23,7 @@ typedef struct __attribute__((packed)) {
   uint32_t identifier;
   uint32_t debugID;
   uint32_t data;
+  uint32_t cpuTicks;
 } DebugInfo;
 void DebugInfo_init(DebugInfo *msg);
 /*
@@ -46,6 +47,13 @@ bool DebugInfo_has_data(const DebugInfo *msg);
 int32_t DebugInfo_data(const DebugInfo *msg);
 void DebugInfo_set_data(DebugInfo *msg, int32_t value);
 void DebugInfo_clear_data(DebugInfo *msg);
+/*
+ * int32 cpuTicks
+ */
+bool DebugInfo_has_cpuTicks(const DebugInfo *msg);
+int32_t DebugInfo_cpuTicks(const DebugInfo *msg);
+void DebugInfo_set_cpuTicks(DebugInfo *msg, int32_t value);
+void DebugInfo_clear_cpuTicks(DebugInfo *msg);
 void DebugInfo_to_bytes(DebugInfo *msg, char *buf, uint32_t seq);
 bool DebugInfo_from_bytes(DebugInfo *msg, const char *buf, uint32_t *seq_out);
 

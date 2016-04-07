@@ -2,4 +2,5 @@ message DebugInfo {
   int32 identifier = 1;
   int32 debugID = 2;
   int32 data = 3;
+  int32 cpuTicks = 4;
 }

@@ -86,25 +86,13 @@ void ENCODERS_Tasks(void) {
       switch (id) {
       case ENCODERS_LEFT: {
         encodersData.leftCount++;
-        DebugInfo info;
-        DebugInfo_init(&info);
-        DebugInfo_set_identifier(&info, ENCODER1_IDENTIFIER);
-        DebugInfo_set_debugID(&info, Encoder1ReceivedMessage);
-        DebugInfo_set_data(&info, encodersData.leftCount);
-        uint32_t seq2 = 0;
-        DebugInfo_to_bytes(&info, (char *)&info, seq2++);
-        sendDebugInfo(&info);
+        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
+                             encodersData.leftCount);
       } break;
       case ENCODERS_RIGHT: {
         encodersData.rightCount++;
-        DebugInfo info;
-        DebugInfo_init(&info);
-        DebugInfo_set_identifier(&info, ENCODER1_IDENTIFIER);
-        DebugInfo_set_debugID(&info, Encoder1ReceivedMessage);
-        DebugInfo_set_data(&info, encodersData.rightCount);
-        uint32_t seq2 = 0;
-        DebugInfo_to_bytes(&info, (char *)&info, seq2++);
-        sendDebugInfo(&info);
+        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
+                             encodersData.rightCount);
       } break;
       default: { errorCheck(__FILE__, __LINE__); }
       }

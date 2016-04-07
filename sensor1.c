@@ -94,14 +94,12 @@ void SENSOR1_Tasks(void) {
       IRSensorData_to_bytes(&data, (char *)&data, seq_tx++);
       sendMessageToCallbacks(&data);
 
-      static uint32_t seq = 0;
-      DebugInfo info;
-      DebugInfo_init(&info);
-      DebugInfo_set_debugID(&info, Sensor1Receive_debugid);
-      DebugInfo_set_identifier(&info, SENSOR1_IDENTIFIER);
-      DebugInfo_set_data(&info, received.center);
-      DebugInfo_to_bytes(&info, (char *)&info, seq++);
-      //sendDebugInfo(&info);
+      packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1CenterSensorValue,
+                           received.center);
+      packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1LeftSensorValue,
+                           received.left);
+      packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1RightSensorValue,
+                           received.right);
     }
     break;
   default: { break; }

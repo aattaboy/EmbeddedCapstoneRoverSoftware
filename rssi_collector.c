@@ -68,12 +68,11 @@ static uint64_t message_checksum(RSSIData *data) {
   uint64_t sum = 0;
   size_t offset = __builtin_offsetof(RSSIData, seq);
   size_t i;
-  for (i=offset; i<sizeof(*data); i++) {
-    sum += ((uint8_t*)data)[i];
+  for (i = offset; i < sizeof(*data); i++) {
+    sum += ((uint8_t *)data)[i];
   }
   return sum;
 }
-
 
 void RSSI_COLLECTOR_Tasks(void) {
   switch (rssi_collectorData.state) {
@@ -89,7 +88,7 @@ void RSSI_COLLECTOR_Tasks(void) {
                       portMAX_DELAY)) {
       uint32_t seq;
       static uint32_t seq_expected;
-      
+
       uint64_t sum = message_checksum(&received_obj);
       if (sum != received_obj.siphash) {
         break;
@@ -100,14 +99,9 @@ void RSSI_COLLECTOR_Tasks(void) {
       }
       seq_expected++;
 
-      DebugInfo info;
-      DebugInfo_init(&info);
-      DebugInfo_set_identifier(&info, RSSI_COLLECTOR_IDENTIFIER);
-      DebugInfo_set_debugID(&info, RSSICollectorReceivedMessage);
-      DebugInfo_set_data(&info, RSSIData_rssi(&received_obj));
-      static uint32_t seq2;
-      DebugInfo_to_bytes(&info, (char *)&info, seq2++);
-      sendDebugInfo(&info);
+      packAndSendDebugInfo(RSSI_COLLECTOR_IDENTIFIER,
+                           RSSICollectorReceivedMessage,
+                           RSSIData_rssi(&received_obj));
 
       writeToDebug(RSSI_COLLECTOR_RECEIVE_BYTE);
     }

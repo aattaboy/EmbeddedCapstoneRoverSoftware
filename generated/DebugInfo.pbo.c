@@ -188,6 +188,34 @@ void DebugInfo_clear_data(DebugInfo *msg) {
   msg->data = 0;
   set_field_absent(msg, 3);
 }
+/*
+ * int32 cpuTicks
+ */
+bool DebugInfo_has_cpuTicks(const DebugInfo *msg) {
+  check_magic(msg);
+  return has_field(msg, 4);
+}
+int32_t DebugInfo_cpuTicks(const DebugInfo *msg) {
+  check_magic(msg);
+  if (has_field(msg, 4)) {
+    return ntohl(msg->cpuTicks);
+  } else {
+    fprintf(stderr, "Requested field cpuTicks from DebugInfo at address %p, "
+                    "but message dows not have the field \n",
+            (void *)msg);
+    return -1;
+  }
+}
+void DebugInfo_set_cpuTicks(DebugInfo *msg, int32_t value) {
+  check_magic(msg);
+  msg->cpuTicks = htonl(value);
+  set_field_present(msg, 4);
+}
+void DebugInfo_clear_cpuTicks(DebugInfo *msg) {
+  check_magic(msg);
+  msg->cpuTicks = 0;
+  set_field_absent(msg, 4);
+}
 void DebugInfo_to_bytes(DebugInfo *msg, char *buf, uint32_t seq) {
   size_t offset = sizeof(msg->magic) + sizeof(msg->siphash);
   msg->seq = seq;

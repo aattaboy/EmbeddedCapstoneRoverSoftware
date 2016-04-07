@@ -108,6 +108,7 @@ void PID_Tasks(void) {
         }
         derivative = (error - pre_error) / DT;
         pid = KP * error + KI * integral + KD * derivative;
+        packAndSendDebugInfo(PID_IDENTIFIER, PIDValueRecalculated, pid);
 
         // Update error
         pre_error = error;

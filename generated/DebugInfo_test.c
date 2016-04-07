@@ -122,10 +122,25 @@ void DebugInfo_data_test() {
   EXPECT_EQ(false, DebugInfo_has_data(&my_message));
   EXPECT_EQ(0x00000000, my_message.data);
 }
+void DebugInfo_cpuTicks_test() {
+  DebugInfo my_message;
+  DebugInfo_init(&my_message);
+  EXPECT_EQ(0xDEADBEEF, my_message.magic);
+  EXPECT_EQ(false, DebugInfo_has_cpuTicks(&my_message));
+  EXPECT_EQ(0x00000000, my_message.cpuTicks);
+  DebugInfo_set_cpuTicks(&my_message, 0x12345678);
+  EXPECT_EQ(true, DebugInfo_has_cpuTicks(&my_message));
+  EXPECT_EQ(htonl(0x12345678), my_message.cpuTicks);
+  EXPECT_EQ(0x12345678, DebugInfo_cpuTicks(&my_message));
+  DebugInfo_clear_cpuTicks(&my_message);
+  EXPECT_EQ(false, DebugInfo_has_cpuTicks(&my_message));
+  EXPECT_EQ(0x00000000, my_message.cpuTicks);
+}
 int main() {
   DRV_USART0_Initialize();
   DebugInfo_identifier_test();
   DebugInfo_debugID_test();
   DebugInfo_data_test();
+  DebugInfo_cpuTicks_test();
   PRINT("Tests completed")
 }
