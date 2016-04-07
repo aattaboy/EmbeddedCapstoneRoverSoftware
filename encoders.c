@@ -96,7 +96,6 @@ void ENCODERS_Tasks(void) {
       counts.left = encodersData.leftCount;
       counts.right = encodersData.rightCount;
       sendToEncodersCallbacks(&counts);
-
     }
   } break;
 

@@ -82,7 +82,7 @@ void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
     // TODO: figure out how to persist direction cmds
     errorCheck(__FILE__, __LINE__);
   }
-  
+
   int32_t tempLeft = leftDuty * MOTORPERIOD / 100;
   int32_t tempRight = rightDuty * MOTORPERIOD / 100;
 

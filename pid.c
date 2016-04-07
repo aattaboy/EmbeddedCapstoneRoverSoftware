@@ -112,15 +112,16 @@ void PID_Tasks(void) {
         // Update error
         pre_error = error;
 
-        int32_t atomicBaseDutyCycle = __sync_fetch_and_add(&pidBaseDutyCycle, 0);
-        
+        int32_t atomicBaseDutyCycle =
+            __sync_fetch_and_add(&pidBaseDutyCycle, 0);
+
         // send to Motor1Queue
         MotorCommand pid_set;
         MotorCommand_init(&pid_set);
         MotorCommand_set_direction(&pid_set, MOTOR_FORWARD);
         MotorCommand_set_mode(&pid_set, MOTOR_PID_SET);
-        MotorCommand_set_dutyCycle(&pid_set,
-                                   constrain(atomicBaseDutyCycle + pid, MAX, MIN));
+        MotorCommand_set_dutyCycle(
+            &pid_set, constrain(atomicBaseDutyCycle + pid, MAX, MIN));
         MotorCommand_to_bytes(&pid_set, (char *)&pid_set, 0);
         sendToMotor1Queue(&pid_set);
 
