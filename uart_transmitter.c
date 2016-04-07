@@ -65,9 +65,13 @@ void UART_TRANSMITTER_Initialize(void) {
   if (uart_transmitterData.xQueue1 == 0) {
     errorCheck(__FILE__, __LINE__);
   }
+  vQueueAddToRegistry(uart_transmitterData.xQueue1,
+                      "UART Transmitter RX Queue");
   if (uart_transmitterData.xQueue2 == 0) {
     errorCheck(__FILE__, __LINE__);
   }
+  vQueueAddToRegistry(uart_transmitterData.xQueue2,
+                      "UART Transmitter Full Queue");
 }
 
 /******************************************************************************

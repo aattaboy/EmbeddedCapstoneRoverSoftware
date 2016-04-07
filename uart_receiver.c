@@ -52,7 +52,7 @@ void UART_RECEIVER_Initialize(void) {
     errorCheck(__FILE__, __LINE__);
   }
   vQueueAddToRegistry(uart_receiverData.uartReceiverQueue,
-                      "Uart Receiver Qeueue");
+                      "Uart Receiver Queue");
 }
 
 void UART_RECEIVER_Tasks(void) {

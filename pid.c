@@ -64,7 +64,9 @@ void PID_Initialize(void) {
   if (pidData.pidQueue == 0) {
     errorCheck(__FILE__, __LINE__);
   }
-  registerEncodersCallback(PID_encoder_count_cb);
+  vQueueAddToRegistry(pidData.pidQueue, "PID Queue");
+
+  //registerEncodersCallback(PID_encoder_count_cb);
 }
 
 static int32_t constrain(int val, int max, int min) {

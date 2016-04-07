@@ -37,12 +37,10 @@ void writeToDebug(char val) {
 
 // Sends DebugInfo messages
 void sendDebugInfo(DebugInfo *info) {
-#if 0
   struct UART_TRANSMITTER_VARIANT var;
   var.data.debug_info = *info;
   var.type = DEBUG_INFO;
   sendToUartQueue(&var);
-#endif
 }
 
 // Error checking for each function

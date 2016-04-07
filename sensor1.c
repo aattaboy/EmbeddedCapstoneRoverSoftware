@@ -49,7 +49,7 @@ static void sensor1TimerCallback(TimerHandle_t timer __attribute__((unused))) {
 }
 
 static void initialize_sensor1_timer(void) {
-  sensor1Data.timerHandle = xTimerCreate("ADC Timer", 4 / portTICK_PERIOD_MS,
+  sensor1Data.timerHandle = xTimerCreate("ADC Timer", 250 / portTICK_PERIOD_MS,
                                          pdTRUE, NULL, sensor1TimerCallback);
 
   if (sensor1Data.timerHandle == NULL) {
@@ -64,6 +64,7 @@ void SENSOR1_Initialize(void) {
   if (sensor1Data.sensor1Queue == 0) {
     errorCheck(__FILE__, __LINE__);
   }
+  vQueueAddToRegistry(sensor1Data.sensor1Queue, "Sensor 1 Queue");
 
   initialize_sensor1_timer();
 }

@@ -20,6 +20,7 @@ void ENCODERS_Initialize(void) {
   if (encodersData.encodersQueue == 0) {
     errorCheck(__FILE__, __LINE__);
   }
+  vQueueAddToRegistry(encodersData.encodersQueue, "Encoders Queue");
 
   encodersData.leftCount = 0;
   encodersData.rightCount = 0;
@@ -49,15 +50,15 @@ static void sendToEncodersCallbacks(struct EncoderCounts *counts) {
 static int32_t constrain(int val, int max, int min) {
   if (val > max) {
     val = max;
-    //PORTE = 0x1;
+    // PORTE = 0x1;
   } else if (val < min) {
     val = min;
-    //PORTE = 0x2;
+    // PORTE = 0x2;
   }
   return val;
 }
 
-//static size_t state_sequence_idx = 0;
+// static size_t state_sequence_idx = 0;
 
 const enum MOTOR1DIRECTION state_sequence[] = {
   MOTOR_FORWARD,  MOTOR_LEFT,  MOTOR_FORWARD,  MOTOR_LEFT,

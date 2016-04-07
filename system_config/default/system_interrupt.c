@@ -37,14 +37,13 @@ void IntHandlerDrvTmrInstance1(void) {
   } rx_state  = RX_FRAME_START_1;
 
 void IntHandlerDrvUsartInstance0(void) {
-  PORTGINV = 1 << 6;
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
   if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT)) {
     // Send message to transmitter to start transmitting again
     writeToDebug(RECEIVER_ISR_BYTE);
     if (PLIB_USART_TransmitterIsEmpty(USART_ID_1)) {
-      // sendToFullBufferQueueFromISR(' ', &higherPriorityTaskWoken);
+      sendToFullBufferQueueFromISR(' ', &higherPriorityTaskWoken);
       PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
       PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
     }
@@ -105,6 +104,7 @@ void IntHandlerDrvTmrInstance2(void) {
 }
 
 void IntHandlerDrvAdc(void) {
+  PORTGINV = 1 << 6;
   BaseType_t higherPriorityTaskWoken = pdFALSE;
   struct sensorInterrupt isr_data;
 

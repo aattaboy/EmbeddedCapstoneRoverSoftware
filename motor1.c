@@ -40,8 +40,7 @@ void MOTOR1_Initialize(void) {
   if (motor1Data.motor1Queue == 0) {
     errorCheck(__FILE__, __LINE__);
   }
-
-  vQueueAddToRegistry(motor1Data.motor1Queue, "Motor 1 queue");
+  vQueueAddToRegistry(motor1Data.motor1Queue, "Motor 1 Queue");
 
   // Receiver Callback
   registerUartReceiverCallback(Motor_Command_Callback);
@@ -61,8 +60,8 @@ void MOTOR1_Initialize(void) {
 }
 
 void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
-  //DRV_OC0_Enable();
-  //DRV_OC1_Enable();
+  // DRV_OC0_Enable();
+  // DRV_OC1_Enable();
 
   if (direction == MOTOR_FORWARD) {
     PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_G, PORTS_BIT_POS_1);
@@ -122,8 +121,7 @@ void MOTOR1_Tasks(void) {
         old_direction = MotorCommand_direction(&received);
       } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
         rightDutyCycle = MotorCommand_dutyCycle(&received);
-        moveRover(old_direction, leftDutyCycle,
-                  rightDutyCycle);
+        moveRover(old_direction, leftDutyCycle, rightDutyCycle);
       } else {
         errorCheck(__FILE__, __LINE__);
       }
