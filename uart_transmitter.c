@@ -72,12 +72,12 @@ void UART_TRANSMITTER_Initialize(void) {
   uart_transmitterData.xQueue2 = xQueueCreate(QSIZE, sizeof(char));
 
   if (uart_transmitterData.xQueue1 == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(UART_TX_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(uart_transmitterData.xQueue1,
                       "UART Transmitter RX Queue");
   if (uart_transmitterData.xQueue2 == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(UART_TX_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(uart_transmitterData.xQueue2,
                       "UART Transmitter Full Queue");
@@ -117,7 +117,7 @@ void UART_TRANSMITTER_Tasks(void) {
                                     (char *)&receivedMessage.data.debug_info,
                                     &seq)) {
             // TODO: handle gracefully
-            errorCheck(__FILE__, __LINE__);
+            errorCheck(UART_TX_IDENTIFIER, __LINE__);
           }
           if (seq != seq_expected) {
             // TODO: notify
@@ -178,7 +178,7 @@ void UART_TRANSMITTER_Tasks(void) {
     }
   } break;
   default: {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(UART_TX_IDENTIFIER, __LINE__);
     break;
   }
   }

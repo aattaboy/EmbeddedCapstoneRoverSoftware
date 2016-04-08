@@ -48,7 +48,7 @@ void RSSI_COLLECTOR_Initialize(void) {
   rssi_collectorData.rssiCollectorQueue =
       xQueueCreate(RSSI_COLLECTOR_QUEUE_SIZE, sizeof(RSSIData));
   if (rssi_collectorData.rssiCollectorQueue == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(RSSI_COLLECTOR_IDENTIFIER, __LINE__);
   }
 }
 
@@ -107,7 +107,7 @@ void RSSI_COLLECTOR_Tasks(void) {
   } break;
 
   default: {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(RSSI_COLLECTOR_IDENTIFIER, __LINE__);
     break;
   }
   }

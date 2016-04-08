@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "debug.h"
+#include "debuginfo.h"
 
 uint64_t siphash24(const void *src, unsigned long src_sz, const char key[16]);
 
@@ -95,7 +96,7 @@ static void check_magic(const IRSensorData *msg) {
   if (msg->magic != htonl(0xDEADBEEFu)) {
     fprintf(stderr, "Invalid magic number for message IRSensorData at %p\n",
             (void *)msg);
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(ERRORCHECK_IDENTIFIER, __LINE__);
   }
 }
 

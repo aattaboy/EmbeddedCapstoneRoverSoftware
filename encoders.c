@@ -19,7 +19,7 @@ void ENCODERS_Initialize(void) {
   encodersData.encodersQueue =
       xQueueCreate(ENCODERS_QUEUE_SIZE, sizeof(EncoderID));
   if (encodersData.encodersQueue == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(ENCODER1_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(encodersData.encodersQueue, "Encoders Queue");
 
@@ -94,7 +94,7 @@ void ENCODERS_Tasks(void) {
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
                              encodersData.rightCount);
       } break;
-      default: { errorCheck(__FILE__, __LINE__); }
+      default: { errorCheck(ENCODER1_IDENTIFIER, __LINE__); }
       }
 
       struct EncoderCounts counts;

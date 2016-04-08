@@ -8,12 +8,13 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "debug.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
+void errorCheck(int taskID, int lineNum);
+  
 #define DebugInfo_FIELD_MAX (4)
 typedef struct __attribute__((packed)) {
   uint32_t magic;

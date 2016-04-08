@@ -17,6 +17,7 @@
  *******************************************************************************/
 
 #include "debug.h"
+#include "debuginfo.h"
 //#include "uart_transmitter_public.h"
 #include "system/debug/sys_debug.h"
 
@@ -52,11 +53,13 @@ void sendDebugInfoFromISR(DebugInfo *info,
 }
 
 // Error checking for each function
-void errorCheck(const char *const filename, int lineNum) {
+void errorCheck(int taskID, int lineNum) {
   // Set port D to 0xF
   PLIB_PORTS_Write(PORTS_ID_0, PORT_CHANNEL_D, 0xF);
   // Ends all tasks
   vTaskSuspendAll();
+  // Send message to monitor
+  packAndSendDebugInfo(ERRORCHECK_IDENTIFIER, taskID, lineNum);
   // Makes the program not restart
   while (1) {
     SYS_DEBUG_BreakPoint();

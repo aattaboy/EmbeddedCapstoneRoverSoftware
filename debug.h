@@ -37,7 +37,7 @@ void writeToDebug(char val);
 void sendDebugInfo(DebugInfo *info);
 void sendDebugInfoFromISR(DebugInfo *info, BaseType_t *higherPriorityTaskWoken);
 
-void errorCheck(const char *const filename, int lineNum);
+void errorCheck(int taskID, int lineNum);
 
 #endif
 

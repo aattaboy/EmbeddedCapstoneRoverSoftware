@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "debug.h"
+#include "debuginfo.h"
 
 #ifdef __cplusplus
 extern "C" {

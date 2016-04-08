@@ -63,7 +63,7 @@ void PID_Initialize(void) {
   pidData.state = PID_STATE_INIT;
   pidData.pidQueue = xQueueCreate(PID_QUEUE_SIZE, sizeof(struct PID_VARIANT));
   if (pidData.pidQueue == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(PID_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(pidData.pidQueue, "PID Queue");
 
@@ -128,10 +128,10 @@ void PID_Tasks(void) {
 
         writeToDebug(PID_RECEIVE_BYTE);
       } break;
-      default: { errorCheck(__FILE__, __LINE__); }
+      default: { errorCheck(PID_IDENTIFIER, __LINE__); }
       } // switch (received.type)
     } else {
-      errorCheck(__FILE__, __LINE__);
+      errorCheck(PID_IDENTIFIER, __LINE__);
     }
     break;
   }

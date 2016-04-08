@@ -38,7 +38,7 @@ void MOTOR1_Initialize(void) {
   motor1Data.motor1Queue =
       xQueueCreate(MOTOR1_QUEUE_SIZE, sizeof(MotorCommand));
   if (motor1Data.motor1Queue == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(MOTOR1_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(motor1Data.motor1Queue, "Motor 1 Queue");
 
@@ -80,7 +80,7 @@ void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
     rightDutyCycle = 0;
   } else {
     // TODO: figure out how to persist direction cmds
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(MOTOR1_IDENTIFIER, __LINE__);
   }
 
   int32_t tempLeft = leftDuty * MOTORPERIOD / 100;
@@ -103,7 +103,7 @@ void MOTOR1_Tasks(void) {
     if (xQueueReceive(motor1Data.motor1Queue, &received, portMAX_DELAY)) {
       if (!MotorCommand_from_bytes(&received, (void *)&received, &seq)) {
         // TODO: handle less catastrophically
-        errorCheck(__FILE__, __LINE__);
+        errorCheck(MOTOR1_IDENTIFIER, __LINE__);
       }
       if (seq != seq_expected) {
         // TODO: notify
@@ -130,13 +130,13 @@ void MOTOR1_Tasks(void) {
         packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1PIDDutyCycleSet,
                              MotorCommand_dutyCycle(&received));
       } else {
-        errorCheck(__FILE__, __LINE__);
+        errorCheck(MOTOR1_IDENTIFIER, __LINE__);
       }
 
       writeToDebug(MOTOR1_RECEIVE_BYTE);
 
     } else {
-      errorCheck(__FILE__, __LINE__);
+      errorCheck(MOTOR1_IDENTIFIER, __LINE__);
     }
     break;
   }

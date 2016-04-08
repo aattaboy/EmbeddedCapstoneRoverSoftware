@@ -49,7 +49,7 @@ void UART_RECEIVER_Initialize(void) {
       UART_RECEIVER_QUEUE_SIZE, sizeof(struct UART_RECEIVER_VARIANT));
   // If we fail to create the queue, die.
   if (uart_receiverData.uartReceiverQueue == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(UART_RX_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(uart_receiverData.uartReceiverQueue,
                       "Uart Receiver Queue");
@@ -72,7 +72,7 @@ void UART_RECEIVER_Tasks(void) {
         static uint32_t seq_expected;
         if (!MotorCommand_from_bytes(&cmd, (char *)&var.data.motorMessage,
                                      &seq_out)) {
-          errorCheck(__FILE__, __LINE__);
+          errorCheck(UART_RX_IDENTIFIER, __LINE__);
         }
 
         if (seq_out != seq_expected) {

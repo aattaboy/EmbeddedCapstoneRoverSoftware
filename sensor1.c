@@ -53,7 +53,7 @@ static void initialize_sensor1_timer(void) {
                                          pdTRUE, NULL, sensor1TimerCallback);
 
   if (sensor1Data.timerHandle == NULL) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(SENSOR1_IDENTIFIER, __LINE__);
   }
 }
 
@@ -62,7 +62,7 @@ void SENSOR1_Initialize(void) {
   sensor1Data.sensor1Queue =
       xQueueCreate(SENSOR1_QUEUE_SIZE, sizeof(struct sensorInterrupt));
   if (sensor1Data.sensor1Queue == 0) {
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(SENSOR1_IDENTIFIER, __LINE__);
   }
   vQueueAddToRegistry(sensor1Data.sensor1Queue, "Sensor 1 Queue");
 
@@ -73,7 +73,7 @@ void SENSOR1_Tasks(void) {
   switch (sensor1Data.state) {
   case SENSOR1_STATE_INIT: {
     if (xTimerStart(sensor1Data.timerHandle, 0) != pdPASS) {
-      errorCheck(__FILE__, __LINE__);
+      errorCheck(SENSOR1_IDENTIFIER, __LINE__);
     }
     sensor1Data.state = SENSOR1_STATE_RECEIVE;
     sensor1Data.unitTesting = SENSOR_TESTS_CONCLUDED;

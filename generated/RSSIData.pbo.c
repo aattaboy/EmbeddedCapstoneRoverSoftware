@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "debug.h"
+#include "debuginfo.h"
 
 uint64_t siphash24(const void *src, unsigned long src_sz, const char key[16]);
 
@@ -95,7 +96,7 @@ static void check_magic(const RSSIData *msg) {
   if (msg->magic != htonl(0xDEADBEEFu)) {
     fprintf(stderr, "Invalid magic number for message RSSIData at %p\n",
             (void *)msg);
-    errorCheck(__FILE__, __LINE__);
+    errorCheck(ERRORCHECK_IDENTIFIER, __LINE__);
   }
 }
 
@@ -176,7 +177,6 @@ bool RSSIData_from_bytes(RSSIData *msg, const char *buf, uint32_t *seq_out) {
   size_t offset = sizeof(msg->magic) + sizeof(msg->siphash);
   memmove((void *)msg, (void *)buf, sizeof(*msg));
   *seq_out = msg->seq;
-  uint64_t siphash = siphash24(((char *)msg) + offset, sizeof(*msg) - offset,
-                    "scary spooky skeletons");
-  return siphash == msg->siphash;
+  return (siphash24(((char *)msg) + offset, sizeof(*msg) - offset,
+                    "scary spooky skeletons") == msg->siphash);
 }

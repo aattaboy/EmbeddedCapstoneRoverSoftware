@@ -94,6 +94,7 @@ void IntHandlerDrvUsartInstance0(void) {
                                          &higherPriorityTaskWoken);
         }
       } break;
+      default: { errorCheck(UART_RX_IDENTIFIER, __LINE__); }
       } // switch (rx_state)
     }
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_RECEIVE);
@@ -197,7 +198,7 @@ void IntHandlerDrvUsartInstance1(void) {
         PLIB_USART_TransmitterByteSend(USART_ID_4, 0x06);
         state = FRAME_START_1;
       } break;
-      default: { errorCheck(__FILE__, __LINE__); } break;
+      default: { errorCheck(RSSI_COLLECTOR_IDENTIFIER, __LINE__); } break;
       }
     }
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_4_RECEIVE);
