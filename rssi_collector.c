@@ -89,7 +89,7 @@ void RSSI_COLLECTOR_Tasks(void) {
       uint32_t seq;
       static uint32_t seq_expected;
 
-      if (!RSSIData_from_bytes(&received_obj, (char*)&received_obj, &seq)) {
+      if (!RSSIData_from_bytes(&received_obj, (char *)&received_obj, &seq)) {
         break;
       }
 
