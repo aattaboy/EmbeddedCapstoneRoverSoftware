@@ -89,8 +89,7 @@ void RSSI_COLLECTOR_Tasks(void) {
       uint32_t seq;
       static uint32_t seq_expected;
 
-      uint64_t sum = message_checksum(&received_obj);
-      if (sum != received_obj.siphash) {
+      if (!RSSIData_from_bytes(&received_obj, (char*)&received_obj, &seq)) {
         break;
       }
 

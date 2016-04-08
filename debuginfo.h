@@ -28,6 +28,8 @@
 
 // RSSI Collector Event Identifiers
 #define RSSICollectorReceivedMessage (0)
+#define RSSICollectorBufferOverrun (1)
+#define RSSICollectorTotalMsgsRxed (2)
 
 // Encoder 1 events
 #define Encoder1ReceivedMessage (0)
@@ -53,5 +55,8 @@
 #define Motor2ReceivedMessage (0)
 
 void packAndSendDebugInfo(int32_t task_id, int32_t event_id, int32_t value);
+void packAndSendDebugInfoFromISR(int32_t task_id, int32_t event_id,
+                                 int32_t value,
+                                 BaseType_t *higherPriorityTaskWoken);
 
 #endif

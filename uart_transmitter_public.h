@@ -19,6 +19,8 @@ struct UART_TRANSMITTER_VARIANT {
 };
 
 bool sendToUartQueue(struct UART_TRANSMITTER_VARIANT *var);
+bool sendToUartQueueFromISR(struct UART_TRANSMITTER_VARIANT *var,
+                            BaseType_t *higherPriorityTaskWoken);
 bool sendToFullBufferQueueFromISR(char var,
                                   BaseType_t *higherPriorityTaskWoken);
 

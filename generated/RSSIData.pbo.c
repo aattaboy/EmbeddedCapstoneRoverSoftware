@@ -176,6 +176,7 @@ bool RSSIData_from_bytes(RSSIData *msg, const char *buf, uint32_t *seq_out) {
   size_t offset = sizeof(msg->magic) + sizeof(msg->siphash);
   memmove((void *)msg, (void *)buf, sizeof(*msg));
   *seq_out = msg->seq;
-  return (siphash24(((char *)msg) + offset, sizeof(*msg) - offset,
-                    "scary spooky skeletons") == msg->siphash);
+  uint64_t siphash = siphash24(((char *)msg) + offset, sizeof(*msg) - offset,
+                    "scary spooky skeletons");
+  return siphash == msg->siphash;
 }

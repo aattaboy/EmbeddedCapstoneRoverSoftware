@@ -37,6 +37,15 @@ bool sendToUartQueue(struct UART_TRANSMITTER_VARIANT *var) {
   return true;
 }
 
+bool sendToUartQueueFromISR(struct UART_TRANSMITTER_VARIANT *var,
+                            BaseType_t *higherPriorityTaskWoken) {
+  if (errQUEUE_FULL == xQueueSendToBackFromISR(uart_transmitterData.xQueue1,
+                                               var, higherPriorityTaskWoken)) {
+    return false;
+  }
+  return true;
+}
+
 bool sendToFullBufferQueueFromISR(char var,
                                   BaseType_t *higherPriorityTaskWoken) {
   if (errQUEUE_FULL == xQueueSendToBackFromISR(uart_transmitterData.xQueue2,

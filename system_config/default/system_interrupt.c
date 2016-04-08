@@ -1,6 +1,7 @@
 #include <xc.h>
 #include <sys/attribs.h>
 #include "debug.h"
+#include "debuginfo.h"
 #include "debug_codes.h"
 #include "encoders_public.h"
 #include "rssi_collector_public.h"
@@ -26,16 +27,17 @@ void IntHandlerDrvTmrInstance1(void) {
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
 
-  static size_t rx_idx __attribute((unused));
-  static uint8_t rx_buf[sizeof(struct UART_RECEIVER_VARIANT)] __attribute((unused));
+static size_t rx_idx __attribute((unused));
+static uint8_t rx_buf[sizeof(struct UART_RECEIVER_VARIANT)]
+    __attribute((unused));
 
-  static enum {
-    RX_FRAME_START_1,
-    RX_FRAME_START_2,
-    RX_FRAME_START_3,
-    RX_FRAME_START_4,
-    RX_BYTES_RECEIVE
-  } rx_state  = RX_FRAME_START_1;
+static enum {
+  RX_FRAME_START_1,
+  RX_FRAME_START_2,
+  RX_FRAME_START_3,
+  RX_FRAME_START_4,
+  RX_BYTES_RECEIVE
+} rx_state = RX_FRAME_START_1;
 
 void IntHandlerDrvUsartInstance0(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
@@ -49,10 +51,11 @@ void IntHandlerDrvUsartInstance0(void) {
       PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT);
     }
   }
-  
+
   if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_1_RECEIVE)) {
     while (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1)) {
-      uint8_t rxedChar __attribute((unused)) = PLIB_USART_ReceiverByteReceive(USART_ID_1);
+      uint8_t rxedChar __attribute((unused)) =
+          PLIB_USART_ReceiverByteReceive(USART_ID_1);
 
       switch (rx_state) {
       case RX_FRAME_START_1: {
@@ -119,71 +122,90 @@ void IntHandlerDrvAdc(void) {
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
 
+const uint8_t frame_sequence[] = { 0xab, 0xcd, 0xef, 0x12 };
 
-const uint8_t frame_sequence[] = {0xab, 0xcd, 0xef, 0x12};
-
-void IntHandlerDrvUsartInstance1(void)
-{
-  PORTGINV = 1 << 6;
+void IntHandlerDrvUsartInstance1(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
+
   static char rx_buf[sizeof(RSSIData)] __attribute__((unused));
   static size_t rx_idx;
-  
+
   static enum {
     FRAME_START_1,
     FRAME_START_2,
     FRAME_START_3,
     FRAME_START_4,
-    RX
+    RX,
+    TRANSMIT_ACK
   } state;
-  
-  if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_2_RECEIVE)) {
-    while (PLIB_USART_ReceiverDataIsAvailable(USART_ID_2)) {
-      uint8_t rxed_char = PLIB_USART_ReceiverByteReceive(USART_ID_2);
-      
+
+  static uint32_t numBufferOverruns;
+  if (U4STA & 1 << 1) {
+    numBufferOverruns++;
+    packAndSendDebugInfoFromISR(RSSI_COLLECTOR_IDENTIFIER,
+                                RSSICollectorBufferOverrun, numBufferOverruns,
+                                &higherPriorityTaskWoken);
+    PLIB_USART_TransmitterByteSend(USART_ID_4, 0x15);
+    state = FRAME_START_1;
+  }
+
+  if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_4_RECEIVE)) {
+    while (PLIB_USART_ReceiverDataIsAvailable(USART_ID_4)) {
+      uint8_t rxed_char = PLIB_USART_ReceiverByteReceive(USART_ID_4);
+
       switch (state) {
-        case FRAME_START_1: {
-          if (rxed_char == frame_sequence[0]) {
-            state = FRAME_START_2;
-          }
-        } break;
-        case FRAME_START_2: {
-          if (rxed_char == frame_sequence[1]) {
-            state = FRAME_START_3;
-          } else {
-            state = FRAME_START_1;
-          }
-        } break;
-        case FRAME_START_3: {
-          if (rxed_char == frame_sequence[2]) {
-            state = FRAME_START_4;
-          } else {
-            state = FRAME_START_1;
-          }
-        } break;
-        case FRAME_START_4: {
-          if (rxed_char == frame_sequence[3]) {
-            rx_idx = 0;
-            state = RX;
-          } else {
-            state = FRAME_START_1;
-          }
-        } break;
-        case RX: {
-          rx_buf[rx_idx++] = rxed_char;
-          if (rx_idx == sizeof(RSSIData)) {
-            state = FRAME_START_1;
-            sendToRSSICollectorQueueFromISR((RSSIData*)rx_buf, &higherPriorityTaskWoken);
-          }
-        } break;
+      case FRAME_START_1: {
+        if (rxed_char == frame_sequence[0]) {
+          state = FRAME_START_2;
+        }
+      } break;
+      case FRAME_START_2: {
+        if (rxed_char == frame_sequence[1]) {
+          state = FRAME_START_3;
+        } else {
+          state = FRAME_START_1;
+        }
+      } break;
+      case FRAME_START_3: {
+        if (rxed_char == frame_sequence[2]) {
+          state = FRAME_START_4;
+        } else {
+          state = FRAME_START_1;
+        }
+      } break;
+      case FRAME_START_4: {
+        if (rxed_char == frame_sequence[3]) {
+          rx_idx = 0;
+          state = RX;
+        } else {
+          state = FRAME_START_1;
+        }
+      } break;
+      case RX: {
+        rx_buf[rx_idx++] = rxed_char;
+        if (rx_idx == sizeof(RSSIData)) {
+          state = TRANSMIT_ACK;
+          sendToRSSICollectorQueueFromISR((RSSIData *)rx_buf,
+                                          &higherPriorityTaskWoken);
+          static uint32_t total_msgs_rxed;
+          packAndSendDebugInfoFromISR(
+              RSSI_COLLECTOR_IDENTIFIER, RSSICollectorTotalMsgsRxed,
+              total_msgs_rxed++, &higherPriorityTaskWoken);
+        }
+      } break;
+      case TRANSMIT_ACK: {
+        PLIB_USART_TransmitterByteSend(USART_ID_4, 0x06);
+        state = FRAME_START_1;
+      } break;
+      default: { errorCheck(__FILE__, __LINE__); } break;
       }
     }
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_2_RECEIVE);
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_4_RECEIVE);
   }
-  
-  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_2_TRANSMIT);
-  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_2_ERROR);
-  U2STACLR = 1 << 1;
+
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_4_TRANSMIT);
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_USART_4_ERROR);
+  U4STACLR = 1 << 1;
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }

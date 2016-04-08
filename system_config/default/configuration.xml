@@ -219,7 +219,7 @@
       <Template>
         <Name>drv_usart_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/usart</Path>
-        <Checksum>93F001D755FF53DB0479F57C91C92989</Checksum>
+        <Checksum>373010ED573F5079E7996AF5B0CB4AD4</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.h</Name>
@@ -249,12 +249,12 @@
       <Template>
         <Name>drv_usart_static.h</Name>
         <Path>Header Files/app/system_config/default/framework/driver/usart</Path>
-        <Checksum>BA6F20D599229BA7DD925DA323110AED</Checksum>
+        <Checksum>78816446BC37CA452E12C9F1F3586B2C</Checksum>
       </Template>
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>9970352CCE1A23ABB86D275ACA26A872</Checksum>
+        <Checksum>829F35484976181A758D229C79F6317C</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -294,7 +294,7 @@
       <Template>
         <Name>system_interrupt_a.S</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>69347D9C1BED96C7B164C032E24326EB</Checksum>
+        <Checksum>28C80317B9FCC4E870E7AE377031CDBC</Checksum>
       </Template>
       <Template>
         <Name>sensor1.c</Name>

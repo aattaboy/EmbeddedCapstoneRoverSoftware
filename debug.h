@@ -35,6 +35,7 @@ extern "C" {
 void writeToDebug(char val);
 
 void sendDebugInfo(DebugInfo *info);
+void sendDebugInfoFromISR(DebugInfo *info, BaseType_t *higherPriorityTaskWoken);
 
 void errorCheck(const char *const filename, int lineNum);
 

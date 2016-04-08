@@ -70,6 +70,7 @@ void DRV_USART0_WriteByte(const uint8_t byte);
 void DRV_USART1_Initialize(void);
 uint8_t DRV_USART1_ReadByte(void);
 bool DRV_USART1_ReceiverBufferIsEmpty(void);
+void DRV_USART1_WriteByte(const uint8_t byte);
 
 #endif // #ifndef _DRV_USART_STATIC_H
 

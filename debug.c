@@ -43,6 +43,14 @@ void sendDebugInfo(DebugInfo *info) {
   sendToUartQueue(&var);
 }
 
+void sendDebugInfoFromISR(DebugInfo *info,
+                          BaseType_t *higherPriorityTaskWoken) {
+  struct UART_TRANSMITTER_VARIANT var;
+  var.data.debug_info = *info;
+  var.type = DEBUG_INFO;
+  sendToUartQueueFromISR(&var, higherPriorityTaskWoken);
+}
+
 // Error checking for each function
 void errorCheck(const char *const filename, int lineNum) {
   // Set port D to 0xF
