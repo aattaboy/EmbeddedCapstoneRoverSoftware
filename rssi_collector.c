@@ -94,7 +94,7 @@ void RSSI_COLLECTOR_Tasks(void) {
       }
 
       if (seq != seq_expected) {
-        // TODO: notify
+        warning(RSSI_COLLECTOR_IDENTIFIER, __LINE__);
       }
       seq_expected++;
 

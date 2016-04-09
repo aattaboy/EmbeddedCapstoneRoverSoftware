@@ -120,7 +120,7 @@ void UART_TRANSMITTER_Tasks(void) {
             errorCheck(UART_TX_IDENTIFIER, __LINE__);
           }
           if (seq != seq_expected) {
-            // TODO: notify
+            warning(UART_TX_IDENTIFIER, __LINE__);
           }
           seq_expected++;
 

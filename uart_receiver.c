@@ -76,7 +76,7 @@ void UART_RECEIVER_Tasks(void) {
         }
 
         if (seq_out != seq_expected) {
-          // TODO: notify
+          warning(UART_RX_IDENTIFIER, __LINE__);
         }
 
         sendMessageToCallbacks(&var);

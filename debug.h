@@ -38,6 +38,7 @@ void sendDebugInfo(DebugInfo *info);
 void sendDebugInfoFromISR(DebugInfo *info, BaseType_t *higherPriorityTaskWoken);
 
 void errorCheck(int taskID, int lineNum);
+void warning(int taskID, int lineNum);
 
 #endif
 

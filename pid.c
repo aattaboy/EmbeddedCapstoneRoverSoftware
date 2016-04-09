@@ -14,7 +14,7 @@ PID_DATA pidData;
 #define MIN (0)
 #define KP (10.)
 #define KI (1.)
-#define KD (0.)
+#define KD (1.)
 
 int32_t pidBaseDutyCycle;
 
@@ -41,7 +41,7 @@ BaseType_t sendToPIDQueueFromISR(struct PID_VARIANT *info,
   return retval;
 }
 
-// Internal function
+// Internal functions
 static void sendMessageToCallbacks(MotorCommand *info) {
   size_t i;
   for (i = 0; i < pidData.pid_callbacks_idx; i++) {

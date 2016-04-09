@@ -1,4 +1,5 @@
 #include "debug.h"
+#include "debuginfo.h"
 #include "debug_codes.h"
 #include "generated/MotorCommand.pbo.h"
 #include "debuginfo.h"
@@ -102,11 +103,11 @@ void MOTOR1_Tasks(void) {
     static uint32_t seq_expected;
     if (xQueueReceive(motor1Data.motor1Queue, &received, portMAX_DELAY)) {
       if (!MotorCommand_from_bytes(&received, (void *)&received, &seq)) {
-        // TODO: handle less catastrophically
-        errorCheck(MOTOR1_IDENTIFIER, __LINE__);
+        warning(MOTOR1_IDENTIFIER, __LINE__);
+        break;
       }
       if (seq != seq_expected) {
-        // TODO: notify
+        warning(MOTOR1_IDENTIFIER, __LINE__);
       }
       seq_expected++;
       static uint8_t old_direction = MOTOR_FORWARD;
@@ -140,6 +141,6 @@ void MOTOR1_Tasks(void) {
     }
     break;
   }
-  default: { break; }
+  default: { errorCheck(MOTOR1_IDENTIFIER, __LINE__); }
   }
 }

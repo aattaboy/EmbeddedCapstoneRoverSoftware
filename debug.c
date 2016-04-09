@@ -56,12 +56,16 @@ void sendDebugInfoFromISR(DebugInfo *info,
 void errorCheck(int taskID, int lineNum) {
   // Set port D to 0xF
   PLIB_PORTS_Write(PORTS_ID_0, PORT_CHANNEL_D, 0xF);
-  // Ends all tasks
-  vTaskSuspendAll();
   // Send message to monitor
   packAndSendDebugInfo(ERRORCHECK_IDENTIFIER, taskID, lineNum);
+  // Ends all tasks
+  vTaskSuspendAll();
   // Makes the program not restart
   while (1) {
     SYS_DEBUG_BreakPoint();
   }
+}
+
+void warning(int taskID, int lineNum) {
+  //packAndSendDebugInfo(WARNING_IDENTIFIER, taskID, lineNum);
 }

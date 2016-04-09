@@ -18,10 +18,12 @@
 #define PID_IDENTIFIER (5)
 #define MOTOR1_IDENTIFIER (6)
 #define MOTOR2_IDENTIFIER (7)
+// errorcheck-specific IDs
 #define UART_RX_IDENTIFIER (8)
 #define UART_TX_IDENTIFIER (9)
 #define PROTO_IDENTIFIER (10)
 #define ERRORCHECK_IDENTIFIER (11)
+#define WARNING_IDENTIFIER (12)
 
 // Sensor1 event identifiers
 #define Sensor1Receive_debugid (0)
