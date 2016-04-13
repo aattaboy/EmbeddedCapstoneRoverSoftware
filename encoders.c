@@ -100,6 +100,8 @@ void ENCODERS_Tasks(void) {
       struct EncoderCounts counts;
       counts.left = encodersData.leftCount;
       counts.right = encodersData.rightCount;
+      counts.left_dir = (PORTC >> 14) & 0x1;
+      counts.right_dir = (PORTG >> 1) & 0x1;
       sendToEncodersCallbacks(&counts);
     }
   } break;

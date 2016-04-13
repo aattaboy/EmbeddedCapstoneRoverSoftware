@@ -14,7 +14,7 @@ typedef struct {
   POSE_STATES state;
   QueueHandle_t poseQueue;
 
-  uint32_t x, y, yaw;
+  double x, y, yaw;
   struct EncoderCounts prev_counts;
 
   size_t pose_callbacks_idx;
