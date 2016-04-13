@@ -61,6 +61,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "sensor1.h"
 #include "pid.h"
 #include "rssi_collector.h"
+#include "pose.h"
 
 
 // *****************************************************************************
@@ -77,6 +78,7 @@ static void _MOTOR1_Tasks(void);
 static void _SENSOR1_Tasks(void);
 static void _PID_Tasks(void);
 static void _RSSI_COLLECTOR_Tasks(void);
+static void _POSE_Tasks(void);
 
 
 // *****************************************************************************
@@ -133,6 +135,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for RSSI_COLLECTOR Tasks. */
     xTaskCreate((TaskFunction_t) _RSSI_COLLECTOR_Tasks,
                 "RSSI_COLLECTOR Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for POSE Tasks. */
+    xTaskCreate((TaskFunction_t) _POSE_Tasks,
+                "POSE Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -281,6 +288,23 @@ static void _RSSI_COLLECTOR_Tasks(void)
     while(1)
     {
         RSSI_COLLECTOR_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _POSE_Tasks ( void )
+
+  Summary:
+    Maintains state machine of POSE.
+*/
+
+static void _POSE_Tasks(void)
+{
+    while(1)
+    {
+        POSE_Tasks();
     }
 }
 

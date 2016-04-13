@@ -218,6 +218,7 @@ void SYS_Initialize ( void* data )
     SENSOR1_Initialize();
     PID_Initialize();
     RSSI_COLLECTOR_Initialize();
+    POSE_Initialize();
 }
 
 

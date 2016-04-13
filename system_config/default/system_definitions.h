@@ -76,6 +76,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "sensor1.h"
 #include "pid.h"
 #include "rssi_collector.h"
+#include "pose.h"
 
 
 // DOM-IGNORE-BEGIN

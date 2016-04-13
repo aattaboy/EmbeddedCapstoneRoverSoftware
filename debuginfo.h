@@ -24,6 +24,7 @@
 #define PROTO_IDENTIFIER (10)
 #define ERRORCHECK_IDENTIFIER (11)
 #define WARNING_IDENTIFIER (12)
+#define POSE_IDENTIFIER (13)
 
 // Sensor1 event identifiers
 #define Sensor1Receive_debugid (0)
@@ -59,6 +60,11 @@
 
 // Motor2 events
 #define Motor2ReceivedMessage (0)
+
+// Pose events
+#define XUpdated (0)
+#define YUpdated (1)
+#define YawUpdated (2)
 
 void packAndSendDebugInfo(int32_t task_id, int32_t event_id, int32_t value);
 void packAndSendDebugInfoFromISR(int32_t task_id, int32_t event_id,

@@ -9,6 +9,8 @@ void sendToEncodersQueueFromISR(EncoderID encoder_id,
 struct EncoderCounts {
   int64_t left;
   int64_t right;
+  uint8_t left_dir :1;
+  uint8_t right_dir :1;
 };
 
 typedef int (*encoders_callback_t)(struct EncoderCounts *);

@@ -195,6 +195,10 @@
         <Path>Header Files/app</Path>
       </Template>
       <Template>
+        <Name>pose.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
         <Name>encoders.h</Name>
         <Path>Header Files/app</Path>
       </Template>
@@ -213,7 +217,7 @@
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>CC34436BF04B920C4B242BB31E305068</Checksum>
+        <Checksum>2C2B3A92E52165279D9B1C1D0A528CE6</Checksum>
         <ProjectFileChecksum>5D8EC81FB4CD31B86B66693939776243</ProjectFileChecksum>
       </Template>
       <Template>
@@ -254,7 +258,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>829F35484976181A758D229C79F6317C</Checksum>
+        <Checksum>86528D99B8110AD44F1570DE774FC4D7</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -274,12 +278,12 @@
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>88EF07DAC618319BB1DAF4B829AA64F5</Checksum>
+        <Checksum>DA065E1876911D449A0EF34F20BFB158</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum>DDADA6E2806B386C1D5C16C04893E1F5</Checksum>
+        <Checksum>0E1446C7E9CE8BD96790EC535CE2154D</Checksum>
       </Template>
       <Template>
         <Name>drv_oc_static.h</Name>
@@ -290,6 +294,10 @@
         <Name>FreeRTOSConfig.h</Name>
         <Path>Header Files/app/system_config/default</Path>
         <Checksum>8F62C1B6519152BC03452258E7180213</Checksum>
+      </Template>
+      <Template>
+        <Name>pose.h</Name>
+        <Path>Header Files/app</Path>
       </Template>
       <Template>
         <Name>system_interrupt_a.S</Name>
@@ -308,7 +316,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>1DEC93C1F31E3D01E3992FB79D0A5D5E</Checksum>
+        <Checksum>191FEA1BA3F9B9799EBC459FD3D683A6</Checksum>
       </Template>
     </Templates>
     <CompilerItems>
