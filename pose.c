@@ -43,23 +43,31 @@ void POSE_Tasks(void) {
 
       uint8_t diff_sw = (counts.left_dir << 1) | (counts.right_dir);
       switch (diff_sw) {
-      case 0x00: { // FORWARD
-        double r = 3. * 0.142 * (diff);
+      case 0x03: { // FORWARD
+        double r = .426 * (diff);
         double x_disp = r * sin(degToRad(poseData.yaw));
         double y_disp = r * cos(degToRad(poseData.yaw));
         poseData.x += x_disp;
         poseData.y += y_disp;
       } break;
-      case 0x01: { // RIGHT
-        double disp_theta = 3. * 1.54 * (diff);
+      case 0x02: { // RIGHT
+        double disp_theta = 4.2 * (diff);
         poseData.yaw += disp_theta;
+        if (poseData.yaw < 0.0) {
+          poseData.yaw = 360.0 + poseData.yaw;
+        }
+        poseData.yaw = fmod(poseData.yaw, 360.0);
       } break;
-      case 0x02: { // LEFT
-        double disp_theta = 3. * -1.54 * (diff);
+      case 0x01: { // LEFT
+        double disp_theta = -4.2 * (diff);
         poseData.yaw += disp_theta;
+        if (poseData.yaw < 0.0) {
+          poseData.yaw = 360.0 + poseData.yaw;
+        }
+        poseData.yaw = fmod(poseData.yaw, 360.0);
       } break;
-      case 0x03: { // BACKWARD
-        double r = 3. * -0.142 * (diff);
+      case 0x00: { // BACKWARD
+        double r = -0.426 * (diff);
         double x_disp = r * sin(degToRad(poseData.yaw));
         double y_disp = r * cos(degToRad(poseData.yaw));
         poseData.x += x_disp;
