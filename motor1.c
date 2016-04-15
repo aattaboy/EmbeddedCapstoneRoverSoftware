@@ -33,6 +33,11 @@ int Motor_Command_Callback(struct UART_RECEIVER_VARIANT *info) {
   return 0;
 }
 
+static int control_callback_wrapper(MotorCommand *cmd) {
+  sendToMotor1Queue(cmd);
+  return 0;
+}
+
 // Internal functions
 void MOTOR1_Initialize(void) {
   motor1Data.state = MOTOR1_STATE_INIT;
@@ -58,6 +63,8 @@ void MOTOR1_Initialize(void) {
 
   PLIB_OC_PulseWidth16BitSet(OC_ID_1, 0);
   PLIB_OC_PulseWidth16BitSet(OC_ID_2, 0);
+  
+  registerControlCallback(control_callback_wrapper);
 }
 
 void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {

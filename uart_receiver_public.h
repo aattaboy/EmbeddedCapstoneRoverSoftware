@@ -6,17 +6,19 @@ extern "C" {
 #endif
 
 #include <FreeRTOS.h>
-#include <generated/UartRxData.pbo.h>
-#include <generated/MotorCommand.pbo.h>
+#include "generated/MotorCommand.pbo.h"
+#include "generated/RoverPose.pbo.h"
+#include "generated/UartRxData.pbo.h"
 #include <queue.h>
 
-typedef enum { UART_RX_DATA, STRING, MOTOR_MESSAGE } UART_RECEIVER_VARIANT_TYPE;
+typedef enum { UART_RX_DATA, STRING, MOTOR_MESSAGE, CONTROL_CMD } UART_RECEIVER_VARIANT_TYPE;
 
 struct __attribute__((packed)) UART_RECEIVER_VARIANT {
   union {
     UartRxData rx_data;
     WiFlyStringWireFormat string;
     MotorCommand motorMessage;
+    RoverPose controlCmd;
   } data;
   UART_RECEIVER_VARIANT_TYPE type;
 };

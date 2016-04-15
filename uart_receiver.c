@@ -65,25 +65,7 @@ void UART_RECEIVER_Tasks(void) {
     struct UART_RECEIVER_VARIANT var;
     if (xQueueReceive(uart_receiverData.uartReceiverQueue, &var,
                       portMAX_DELAY)) {
-      switch (var.type) {
-      case MOTOR_MESSAGE: {
-        MotorCommand cmd;
-        uint32_t seq_out;
-        static uint32_t seq_expected;
-        if (!MotorCommand_from_bytes(&cmd, (char *)&var.data.motorMessage,
-                                     &seq_out)) {
-          errorCheck(UART_RX_IDENTIFIER, __LINE__);
-        }
-
-        if (seq_out != seq_expected) {
-          warning(UART_RX_IDENTIFIER, __LINE__);
-        }
-
-        sendMessageToCallbacks(&var);
-      } break;
-      default:
-        break;
-      }
+      sendMessageToCallbacks(&var);
     }
   } break;
 
