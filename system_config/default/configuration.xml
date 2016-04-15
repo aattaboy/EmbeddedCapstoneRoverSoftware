@@ -217,7 +217,7 @@
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>2C2B3A92E52165279D9B1C1D0A528CE6</Checksum>
+        <Checksum>C96A2A4F5CB3A126C45637B966BEC505</Checksum>
         <ProjectFileChecksum>5D8EC81FB4CD31B86B66693939776243</ProjectFileChecksum>
       </Template>
       <Template>
@@ -243,6 +243,10 @@
         <Path>Header Files/app</Path>
       </Template>
       <Template>
+        <Name>control.h</Name>
+        <Path>Header Files/app</Path>
+      </Template>
+      <Template>
         <Name>uart_receiver.c</Name>
         <Path>Source Files/app</Path>
       </Template>
@@ -258,7 +262,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>86528D99B8110AD44F1570DE774FC4D7</Checksum>
+        <Checksum>8089BDCDCD57C40FC98BB67BE854BBA3</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -276,9 +280,13 @@
         <Path>Header Files/app</Path>
       </Template>
       <Template>
+        <Name>control.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>DA065E1876911D449A0EF34F20BFB158</Checksum>
+        <Checksum>469DF72E04BDFDD8BBEBB89BA354C8FC</Checksum>
       </Template>
       <Template>
         <Name>drv_tmr_static.c</Name>
@@ -316,7 +324,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>191FEA1BA3F9B9799EBC459FD3D683A6</Checksum>
+        <Checksum>489F3BF9A23EBCBADDF2AF9610C92E91</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

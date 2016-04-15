@@ -25,6 +25,7 @@
 #define ERRORCHECK_IDENTIFIER (11)
 #define WARNING_IDENTIFIER (12)
 #define POSE_IDENTIFIER (13)
+#define CONTROL_IDENTIFIER (13)
 
 // Sensor1 event identifiers
 #define Sensor1Receive_debugid (0)

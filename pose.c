@@ -12,6 +12,15 @@ static int pose_encoder_counts_callback(struct EncoderCounts *counts) {
   return xQueueSendToBack(poseData.poseQueue, counts, portMAX_DELAY);
 }
 
+int registerPoseCallback(pose_callback_t callback) {
+  if (poseData.pose_callbacks_idx < POSE_CALLBACKS_VECTOR_SIZE) {
+    poseData.callbacks[poseData.pose_callbacks_idx++] = callback;
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 void POSE_Initialize(void) {
   poseData.state = POSE_STATE_INIT;
   poseData.poseQueue =
@@ -29,7 +38,7 @@ void POSE_Initialize(void) {
   registerEncodersCallback(pose_encoder_counts_callback);
 }
 
-static double degToRad(double deg) { return deg * 180.0 / 3.14; }
+static double degToRad(double deg) { return deg * 3.14159 / 180.0; }
 
 void POSE_Tasks(void) {
   switch (poseData.state) {
@@ -44,7 +53,7 @@ void POSE_Tasks(void) {
       uint8_t diff_sw = (counts.left_dir << 1) | (counts.right_dir);
       switch (diff_sw) {
       case 0x03: { // FORWARD
-        double r = .426 * (diff);
+        double r = -0.426 * (diff);
         double x_disp = r * sin(degToRad(poseData.yaw));
         double y_disp = r * cos(degToRad(poseData.yaw));
         poseData.x += x_disp;
@@ -67,7 +76,7 @@ void POSE_Tasks(void) {
         poseData.yaw = fmod(poseData.yaw, 360.0);
       } break;
       case 0x00: { // BACKWARD
-        double r = -0.426 * (diff);
+        double r = 0.426 * (diff);
         double x_disp = r * sin(degToRad(poseData.yaw));
         double y_disp = r * cos(degToRad(poseData.yaw));
         poseData.x += x_disp;

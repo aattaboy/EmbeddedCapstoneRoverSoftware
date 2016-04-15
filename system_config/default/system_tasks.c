@@ -62,6 +62,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "pid.h"
 #include "rssi_collector.h"
 #include "pose.h"
+#include "control.h"
 
 
 // *****************************************************************************
@@ -79,6 +80,7 @@ static void _SENSOR1_Tasks(void);
 static void _PID_Tasks(void);
 static void _RSSI_COLLECTOR_Tasks(void);
 static void _POSE_Tasks(void);
+static void _CONTROL_Tasks(void);
 
 
 // *****************************************************************************
@@ -140,6 +142,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for POSE Tasks. */
     xTaskCreate((TaskFunction_t) _POSE_Tasks,
                 "POSE Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for CONTROL Tasks. */
+    xTaskCreate((TaskFunction_t) _CONTROL_Tasks,
+                "CONTROL Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -305,6 +312,23 @@ static void _POSE_Tasks(void)
     while(1)
     {
         POSE_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _CONTROL_Tasks ( void )
+
+  Summary:
+    Maintains state machine of CONTROL.
+*/
+
+static void _CONTROL_Tasks(void)
+{
+    while(1)
+    {
+        CONTROL_Tasks();
     }
 }
 
