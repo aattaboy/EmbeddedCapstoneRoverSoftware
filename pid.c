@@ -13,8 +13,8 @@ PID_DATA pidData;
 #define MAX (100)
 #define MIN (0)
 #define KP (10.)
-#define KI (1.)
-#define KD (1.)
+#define KI (0.)
+#define KD (0.)
 
 int32_t pidBaseDutyCycle;
 

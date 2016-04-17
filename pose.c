@@ -21,6 +21,13 @@ int registerPoseCallback(pose_callback_t callback) {
   }
 }
 
+static void sendToCallbacks(RoverPose *pose) {
+  size_t i;
+  for (i=0; i<poseData.pose_callbacks_idx; i++) {
+    poseData.callbacks[i](pose);
+  }
+}
+
 void POSE_Initialize(void) {
   poseData.state = POSE_STATE_INIT;
   poseData.poseQueue =
@@ -89,6 +96,15 @@ void POSE_Tasks(void) {
       packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
       packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
       packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
+      
+      RoverPose pose;
+      RoverPose_init(&pose);
+      RoverPose_set_xPosition(&pose, poseData.x);
+      RoverPose_set_yPosition(&pose, poseData.y);
+      RoverPose_set_yaw(&pose, poseData.yaw);
+      RoverPose_to_bytes(&pose, (char*)&pose, 0);
+      
+      sendToCallbacks(&pose);
     }
   } break;
   default: { errorCheck(POSE_IDENTIFIER, __LINE__); }
