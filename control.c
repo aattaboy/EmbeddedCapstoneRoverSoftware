@@ -104,7 +104,8 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
   int32_t delta_y =
       RoverPose_yPosition(setpoint) - RoverPose_yPosition(current);
 
-  if (abs(delta_x) < 5 && abs(delta_y) < 5) {
+  double euclidean_distance = sqrt(pow(delta_x, 2) + pow(delta_y, 2));
+  if (euclidean_distance < 4) {
     return CONTROL_STATE_STOP;
   } else {
     int32_t target_angle = atan2(delta_x, delta_y)*180.0/3.14159;
@@ -113,7 +114,10 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
 
     controlData.target_yaw = target_angle; // Recalculating this is expensive
 
-    if (abs(calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current))) > 2) {
+    double offset = calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
+    double sigmoid = offset / (1 + exp(-euclidean_distance/10.0));
+    
+    if (abs(sigmoid) > 2) {
       return CONTROL_STATE_ROTATE;
     } else {
       return CONTROL_STATE_MOVE;
@@ -125,7 +129,7 @@ static void sendMotorCommand(uint8_t direction, uint8_t dutyCycle) {
   MotorCommand motorCommand;
   MotorCommand_init(&motorCommand);
   MotorCommand_set_direction(&motorCommand, direction);
-  MotorCommand_set_dutyCycle(&motorCommand, constrain(dutyCycle, 70, 30));
+  MotorCommand_set_dutyCycle(&motorCommand, constrain(dutyCycle, 70, 35));
   MotorCommand_set_mode(&motorCommand, MOTOR_COMMAND_SET);
   MotorCommand_to_bytes(&motorCommand, (char*)&motorCommand, 0);
   sendToControlCallbacks(&motorCommand);
@@ -168,9 +172,9 @@ void CONTROL_Tasks(void) {
     int32_t yaw_displacement = calculate_mod_yaw_diff(
         controlData.target_yaw, RoverPose_yaw(&controlData.currentPosition));
     if (yaw_displacement > 0) {
-      sendMotorCommand(MOTOR_RIGHT, 50 + abs(yaw_displacement));
+      sendMotorCommand(MOTOR_RIGHT, abs(yaw_displacement));
     } else {
-      sendMotorCommand(MOTOR_LEFT, 50+ abs(yaw_displacement));
+      sendMotorCommand(MOTOR_LEFT, abs(yaw_displacement));
     }
 
     controlData.state = CONTROL_STATE_RECEIVE_ROVER_POSITION;
