@@ -63,16 +63,25 @@ static int pairs_rssi_collector_cb(RSSIData *data) {
   return 0;
 }
 
+static int pairs_pose_callback(RoverPose *pose) {
+  struct RSSI_PAIRS_VARIANT var;
+  var.type = ROVER_POSE;
+  memcpy(&var.data.rover_pose, pose, sizeof(*pose));
+  sendToRssiPairsQueue(&var);
+  return 0;
+}
+
 void RSSI_PAIRS_Initialize(void) {
   rssi_pairsData.state = RSSI_PAIRS_STATE_INIT;
   rssi_pairsData.rssi_pairsQueue =
-      xQueueCreate(RSSI_PAIRS_QUEUE_SIZE, sizeof(RSSIData));
+      xQueueCreate(RSSI_PAIRS_QUEUE_SIZE, sizeof(struct RSSI_PAIRS_VARIANT));
   if (rssi_pairsData.rssi_pairsQueue == 0) {
     errorCheck(RSSI_PAIRS_IDENTIFIER, __LINE__);
   }
   rssi_pairsData.queueReceive = queueReceiveWrapperProd;
   common_init();
   registerRSSICollectorCallback(pairs_rssi_collector_cb);
+  registerPoseCallback(pairs_pose_callback);
 }
 
 void RSSI_PAIRS_Initialize_Testing(rssi_pairs_queue_receive_cb cb) {
@@ -112,7 +121,7 @@ void RSSI_PAIRS_Tasks(void) {
           
           struct UART_TRANSMITTER_VARIANT var;
           var.type = RSSI_PAIR;
-          memcpy(&var.data.rssi_pair, &outgoing_pair, sizeof(outgoing_pair));
+          memcpy(&var.data.rover_pair, &outgoing_pair, sizeof(outgoing_pair));
           sendToUartQueue(&var);
         }
 

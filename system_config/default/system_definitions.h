@@ -78,6 +78,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "rssi_collector.h"
 #include "pose.h"
 #include "control.h"
+#include "rssi_pairs.h"
 
 
 // DOM-IGNORE-BEGIN

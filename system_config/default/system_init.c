@@ -220,6 +220,7 @@ void SYS_Initialize ( void* data )
     RSSI_COLLECTOR_Initialize();
     POSE_Initialize();
     CONTROL_Initialize();
+    RSSI_PAIRS_Initialize();
 }
 
 

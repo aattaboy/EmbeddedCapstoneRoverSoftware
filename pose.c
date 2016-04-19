@@ -51,6 +51,13 @@ void POSE_Tasks(void) {
   switch (poseData.state) {
   case POSE_STATE_INIT: {
     poseData.state = POSE_STATE_RECEIVE;
+    RoverPose pose;
+    RoverPose_init(&pose);
+    RoverPose_set_xPosition(&pose, 0);
+    RoverPose_set_yPosition(&pose, 0);
+    RoverPose_set_yaw(&pose, 0);
+    RoverPose_to_bytes(&pose, (char*)&pose, 0);
+    sendToCallbacks(&pose);
   } break;
   case POSE_STATE_RECEIVE: {
     struct EncoderCounts counts;

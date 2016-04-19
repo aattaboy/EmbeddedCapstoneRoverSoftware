@@ -11,7 +11,7 @@ extern "C" {
 
 typedef enum { DEBUG_INFO, TEST_CHAR, RSSI_PAIR } UART_TRANSMITTER_VARIANT_TYPE;
 
-struct UART_TRANSMITTER_VARIANT {
+struct __attribute__((packed)) UART_TRANSMITTER_VARIANT {
   union {
     DebugInfo debug_info;
     uint8_t test_char;
@@ -20,7 +20,7 @@ struct UART_TRANSMITTER_VARIANT {
   UART_TRANSMITTER_VARIANT_TYPE type;
 };
 
-struct UART_TRANSMITTER_VARIANT_WIRE {
+struct __attribute((packed)) UART_TRANSMITTER_VARIANT_WIRE {
   union {
     DebugInfo debug_info;
     uint8_t test_char;

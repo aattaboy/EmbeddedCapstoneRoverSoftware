@@ -217,7 +217,7 @@
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>C96A2A4F5CB3A126C45637B966BEC505</Checksum>
+        <Checksum>D840B6D077A7340225879443B275B2BB</Checksum>
         <ProjectFileChecksum>5D8EC81FB4CD31B86B66693939776243</ProjectFileChecksum>
       </Template>
       <Template>
@@ -243,6 +243,10 @@
         <Path>Header Files/app</Path>
       </Template>
       <Template>
+        <Name>rssi_pairs.c</Name>
+        <Path>Source Files/app</Path>
+      </Template>
+      <Template>
         <Name>control.h</Name>
         <Path>Header Files/app</Path>
       </Template>
@@ -262,7 +266,7 @@
       <Template>
         <Name>system_interrupt.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>8089BDCDCD57C40FC98BB67BE854BBA3</Checksum>
+        <Checksum>EF7596DAA01506CC01CAEEC5AD9B9D13</Checksum>
         <ProjectFileChecksum>CA05376BFAFD4FCE60C274F2EF88BD6A</ProjectFileChecksum>
       </Template>
       <Template>
@@ -286,7 +290,11 @@
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>469DF72E04BDFDD8BBEBB89BA354C8FC</Checksum>
+        <Checksum>6EF96F1C1FAA10F640E8F98D3284C90D</Checksum>
+      </Template>
+      <Template>
+        <Name>rssi_pairs.h</Name>
+        <Path>Header Files/app</Path>
       </Template>
       <Template>
         <Name>drv_tmr_static.c</Name>
@@ -324,7 +332,7 @@
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>489F3BF9A23EBCBADDF2AF9610C92E91</Checksum>
+        <Checksum>09F632B36422056ABC4933E6DBF21243</Checksum>
       </Template>
     </Templates>
     <CompilerItems>

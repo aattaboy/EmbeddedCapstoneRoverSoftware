@@ -63,6 +63,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "rssi_collector.h"
 #include "pose.h"
 #include "control.h"
+#include "rssi_pairs.h"
 
 
 // *****************************************************************************
@@ -81,6 +82,7 @@ static void _PID_Tasks(void);
 static void _RSSI_COLLECTOR_Tasks(void);
 static void _POSE_Tasks(void);
 static void _CONTROL_Tasks(void);
+static void _RSSI_PAIRS_Tasks(void);
 
 
 // *****************************************************************************
@@ -147,6 +149,11 @@ void SYS_Tasks ( void )
     /* Create OS Thread for CONTROL Tasks. */
     xTaskCreate((TaskFunction_t) _CONTROL_Tasks,
                 "CONTROL Tasks",
+                1024, NULL, 1, NULL);
+
+    /* Create OS Thread for RSSI_PAIRS Tasks. */
+    xTaskCreate((TaskFunction_t) _RSSI_PAIRS_Tasks,
+                "RSSI_PAIRS Tasks",
                 1024, NULL, 1, NULL);
 
     /**************
@@ -329,6 +336,23 @@ static void _CONTROL_Tasks(void)
     while(1)
     {
         CONTROL_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _RSSI_PAIRS_Tasks ( void )
+
+  Summary:
+    Maintains state machine of RSSI_PAIRS.
+*/
+
+static void _RSSI_PAIRS_Tasks(void)
+{
+    while(1)
+    {
+        RSSI_PAIRS_Tasks();
     }
 }
 

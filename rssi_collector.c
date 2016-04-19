@@ -50,6 +50,7 @@ void RSSI_COLLECTOR_Initialize(void) {
   if (rssi_collectorData.rssiCollectorQueue == 0) {
     errorCheck(RSSI_COLLECTOR_IDENTIFIER, __LINE__);
   }
+  vQueueAddToRegistry(rssi_collectorData.rssiCollectorQueue, "RSSI Collector Queue");
 }
 
 // Consume a message from the receive queue and unpack it as a char.
@@ -103,6 +104,7 @@ void RSSI_COLLECTOR_Tasks(void) {
                            RSSIData_rssi(&received_obj));
 
       writeToDebug(RSSI_COLLECTOR_RECEIVE_BYTE);
+      sendMessageToCallbacks(&received_obj);
     }
   } break;
 
