@@ -26,6 +26,7 @@
 #define WARNING_IDENTIFIER (12)
 #define POSE_IDENTIFIER (13)
 #define CONTROL_IDENTIFIER (14)
+#define RSSI_PAIRS_IDENTIFIER (15)
 
 // Sensor1 event identifiers
 #define Sensor1Receive_debugid (0)
