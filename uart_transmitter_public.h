@@ -7,10 +7,20 @@ extern "C" {
 #endif
 
 #include "generated/DebugInfo.pbo.h"
+#include "pose_position_pair.h"
 
-typedef enum { DEBUG_INFO, TEST_CHAR } UART_TRANSMITTER_VARIANT_TYPE;
+typedef enum { DEBUG_INFO, TEST_CHAR, RSSI_PAIR } UART_TRANSMITTER_VARIANT_TYPE;
 
 struct UART_TRANSMITTER_VARIANT {
+  union {
+    DebugInfo debug_info;
+    uint8_t test_char;
+    struct PosePositionPair rover_pair;
+  } data;
+  UART_TRANSMITTER_VARIANT_TYPE type;
+};
+
+struct UART_TRANSMITTER_VARIANT_WIRE {
   union {
     DebugInfo debug_info;
     uint8_t test_char;

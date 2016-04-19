@@ -35,7 +35,7 @@ typedef struct {
   QueueHandle_t xQueue1;
   QueueHandle_t xQueue2;
 
-  char transmit_str[sizeof(DebugInfo) + 4];
+  char transmit_str[sizeof(struct UART_TRANSMITTER_VARIANT) + 4];
   size_t transmit_idx;
   size_t transmit_size;
 

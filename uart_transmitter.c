@@ -106,45 +106,37 @@ void UART_TRANSMITTER_Tasks(void) {
       // Receive a message on the created queue.
       if (xQueueReceive(uart_transmitterData.xQueue1, &(receivedMessage),
                         portMAX_DELAY)) {
-        switch (receivedMessage.type) {
-        case DEBUG_INFO: {
-          // receivedMessage now points to the struct
-          // UART_TRANSMITTER_VARIANT variable posted by vATask.
-          DebugInfo deserialized_message;
-          static uint32_t seq_expected;
-          uint32_t seq;
-          if (!DebugInfo_from_bytes(&deserialized_message,
-                                    (char *)&receivedMessage.data.debug_info,
-                                    &seq)) {
-            // TODO: handle gracefully
-            errorCheck(UART_TX_IDENTIFIER, __LINE__);
+        uart_transmitterData.transmit_idx = 0;
+        uart_transmitterData.transmit_str[0] = 0x13;
+        uart_transmitterData.transmit_str[1] = 0x37;
+        uart_transmitterData.transmit_str[2] = 0x80;
+        uart_transmitterData.transmit_str[3] = 0x08;
+        if (receivedMessage.type == RSSI_PAIR) {
+          uart_transmitterData.transmit_str[4] = 0x01;
+          memcpy(uart_transmitterData.transmit_str + 5, &receivedMessage,
+                 sizeof(receivedMessage));
+        } else {
+          struct UART_TRANSMITTER_VARIANT_WIRE var_wire;
+          var_wire.type = receivedMessage.type;
+          switch (var_wire.type) {
+          case DEBUG_INFO:
+            memcpy(&var_wire.data.debug_info, &receivedMessage.data.debug_info,
+                   sizeof(DebugInfo));
+            break;
+          case TEST_CHAR:
+            memcpy(&var_wire.data.test_char, &receivedMessage.data.test_char,
+                   sizeof(uint8_t));
+            break;
+          default:
+            break;
           }
-          if (seq != seq_expected) {
-            warning(UART_TX_IDENTIFIER, __LINE__);
-          }
-          seq_expected++;
-
-          static uint32_t debuginfo_seq;
-          DebugInfo_to_bytes(&deserialized_message,
-                             (char *)&deserialized_message, debuginfo_seq++);
-          uart_transmitterData.transmit_idx = 0;
-          uart_transmitterData.transmit_str[0] = 0x13;
-          uart_transmitterData.transmit_str[1] = 0x37;
-          uart_transmitterData.transmit_str[2] = 0x80;
-          uart_transmitterData.transmit_str[3] = 0x08;
-          memcpy(uart_transmitterData.transmit_str + 4, &deserialized_message,
-                 sizeof(deserialized_message));
-          uart_transmitterData.transmit_size = sizeof(deserialized_message) + 4;
-
-          uart_transmitterData.state = UART_TRANSMITTER_STATE_SEND;
-          writeToDebug('b');
+          uart_transmitterData.transmit_str[4] = 0x00;
+          memcpy(uart_transmitterData.transmit_str + 5, &var_wire,
+                 sizeof(struct UART_TRANSMITTER_VARIANT_WIRE));
         }
-        case TEST_CHAR: {
-          uint8_t to_transmit = receivedMessage.data.test_char;
-          PLIB_USART_TransmitterByteSend(USART_ID_1, to_transmit);
-        }
-        default: { break; }
-        }
+        uart_transmitterData.transmit_size =
+            sizeof(struct UART_TRANSMITTER_VARIANT_WIRE) + 5;
+        uart_transmitterData.state = UART_TRANSMITTER_STATE_SEND;
       }
     }
   } break;
