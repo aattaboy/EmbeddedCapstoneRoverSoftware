@@ -46,6 +46,7 @@ static void sensor1TimerCallback(TimerHandle_t timer __attribute__((unused))) {
   DRV_ADC_Initialize();
   DRV_ADC_Open();
   DRV_ADC_Start();
+  PLIB_ADC_MuxAInputScanEnable(ADC_ID_1);
 }
 
 static void initialize_sensor1_timer(void) {
