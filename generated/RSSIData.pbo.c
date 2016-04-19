@@ -165,6 +165,90 @@ void RSSIData_clear_rssi(RSSIData *msg) {
   msg->rssi = 0;
   set_field_absent(msg, 2);
 }
+/*
+ * int32 pairSeq
+ */
+bool RSSIData_has_pairSeq(const RSSIData *msg) {
+  check_magic(msg);
+  return has_field(msg, 3);
+}
+int32_t RSSIData_pairSeq(const RSSIData *msg) {
+  check_magic(msg);
+  if (has_field(msg, 3)) {
+    return ntohl(msg->pairSeq);
+  } else {
+    fprintf(stderr, "Requested field pairSeq from RSSIData at address %p, but "
+                    "message dows not have the field \n",
+            (void *)msg);
+    return -1;
+  }
+}
+void RSSIData_set_pairSeq(RSSIData *msg, int32_t value) {
+  check_magic(msg);
+  msg->pairSeq = htonl(value);
+  set_field_present(msg, 3);
+}
+void RSSIData_clear_pairSeq(RSSIData *msg) {
+  check_magic(msg);
+  msg->pairSeq = 0;
+  set_field_absent(msg, 3);
+}
+/*
+ * int32 frameSize
+ */
+bool RSSIData_has_frameSize(const RSSIData *msg) {
+  check_magic(msg);
+  return has_field(msg, 4);
+}
+int32_t RSSIData_frameSize(const RSSIData *msg) {
+  check_magic(msg);
+  if (has_field(msg, 4)) {
+    return ntohl(msg->frameSize);
+  } else {
+    fprintf(stderr, "Requested field frameSize from RSSIData at address %p, "
+                    "but message dows not have the field \n",
+            (void *)msg);
+    return -1;
+  }
+}
+void RSSIData_set_frameSize(RSSIData *msg, int32_t value) {
+  check_magic(msg);
+  msg->frameSize = htonl(value);
+  set_field_present(msg, 4);
+}
+void RSSIData_clear_frameSize(RSSIData *msg) {
+  check_magic(msg);
+  msg->frameSize = 0;
+  set_field_absent(msg, 4);
+}
+/*
+ * int32 frameNum
+ */
+bool RSSIData_has_frameNum(const RSSIData *msg) {
+  check_magic(msg);
+  return has_field(msg, 5);
+}
+int32_t RSSIData_frameNum(const RSSIData *msg) {
+  check_magic(msg);
+  if (has_field(msg, 5)) {
+    return ntohl(msg->frameNum);
+  } else {
+    fprintf(stderr, "Requested field frameNum from RSSIData at address %p, but "
+                    "message dows not have the field \n",
+            (void *)msg);
+    return -1;
+  }
+}
+void RSSIData_set_frameNum(RSSIData *msg, int32_t value) {
+  check_magic(msg);
+  msg->frameNum = htonl(value);
+  set_field_present(msg, 5);
+}
+void RSSIData_clear_frameNum(RSSIData *msg) {
+  check_magic(msg);
+  msg->frameNum = 0;
+  set_field_absent(msg, 5);
+}
 void RSSIData_to_bytes(RSSIData *msg, char *buf, uint32_t seq) {
   size_t offset = sizeof(msg->magic) + sizeof(msg->siphash);
   msg->seq = seq;

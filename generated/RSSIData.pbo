@@ -1,4 +1,7 @@
 message RSSIData {
   string[20] bssid = 1;
   int16 rssi = 2;
+  int32 pairSeq = 3;
+  int32 frameSize = 4;
+  int32 frameNum = 5;
 }

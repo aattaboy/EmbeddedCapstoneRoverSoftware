@@ -125,9 +125,54 @@ void RSSIData_rssi_test() {
   EXPECT_EQ(false, RSSIData_has_rssi(&my_message));
   EXPECT_EQ(0x0000, my_message.rssi);
 }
+void RSSIData_pairSeq_test() {
+  RSSIData my_message;
+  RSSIData_init(&my_message);
+  EXPECT_EQ(0xDEADBEEF, my_message.magic);
+  EXPECT_EQ(false, RSSIData_has_pairSeq(&my_message));
+  EXPECT_EQ(0x00000000, my_message.pairSeq);
+  RSSIData_set_pairSeq(&my_message, 0x12345678);
+  EXPECT_EQ(true, RSSIData_has_pairSeq(&my_message));
+  EXPECT_EQ(htonl(0x12345678), my_message.pairSeq);
+  EXPECT_EQ(0x12345678, RSSIData_pairSeq(&my_message));
+  RSSIData_clear_pairSeq(&my_message);
+  EXPECT_EQ(false, RSSIData_has_pairSeq(&my_message));
+  EXPECT_EQ(0x00000000, my_message.pairSeq);
+}
+void RSSIData_frameSize_test() {
+  RSSIData my_message;
+  RSSIData_init(&my_message);
+  EXPECT_EQ(0xDEADBEEF, my_message.magic);
+  EXPECT_EQ(false, RSSIData_has_frameSize(&my_message));
+  EXPECT_EQ(0x00000000, my_message.frameSize);
+  RSSIData_set_frameSize(&my_message, 0x12345678);
+  EXPECT_EQ(true, RSSIData_has_frameSize(&my_message));
+  EXPECT_EQ(htonl(0x12345678), my_message.frameSize);
+  EXPECT_EQ(0x12345678, RSSIData_frameSize(&my_message));
+  RSSIData_clear_frameSize(&my_message);
+  EXPECT_EQ(false, RSSIData_has_frameSize(&my_message));
+  EXPECT_EQ(0x00000000, my_message.frameSize);
+}
+void RSSIData_frameNum_test() {
+  RSSIData my_message;
+  RSSIData_init(&my_message);
+  EXPECT_EQ(0xDEADBEEF, my_message.magic);
+  EXPECT_EQ(false, RSSIData_has_frameNum(&my_message));
+  EXPECT_EQ(0x00000000, my_message.frameNum);
+  RSSIData_set_frameNum(&my_message, 0x12345678);
+  EXPECT_EQ(true, RSSIData_has_frameNum(&my_message));
+  EXPECT_EQ(htonl(0x12345678), my_message.frameNum);
+  EXPECT_EQ(0x12345678, RSSIData_frameNum(&my_message));
+  RSSIData_clear_frameNum(&my_message);
+  EXPECT_EQ(false, RSSIData_has_frameNum(&my_message));
+  EXPECT_EQ(0x00000000, my_message.frameNum);
+}
 int main() {
   DRV_USART0_Initialize();
   RSSIData_bssid_test();
   RSSIData_rssi_test();
+  RSSIData_pairSeq_test();
+  RSSIData_frameSize_test();
+  RSSIData_frameNum_test();
   PRINT("Tests completed")
 }

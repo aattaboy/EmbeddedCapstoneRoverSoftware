@@ -15,7 +15,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#define RSSIData_FIELD_MAX (2)
+#define RSSIData_FIELD_MAX (5)
 typedef struct __attribute__((packed)) {
   uint32_t magic;
   uint64_t siphash;
@@ -24,6 +24,9 @@ typedef struct __attribute__((packed)) {
   uint32_t bssid_size;
   char bssid[100];
   uint16_t rssi;
+  uint32_t pairSeq;
+  uint32_t frameSize;
+  uint32_t frameNum;
 } RSSIData;
 void RSSIData_init(RSSIData *msg);
 /*
@@ -40,6 +43,27 @@ bool RSSIData_has_rssi(const RSSIData *msg);
 int16_t RSSIData_rssi(const RSSIData *msg);
 void RSSIData_set_rssi(RSSIData *msg, int16_t value);
 void RSSIData_clear_rssi(RSSIData *msg);
+/*
+ * int32 pairSeq
+ */
+bool RSSIData_has_pairSeq(const RSSIData *msg);
+int32_t RSSIData_pairSeq(const RSSIData *msg);
+void RSSIData_set_pairSeq(RSSIData *msg, int32_t value);
+void RSSIData_clear_pairSeq(RSSIData *msg);
+/*
+ * int32 frameSize
+ */
+bool RSSIData_has_frameSize(const RSSIData *msg);
+int32_t RSSIData_frameSize(const RSSIData *msg);
+void RSSIData_set_frameSize(RSSIData *msg, int32_t value);
+void RSSIData_clear_frameSize(RSSIData *msg);
+/*
+ * int32 frameNum
+ */
+bool RSSIData_has_frameNum(const RSSIData *msg);
+int32_t RSSIData_frameNum(const RSSIData *msg);
+void RSSIData_set_frameNum(RSSIData *msg, int32_t value);
+void RSSIData_clear_frameNum(RSSIData *msg);
 void RSSIData_to_bytes(RSSIData *msg, char *buf, uint32_t seq);
 bool RSSIData_from_bytes(RSSIData *msg, const char *buf, uint32_t *seq_out);
 
