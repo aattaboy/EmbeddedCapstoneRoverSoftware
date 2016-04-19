@@ -67,7 +67,7 @@ void POSE_Tasks(void) {
       uint8_t diff_sw = (counts.left_dir << 1) | (counts.right_dir);
       switch (diff_sw) {
       case 0x03: { // FORWARD
-        double r = -0.426 * (diff);
+        double r = -0.404 * (diff);
         double x_disp = r * sin(degToRad(poseData.yaw));
         double y_disp = r * cos(degToRad(poseData.yaw));
         poseData.x += x_disp;
@@ -90,7 +90,7 @@ void POSE_Tasks(void) {
         poseData.yaw = fmod(poseData.yaw, 360.0);
       } break;
       case 0x00: { // BACKWARD
-        double r = 0.426 * (diff);
+        double r = 0.404 * (diff);
         double x_disp = r * sin(degToRad(poseData.yaw));
         double y_disp = r * cos(degToRad(poseData.yaw));
         poseData.x += x_disp;
