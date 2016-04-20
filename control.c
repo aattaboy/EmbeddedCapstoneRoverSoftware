@@ -4,6 +4,7 @@
 #include "motor1_public.h"
 #include "system_config/default/framework/driver/tmr/drv_tmr_static.h"
 #include "uart_receiver_public.h"
+#include "util.h"
 
 #include <math.h>
 
@@ -75,17 +76,6 @@ static void sendToControlCallbacks(MotorCommand *motorCommand) {
     controlData.callbacks[i](motorCommand);
   }
 }
-
-static int32_t constrain(int val, int max, int min) {
-  if (val > max) {
-    val = max;
-  } else if (val < min) {
-    val = min;
-  }
-  return val;
-}
-
-static int32_t positive_modulo(int32_t i, int32_t n) { return (i % n + n) % n; }
 
 // Use fancy modulo arithmetic to give a delta between where we are and where we
 // want to be
