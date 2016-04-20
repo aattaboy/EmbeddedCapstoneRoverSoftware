@@ -3,6 +3,7 @@
 #include "encoders.h"
 #include "motor1_public.h"
 #include "system_config/default/framework/driver/tmr/drv_tmr_static.h"
+#include "util.h"
 
 ENCODERS_DATA encodersData;
 
@@ -49,17 +50,6 @@ static void sendToEncodersCallbacks(struct EncoderCounts *counts) {
   for (i = 0; i < encodersData.encoders_callbacks_idx; i++) {
     encodersData.callbacks[i](counts);
   }
-}
-
-static int32_t constrain(int val, int max, int min) {
-  if (val > max) {
-    val = max;
-    // PORTE = 0x1;
-  } else if (val < min) {
-    val = min;
-    // PORTE = 0x2;
-  }
-  return val;
 }
 
 // static size_t state_sequence_idx = 0;
