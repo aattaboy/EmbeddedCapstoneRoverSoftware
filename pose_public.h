@@ -4,7 +4,9 @@
 #include "encoders_public.h"
 #include "generated/RoverPose.pbo.h"
 
-void sendToPoseQueue(struct EncoderCounts *counts);
+#define POSE_QUEUE_TYPE struct EncoderCounts
+
+void sendToPoseQueue(POSE_QUEUE_TYPE *counts);
 
 typedef int (*pose_callback_t)(RoverPose *);
 

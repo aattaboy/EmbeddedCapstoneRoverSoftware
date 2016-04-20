@@ -31,7 +31,7 @@ static void sendToCallbacks(RoverPose *pose) {
 void POSE_Initialize(void) {
   poseData.state = POSE_STATE_INIT;
   poseData.poseQueue =
-      xQueueCreate(POSE_QUEUE_SIZE, sizeof(struct EncoderCounts));
+      xQueueCreate(POSE_QUEUE_SIZE, sizeof(POSE_QUEUE_TYPE));
   if (poseData.poseQueue == 0) {
     errorCheck(POSE_IDENTIFIER, __LINE__);
   }
@@ -60,7 +60,7 @@ void POSE_Tasks(void) {
     sendToCallbacks(&pose);
   } break;
   case POSE_STATE_RECEIVE: {
-    struct EncoderCounts counts;
+    POSE_QUEUE_TYPE counts;
     if (xQueueReceive(poseData.poseQueue, &counts, portMAX_DELAY)) {
       uint32_t diff = counts.left - poseData.prev_counts.left;
 
