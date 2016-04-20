@@ -88,15 +88,15 @@ void DRV_ADC_Initialize(void)
     PLIB_ADC_MuxChannel0InputNegativeSelect(DRV_ADC_ID_1, ADC_MUX_A, ADC_INPUT_NEGATIVE_VREF_MINUS);
  
     /* Select Scan Input 0 */
-    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN0);
+    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN8);
  
  
     /* Select Scan Input 1 */
-    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN1);
+    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN9);
  
  
     /* Select Scan Input 2 */
-    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN2);
+    PLIB_ADC_InputScanMaskAdd(DRV_ADC_ID_1, ADC_INPUT_SCAN_AN10);
  
     /* Initialize ADC Interrupt */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_ADC_1);
