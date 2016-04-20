@@ -9,7 +9,10 @@ POSE_DATA poseData;
 #define POSE_QUEUE_SIZE (10)
 
 static int pose_encoder_counts_callback(struct EncoderCounts *counts) {
-  return xQueueSendToBack(poseData.poseQueue, counts, portMAX_DELAY);
+  POSE_QUEUE_TYPE var;
+  var.type = POSE_ENCODER_COUNTS;
+  var.data.encoderCounts = *counts;
+  return xQueueSendToBack(poseData.poseQueue, &var, portMAX_DELAY);
 }
 
 int registerPoseCallback(pose_callback_t callback) {
