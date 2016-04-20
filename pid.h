@@ -35,8 +35,11 @@ typedef struct {
   size_t pid_callbacks_idx;
   pid_callback_t callbacks[PID_CALLBACKS_VECTOR_SIZE];
 
-  uint32_t velocity_left;
-  uint32_t velocity_right;
+  int32_t velocity_left;
+  int32_t velocity_right;
+  
+  int32_t displacement_left;
+  int32_t displacement_right;
   
   TimerHandle_t timer;
   

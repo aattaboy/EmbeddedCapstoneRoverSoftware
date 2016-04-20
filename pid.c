@@ -9,12 +9,19 @@ PID_DATA pidData;
 
 // Define parameters
 #define EPSILON (0.01)
-#define DT (10/1000.0)
+#define DT (100/1000.0)
 #define MAX (100)
 #define MIN (0)
-#define KP (90000000.0)
+
+#ifdef VEL
+#define KP (150000000.0)
 #define KI (100000000.0)
 #define KD (0.0)
+#else 
+#define KP (20.0)
+#define KI (10.0)
+#define KD (0.0)
+#endif
 
 int32_t pidBaseDutyCycle;
 
@@ -75,7 +82,7 @@ void PID_Initialize(void) {
 
   registerEncodersCallback(PID_encoder_count_cb);
 
-  pidData.timer = xTimerCreate("PID Timer", 10 / portTICK_PERIOD_MS, pdTRUE,
+  pidData.timer = xTimerCreate("PID Timer", 100 / portTICK_PERIOD_MS, pdTRUE,
                                NULL, pidTimerCallback);
   if (pidData.timer == NULL) {
     errorCheck(PID_IDENTIFIER, __LINE__);
@@ -116,10 +123,9 @@ void PID_Tasks(void) {
         double error;
         double derivative;
         double pid;
-
-        error = (1.0 / (pidData.velocity_right + 1)) -
-                (1.0 / (pidData.velocity_left + 1));
-
+        
+        error = pidData.displacement_right - pidData.displacement_left;
+        
         // Check to see if error is too small
         if (abs(error) > EPSILON) {
           integral = integral + error * DT;
@@ -150,6 +156,8 @@ void PID_Tasks(void) {
       case ENCODER_COUNTS: {
         pidData.velocity_left = received.data.encoder_counts.velocity_left;
         pidData.velocity_right = received.data.encoder_counts.velocity_right;
+        pidData.displacement_left = received.data.encoder_counts.left;
+        pidData.displacement_right = received.data.encoder_counts.right;
       } break;
       default: { errorCheck(PID_IDENTIFIER, __LINE__); }
       } // switch (received.type)
