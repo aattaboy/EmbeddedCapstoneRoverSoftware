@@ -92,7 +92,8 @@ void ENCODERS_Tasks(void) {
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
                              encodersData.leftCount);
         // Calculate velocity
-        int32_t tick_diff = data.cycles - encodersData.left_cycles;
+        int32_t tick_diff = positive_modulo(
+            data.cycles - encodersData.left_cycles, 0xffffffffu);
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftVelocity,
                              tick_diff);
         encodersData.left_cycles = data.cycles;
@@ -101,7 +102,8 @@ void ENCODERS_Tasks(void) {
         encodersData.rightCount++;
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
                              encodersData.rightCount);
-        int32_t tick_diff = data.cycles = encodersData.right_cycles;
+        int32_t tick_diff = positive_modulo(
+            data.cycles = encodersData.right_cycles, 0xffffffffu);
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,
                              tick_diff);
         encodersData.right_cycles = data.cycles;
