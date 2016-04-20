@@ -116,7 +116,7 @@ void UART_TRANSMITTER_Tasks(void) {
           memcpy(uart_transmitterData.transmit_str + 5, &receivedMessage,
                  sizeof(receivedMessage));
           uart_transmitterData.transmit_size =
-            sizeof(struct UART_TRANSMITTER_VARIANT) + 5;
+              sizeof(struct UART_TRANSMITTER_VARIANT) + 5;
         } else {
           struct UART_TRANSMITTER_VARIANT_WIRE var_wire;
           var_wire.type = receivedMessage.type;
@@ -136,7 +136,7 @@ void UART_TRANSMITTER_Tasks(void) {
           memcpy(uart_transmitterData.transmit_str + 5, &var_wire,
                  sizeof(struct UART_TRANSMITTER_VARIANT_WIRE));
           uart_transmitterData.transmit_size =
-            sizeof(struct UART_TRANSMITTER_VARIANT_WIRE) + 5;
+              sizeof(struct UART_TRANSMITTER_VARIANT_WIRE) + 5;
         }
         uart_transmitterData.state = UART_TRANSMITTER_STATE_SEND;
       }

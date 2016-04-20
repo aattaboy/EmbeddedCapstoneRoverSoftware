@@ -98,7 +98,7 @@ static int32_t calculate_mod_yaw_diff(int32_t target, int32_t current) {
 }
 
 static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
-                                             RoverPose *current) {
+                                              RoverPose *current) {
   int32_t delta_x =
       RoverPose_xPosition(setpoint) - RoverPose_xPosition(current);
   int32_t delta_y =
@@ -108,15 +108,16 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
   if (euclidean_distance < 4) {
     return CONTROL_STATE_STOP;
   } else {
-    int32_t target_angle = atan2(delta_x, delta_y)*180.0/3.14159;
+    int32_t target_angle = atan2(delta_x, delta_y) * 180.0 / 3.14159;
     if (target_angle < 0)
       target_angle += 360;
 
     controlData.target_yaw = target_angle; // Recalculating this is expensive
 
-    double offset = calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
-    double sigmoid = offset / (1 + exp(-euclidean_distance/10.0));
-    
+    double offset =
+        calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
+    double sigmoid = offset / (1 + exp(-euclidean_distance / 10.0));
+
     if (abs(sigmoid) > 2) {
       return CONTROL_STATE_ROTATE;
     } else {
@@ -131,7 +132,7 @@ static void sendMotorCommand(uint8_t direction, uint8_t dutyCycle) {
   MotorCommand_set_direction(&motorCommand, direction);
   MotorCommand_set_dutyCycle(&motorCommand, constrain(dutyCycle, 70, 35));
   MotorCommand_set_mode(&motorCommand, MOTOR_COMMAND_SET);
-  MotorCommand_to_bytes(&motorCommand, (char*)&motorCommand, 0);
+  MotorCommand_to_bytes(&motorCommand, (char *)&motorCommand, 0);
   sendToControlCallbacks(&motorCommand);
 }
 
@@ -157,8 +158,8 @@ void CONTROL_Tasks(void) {
   case CONTROL_STATE_RECEIVE_ROVER_POSITION: {
     if (xQueueReceive(controlData.controlQueueRoverPosition,
                       &controlData.currentPosition, portMAX_DELAY)) {
-      //uint32_t seq_out;
-      //if (!RoverPose_from_bytes(&controlData.currentPosition,
+      // uint32_t seq_out;
+      // if (!RoverPose_from_bytes(&controlData.currentPosition,
       //                          (char *)&controlData.currentPosition,
       //                          &seq_out)) {
       //  break;
@@ -182,7 +183,7 @@ void CONTROL_Tasks(void) {
 
   case CONTROL_STATE_MOVE: {
     sendMotorCommand(MOTOR_FORWARD, 50);
-    
+
     controlData.state = CONTROL_STATE_RECEIVE_ROVER_POSITION;
   } break;
 
@@ -192,7 +193,7 @@ void CONTROL_Tasks(void) {
     MotorCommand_set_direction(&motorCommand, MOTOR_FORWARD);
     MotorCommand_set_dutyCycle(&motorCommand, 0);
     MotorCommand_set_mode(&motorCommand, MOTOR_COMMAND_SET);
-    MotorCommand_to_bytes(&motorCommand, (char*)&motorCommand, 0);
+    MotorCommand_to_bytes(&motorCommand, (char *)&motorCommand, 0);
     sendToControlCallbacks(&motorCommand);
     controlData.state = CONTROL_STATE_RECEIVE;
   } break;

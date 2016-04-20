@@ -30,10 +30,10 @@ typedef struct {
 
   size_t control_callbacks_idx;
   control_callback_t callbacks[CONTROL_CALLBACKS_VECTOR_SIZE];
-  
+
   RoverPose setPoint;
   RoverPose currentPosition;
-  
+
   int32_t target_yaw;
 
 } CONTROL_DATA;

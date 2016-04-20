@@ -41,7 +41,7 @@ bool getRSSIPairsReceivedRoverPose() { return rssi_pairsData.receieved_pose; }
 
 static void sendPairToCallbacks(struct PosePositionPair *out) {
   size_t i;
-  for (i=0; i<rssi_pairsData.rssi_pairs_callbacks_idx; i++) {
+  for (i = 0; i < rssi_pairsData.rssi_pairs_callbacks_idx; i++) {
     rssi_pairsData.callbacks[i](out);
   }
 }
@@ -113,12 +113,12 @@ void RSSI_PAIRS_Tasks(void) {
           // TODO: notify
         }
         seq_expected++;
-        
+
         if (rssi_pairsData.receieved_pose) {
           struct PosePositionPair outgoing_pair;
           outgoing_pair.pose = rssi_pairsData.last_reported_pose;
           outgoing_pair.rssi = rssi;
-          
+
           struct UART_TRANSMITTER_VARIANT var;
           var.type = RSSI_PAIR;
           memcpy(&var.data.rover_pair, &outgoing_pair, sizeof(outgoing_pair));

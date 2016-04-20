@@ -63,7 +63,7 @@ void MOTOR1_Initialize(void) {
 
   PLIB_OC_PulseWidth16BitSet(OC_ID_1, 0);
   PLIB_OC_PulseWidth16BitSet(OC_ID_2, 0);
-  
+
   registerControlCallback(control_callback_wrapper);
 }
 
