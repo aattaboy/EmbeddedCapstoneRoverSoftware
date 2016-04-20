@@ -44,6 +44,8 @@
 #define Encoder1ReceivedMessage (0)
 #define Encoder1LeftCount (1)
 #define Encoder1RightCount (2)
+#define Encoder1LeftVelocity (3)
+#define Encoder1RightVelocity (4)
 
 // Encoder 2 events
 #define Encoder2ReceivedMessage (0)

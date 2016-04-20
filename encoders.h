@@ -25,6 +25,9 @@ typedef struct {
 
   uint64_t leftCount;
   uint64_t rightCount;
+  
+  uint32_t left_cycles;
+  uint32_t right_cycles;
 
   size_t encoders_callbacks_idx;
   encoders_callback_t callbacks[ENCODERS_CALLBACKS_VECTOR_SIZE];

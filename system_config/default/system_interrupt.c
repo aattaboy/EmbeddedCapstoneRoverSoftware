@@ -8,11 +8,16 @@
 #include "sensor1_public.h"
 #include "system_definitions.h"
 #include "uart_receiver_public.h"
+#include "util.h"
 
 void IntHandlerDrvTmrInstance0(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
-  sendToEncodersQueueFromISR(ENCODERS_LEFT, &higherPriorityTaskWoken);
+  struct EncodersISRData data;
+  data.encoder_id = ENCODERS_LEFT;
+  data.cycles = getCpuCycles();
+  
+  sendToEncodersQueueFromISR(&data, &higherPriorityTaskWoken);
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
@@ -21,7 +26,11 @@ void IntHandlerDrvTmrInstance0(void) {
 void IntHandlerDrvTmrInstance1(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
-  sendToEncodersQueueFromISR(ENCODERS_RIGHT, &higherPriorityTaskWoken);
+  struct EncodersISRData data;
+  data.encoder_id = ENCODERS_RIGHT;
+  data.cycles = getCpuCycles();
+  
+  sendToEncodersQueueFromISR(&data, &higherPriorityTaskWoken);
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);

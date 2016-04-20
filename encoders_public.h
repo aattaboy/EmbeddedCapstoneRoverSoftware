@@ -3,7 +3,12 @@
 
 typedef enum { ENCODERS_LEFT = 0, ENCODERS_RIGHT = 1 } EncoderID;
 
-void sendToEncodersQueueFromISR(EncoderID encoder_id,
+struct EncodersISRData {
+  EncoderID encoder_id;
+  uint32_t cycles;
+};
+
+void sendToEncodersQueueFromISR(struct EncodersISRData *data,
                                 BaseType_t *higherPriorityTaskWoken);
 
 struct EncoderCounts {

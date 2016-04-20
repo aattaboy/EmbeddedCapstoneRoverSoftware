@@ -8,16 +8,16 @@ ENCODERS_DATA encodersData;
 
 #define ENCODERS_QUEUE_SIZE (10)
 
-void sendToEncodersQueueFromISR(EncoderID encoder_id,
+void sendToEncodersQueueFromISR(struct EncodersISRData *data,
                                 BaseType_t *higherPriorityTaskWoken) {
-  xQueueSendToBackFromISR(encodersData.encodersQueue, &encoder_id,
+  xQueueSendToBackFromISR(encodersData.encodersQueue, data,
                           higherPriorityTaskWoken);
 }
 
 void ENCODERS_Initialize(void) {
   encodersData.state = ENCODERS_STATE_INIT;
   encodersData.encodersQueue =
-      xQueueCreate(ENCODERS_QUEUE_SIZE, sizeof(EncoderID));
+      xQueueCreate(ENCODERS_QUEUE_SIZE, sizeof(struct EncodersISRData));
   if (encodersData.encodersQueue == 0) {
     errorCheck(ENCODER1_IDENTIFIER, __LINE__);
   }
@@ -25,6 +25,9 @@ void ENCODERS_Initialize(void) {
 
   encodersData.leftCount = 0;
   encodersData.rightCount = 0;
+
+  encodersData.left_cycles = 0;
+  encodersData.right_cycles = 0;
 
   encodersData.encoders_callbacks_idx = 0;
 
@@ -81,18 +84,27 @@ void ENCODERS_Tasks(void) {
   } break;
 
   case ENCODERS_STATE_RECEIVE: {
-    EncoderID id;
-    if (xQueueReceive(encodersData.encodersQueue, &id, portMAX_DELAY)) {
-      switch (id) {
+    struct EncodersISRData data;
+    if (xQueueReceive(encodersData.encodersQueue, &data, portMAX_DELAY)) {
+      switch (data.encoder_id) {
       case ENCODERS_LEFT: {
         encodersData.leftCount++;
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
                              encodersData.leftCount);
+        // Calculate velocity
+        int32_t tick_diff = data.cycles - encodersData.left_cycles;
+        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftVelocity,
+                             tick_diff);
+        encodersData.left_cycles = data.cycles;
       } break;
       case ENCODERS_RIGHT: {
         encodersData.rightCount++;
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
                              encodersData.rightCount);
+        int32_t tick_diff = data.cycles = encodersData.right_cycles;
+        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,
+                             tick_diff);
+        encodersData.right_cycles = data.cycles;
       } break;
       default: { errorCheck(ENCODER1_IDENTIFIER, __LINE__); }
       }
