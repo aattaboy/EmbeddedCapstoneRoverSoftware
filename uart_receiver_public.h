@@ -15,7 +15,8 @@ typedef enum {
   UART_RX_DATA,
   STRING,
   MOTOR_MESSAGE,
-  CONTROL_CMD
+  CONTROL_CMD,
+  UART_RX_POSE_OVERRIDE
 } UART_RECEIVER_VARIANT_TYPE;
 
 struct __attribute__((packed)) UART_RECEIVER_VARIANT {
@@ -24,6 +25,7 @@ struct __attribute__((packed)) UART_RECEIVER_VARIANT {
     WiFlyStringWireFormat string;
     MotorCommand motorMessage;
     RoverPose controlCmd;
+    RoverPose poseOverride;
   } data;
   UART_RECEIVER_VARIANT_TYPE type;
 };

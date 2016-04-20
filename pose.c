@@ -15,6 +15,16 @@ static int pose_encoder_counts_callback(struct EncoderCounts *counts) {
   return xQueueSendToBack(poseData.poseQueue, &var, portMAX_DELAY);
 }
 
+static int
+pose_uart_rx_pose_override_Callback(struct UART_RECEIVER_VARIANT *var) {
+  if (var->type == UART_RX_POSE_OVERRIDE) {
+    xQueueSendToBack(poseData.poseQueue, &var->data.poseOverride,
+                     portMAX_DELAY);
+    return 1;
+  }
+  return 0;
+}
+
 int registerPoseCallback(pose_callback_t callback) {
   if (poseData.pose_callbacks_idx < POSE_CALLBACKS_VECTOR_SIZE) {
     poseData.callbacks[poseData.pose_callbacks_idx++] = callback;
@@ -45,6 +55,7 @@ void POSE_Initialize(void) {
   memset(&poseData.prev_counts, 0, sizeof(poseData.prev_counts));
 
   registerEncodersCallback(pose_encoder_counts_callback);
+  registerUartReceiverCallback(pose_uart_rx_pose_override_Callback);
 }
 
 static double degToRad(double deg) { return deg * 3.14159 / 180.0; }
