@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <timers.h>
 #include "system_config.h"
 #include "system_definitions.h"
 #include "pid_public.h"
@@ -34,6 +35,11 @@ typedef struct {
   size_t pid_callbacks_idx;
   pid_callback_t callbacks[PID_CALLBACKS_VECTOR_SIZE];
 
+  uint32_t velocity_left;
+  uint32_t velocity_right;
+  
+  TimerHandle_t timer;
+  
 } PID_DATA;
 
 void PID_Initialize(void);

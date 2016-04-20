@@ -13,24 +13,58 @@
 void IntHandlerDrvTmrInstance0(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
+  static uint32_t prev_cycles;
+  uint32_t current_ticks = getCpuCycles();
+  
+  static uint32_t cycles_lpf[3] = {};
+  static size_t lpf_idx = 0;
+  size_t i;
+  
   struct EncodersISRData data;
   data.encoder_id = ENCODERS_LEFT;
-  data.cycles = getCpuCycles();
-  
+  cycles_lpf[lpf_idx++]  = positive_modulo_u(current_ticks - prev_cycles, 0xffffffffu);
+  if (lpf_idx == 3) {
+    lpf_idx = 0;
+  }
+  uint32_t avg = 0;
+  for (i=0; i<3; i++) {
+    avg += (cycles_lpf[i]/3);
+  }
+  data.cycles = avg;
   sendToEncodersQueueFromISR(&data, &higherPriorityTaskWoken);
-  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
+  
+  prev_cycles = current_ticks;
 
+  PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
+  
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
 
 void IntHandlerDrvTmrInstance1(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
+  static uint32_t prev_cycles;
+  uint32_t current_ticks = getCpuCycles();
+  
+  static uint32_t cycles_lpf[3] = {};
+  static size_t lpf_idx = 0;
+  size_t i;
+  
   struct EncodersISRData data;
   data.encoder_id = ENCODERS_RIGHT;
-  data.cycles = getCpuCycles();
-  
+ cycles_lpf[lpf_idx++]  = positive_modulo_u(current_ticks - prev_cycles, 0xffffffffu);
+  if (lpf_idx == 3) {
+    lpf_idx = 0;
+  }
+  uint32_t avg = 0;
+  for (i=0; i<3; i++) {
+    avg += (cycles_lpf[i]/3);
+  }
+  data.cycles = avg;
   sendToEncodersQueueFromISR(&data, &higherPriorityTaskWoken);
+  
+  prev_cycles = current_ticks;
+  
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);

@@ -28,9 +28,7 @@ void ENCODERS_Initialize(void) {
   encodersData.rightCount = 0;
 
   encodersData.left_cycles = 0;
-  encodersData.right_cycles_diff = 0;
   encodersData.right_cycles = 0;
-  encodersData.right_cycles_diff = 0;
 
   encodersData.encoders_callbacks_idx = 0;
 
@@ -83,33 +81,30 @@ void ENCODERS_Tasks(void) {
         encodersData.leftCount++;
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
                              encodersData.leftCount);
-        // Calculate velocity
-        encodersData.left_cycles_diff = positive_modulo_u(
-            data.cycles - encodersData.left_cycles, 0xffffffffu);
-        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftVelocity,
-                             encodersData.left_cycles_diff);
+        // Velocity
         encodersData.left_cycles = data.cycles;
+        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftVelocity,
+                             encodersData.left_cycles);
       } break;
       case ENCODERS_RIGHT: {
         encodersData.rightCount++;
         packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
                              encodersData.rightCount);
-        encodersData.right_cycles_diff = positive_modulo_u(
-            data.cycles - encodersData.right_cycles, 0xffffffffu);
-        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,
-                             encodersData.right_cycles_diff);
         encodersData.right_cycles = data.cycles;
+        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,
+                             encodersData.right_cycles);
       } break;
       default: { errorCheck(ENCODER1_IDENTIFIER, __LINE__); }
       }
 
       struct EncoderCounts counts;
+      memset(&counts, 0xd5, sizeof(counts));
       counts.left = encodersData.leftCount;
       counts.right = encodersData.rightCount;
       counts.left_dir = (PORTC >> 14) & 0x1;
       counts.right_dir = (PORTG >> 1) & 0x1;
-      counts.velocity_left = encodersData.left_cycles_diff;
-      counts.velocity_right = encodersData.right_cycles_diff;
+      counts.velocity_left = encodersData.left_cycles;
+      counts.velocity_right = encodersData.right_cycles;
       sendToEncodersCallbacks(&counts);
     }
   } break;

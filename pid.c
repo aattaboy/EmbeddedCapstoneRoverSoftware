@@ -9,12 +9,12 @@ PID_DATA pidData;
 
 // Define parameters
 #define EPSILON (0.01)
-#define DT (1.0)
+#define DT (10/1000.0)
 #define MAX (100)
 #define MIN (0)
-#define KP (10.)
-#define KI (0.)
-#define KD (0.)
+#define KP (90000000.0)
+#define KI (100000000.0)
+#define KD (0.0)
 
 int32_t pidBaseDutyCycle;
 
@@ -59,6 +59,12 @@ static int PID_encoder_count_cb(struct EncoderCounts *counts) {
   return 0;
 }
 
+static void pidTimerCallback(TimerHandle_t timer) {
+  struct PID_VARIANT var;
+  var.type = PID_TRIGGER;
+  sendToPIDQueue(&var);
+}
+
 void PID_Initialize(void) {
   pidData.state = PID_STATE_INIT;
   pidData.pidQueue = xQueueCreate(PID_QUEUE_SIZE, sizeof(struct PID_VARIANT));
@@ -68,6 +74,15 @@ void PID_Initialize(void) {
   vQueueAddToRegistry(pidData.pidQueue, "PID Queue");
 
   registerEncodersCallback(PID_encoder_count_cb);
+
+  pidData.timer = xTimerCreate("PID Timer", 10 / portTICK_PERIOD_MS, pdTRUE,
+                               NULL, pidTimerCallback);
+  if (pidData.timer == NULL) {
+    errorCheck(PID_IDENTIFIER, __LINE__);
+  }
+
+  pidData.velocity_left = 0;
+  pidData.velocity_right = 0;
 }
 
 static int32_t constrain(int val, int max, int min) {
@@ -85,22 +100,25 @@ void PID_Tasks(void) {
   switch (pidData.state) {
   case PID_STATE_INIT: {
     pidData.state = PID_STATE_RECEIVE;
+    if (xTimerStart(pidData.timer, 0) != pdPASS) {
+      errorCheck(PID_IDENTIFIER, __LINE__);
+    }
     break;
   }
   case PID_STATE_RECEIVE: {
     struct PID_VARIANT received;
     if (xQueueReceive(pidData.pidQueue, &received, portMAX_DELAY)) {
       switch (received.type) {
-      case ENCODER_COUNTS: {
+      case PID_TRIGGER: {
         // PID setup
         static int32_t pre_error = 0;
         static int32_t integral = 0;
-        int32_t error;
-        int32_t derivative;
-        int32_t pid;
+        double error;
+        double derivative;
+        double pid;
 
-        error = received.data.encoder_counts.right -
-                received.data.encoder_counts.left;
+        error = (1.0 / (pidData.velocity_right + 1)) -
+                (1.0 / (pidData.velocity_left + 1));
 
         // Check to see if error is too small
         if (abs(error) > EPSILON) {
@@ -115,7 +133,6 @@ void PID_Tasks(void) {
 
         int32_t atomicBaseDutyCycle =
             __sync_fetch_and_add(&pidBaseDutyCycle, 0);
-
         // send to Motor1Queue
         MotorCommand pid_set;
         MotorCommand_init(&pid_set);
@@ -127,6 +144,12 @@ void PID_Tasks(void) {
         sendToMotor1Queue(&pid_set);
 
         writeToDebug(PID_RECEIVE_BYTE);
+
+      } break;
+
+      case ENCODER_COUNTS: {
+        pidData.velocity_left = received.data.encoder_counts.velocity_left;
+        pidData.velocity_right = received.data.encoder_counts.velocity_right;
       } break;
       default: { errorCheck(PID_IDENTIFIER, __LINE__); }
       } // switch (received.type)

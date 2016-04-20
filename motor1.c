@@ -94,8 +94,15 @@ void moveRover(uint8_t direction, uint8_t leftDuty, uint8_t rightDuty) {
   int32_t tempLeft = leftDuty * MOTORPERIOD / 100;
   int32_t tempRight = rightDuty * MOTORPERIOD / 100;
 
-  PLIB_OC_PulseWidth16BitSet(OC_ID_1, tempLeft);  // left
-  PLIB_OC_PulseWidth16BitSet(OC_ID_2, tempRight); // right
+  if (leftDuty >= 15)
+    PLIB_OC_PulseWidth16BitSet(OC_ID_1, tempLeft);  // left
+  else
+    PLIB_OC_PulseWidth16BitSet(OC_ID_1, 0);
+  
+  if (rightDuty >= 15)
+    PLIB_OC_PulseWidth16BitSet(OC_ID_2, tempRight); // right
+  else
+    PLIB_OC_PulseWidth16BitSet(OC_ID_2, 0);
 }
 
 void MOTOR1_Tasks(void) {

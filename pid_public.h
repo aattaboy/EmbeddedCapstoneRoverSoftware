@@ -9,7 +9,7 @@ extern "C" {
 #include "generated/PIDSetPoint.pbo.h"
 #include "generated/MotorCommand.pbo.h"
 
-typedef enum { ENCODER_COUNTS } PID_VARIANT_TYPE;
+typedef enum { ENCODER_COUNTS, PID_TRIGGER } PID_VARIANT_TYPE;
 
 struct PID_VARIANT {
   union {
