@@ -4,7 +4,17 @@
 #include "encoders_public.h"
 #include "generated/RoverPose.pbo.h"
 
-#define POSE_QUEUE_TYPE struct EncoderCounts
+typedef enum { POSE_ENCODER_COUNTS, POSE_OVERRIDE } ROVER_POSE_VARIANT_TYPES;
+
+struct ROVER_POSE_VARIANT {
+  union {
+    struct EncoderCounts encoderCounts;
+    RoverPose poseOverride;
+  } data;
+  ROVER_POSE_VARIANT_TYPES type;
+};
+
+#define POSE_QUEUE_TYPE struct ROVER_POSE_VARIANT
 
 void sendToPoseQueue(POSE_QUEUE_TYPE *counts);
 

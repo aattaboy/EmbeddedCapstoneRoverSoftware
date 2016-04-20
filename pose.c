@@ -23,15 +23,14 @@ int registerPoseCallback(pose_callback_t callback) {
 
 static void sendToCallbacks(RoverPose *pose) {
   size_t i;
-  for (i=0; i<poseData.pose_callbacks_idx; i++) {
+  for (i = 0; i < poseData.pose_callbacks_idx; i++) {
     poseData.callbacks[i](pose);
   }
 }
 
 void POSE_Initialize(void) {
   poseData.state = POSE_STATE_INIT;
-  poseData.poseQueue =
-      xQueueCreate(POSE_QUEUE_SIZE, sizeof(POSE_QUEUE_TYPE));
+  poseData.poseQueue = xQueueCreate(POSE_QUEUE_SIZE, sizeof(POSE_QUEUE_TYPE));
   if (poseData.poseQueue == 0) {
     errorCheck(POSE_IDENTIFIER, __LINE__);
   }
@@ -56,64 +55,73 @@ void POSE_Tasks(void) {
     RoverPose_set_xPosition(&pose, 0);
     RoverPose_set_yPosition(&pose, 0);
     RoverPose_set_yaw(&pose, 0);
-    RoverPose_to_bytes(&pose, (char*)&pose, 0);
+    RoverPose_to_bytes(&pose, (char *)&pose, 0);
     sendToCallbacks(&pose);
   } break;
   case POSE_STATE_RECEIVE: {
-    POSE_QUEUE_TYPE counts;
-    if (xQueueReceive(poseData.poseQueue, &counts, portMAX_DELAY)) {
-      uint32_t diff = counts.left - poseData.prev_counts.left;
+    POSE_QUEUE_TYPE var;
+    if (xQueueReceive(poseData.poseQueue, &var, portMAX_DELAY)) {
+      switch (var.type) {
+      case POSE_ENCODER_COUNTS: {
+        struct EncoderCounts counts = var.data.encoderCounts;
+        uint32_t diff = counts.left - poseData.prev_counts.left;
 
-      uint8_t diff_sw = (counts.left_dir << 1) | (counts.right_dir);
-      switch (diff_sw) {
-      case 0x03: { // FORWARD
-        double r = -0.404 * (diff);
-        double x_disp = r * sin(degToRad(poseData.yaw));
-        double y_disp = r * cos(degToRad(poseData.yaw));
-        poseData.x += x_disp;
-        poseData.y += y_disp;
-      } break;
-      case 0x02: { // RIGHT
-        double disp_theta = 4.2 * (diff);
-        poseData.yaw += disp_theta;
-        if (poseData.yaw < 0.0) {
-          poseData.yaw = 360.0 + poseData.yaw;
+        uint8_t diff_sw = (counts.left_dir << 1) | (counts.right_dir);
+        switch (diff_sw) {
+        case 0x03: { // FORWARD
+          double r = -0.404 * (diff);
+          double x_disp = r * sin(degToRad(poseData.yaw));
+          double y_disp = r * cos(degToRad(poseData.yaw));
+          poseData.x += x_disp;
+          poseData.y += y_disp;
+        } break;
+        case 0x02: { // RIGHT
+          double disp_theta = 4.2 * (diff);
+          poseData.yaw += disp_theta;
+          if (poseData.yaw < 0.0) {
+            poseData.yaw = 360.0 + poseData.yaw;
+          }
+          poseData.yaw = fmod(poseData.yaw, 360.0);
+        } break;
+        case 0x01: { // LEFT
+          double disp_theta = -4.2 * (diff);
+          poseData.yaw += disp_theta;
+          if (poseData.yaw < 0.0) {
+            poseData.yaw = 360.0 + poseData.yaw;
+          }
+          poseData.yaw = fmod(poseData.yaw, 360.0);
+        } break;
+        case 0x00: { // BACKWARD
+          double r = 0.404 * (diff);
+          double x_disp = r * sin(degToRad(poseData.yaw));
+          double y_disp = r * cos(degToRad(poseData.yaw));
+          poseData.x += x_disp;
+          poseData.y += y_disp;
+        } break;
+        default: { errorCheck(POSE_IDENTIFIER, __LINE__); }
         }
-        poseData.yaw = fmod(poseData.yaw, 360.0);
-      } break;
-      case 0x01: { // LEFT
-        double disp_theta = -4.2 * (diff);
-        poseData.yaw += disp_theta;
-        if (poseData.yaw < 0.0) {
-          poseData.yaw = 360.0 + poseData.yaw;
-        }
-        poseData.yaw = fmod(poseData.yaw, 360.0);
-      } break;
-      case 0x00: { // BACKWARD
-        double r = 0.404 * (diff);
-        double x_disp = r * sin(degToRad(poseData.yaw));
-        double y_disp = r * cos(degToRad(poseData.yaw));
-        poseData.x += x_disp;
-        poseData.y += y_disp;
-      } break;
-      default: { errorCheck(POSE_IDENTIFIER, __LINE__); }
-      }
 
-      poseData.prev_counts = counts;
-      packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
-      packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
-      packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
-      
-      RoverPose pose;
-      RoverPose_init(&pose);
-      RoverPose_set_xPosition(&pose, poseData.x);
-      RoverPose_set_yPosition(&pose, poseData.y);
-      RoverPose_set_yaw(&pose, poseData.yaw);
-      RoverPose_to_bytes(&pose, (char*)&pose, 0);
-      
-      sendToCallbacks(&pose);
+        poseData.prev_counts = counts;
+        packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
+        packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
+        packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
+
+        RoverPose pose;
+        RoverPose_init(&pose);
+        RoverPose_set_xPosition(&pose, poseData.x);
+        RoverPose_set_yPosition(&pose, poseData.y);
+        RoverPose_set_yaw(&pose, poseData.yaw);
+        RoverPose_to_bytes(&pose, (char *)&pose, 0);
+
+        sendToCallbacks(&pose);
+      } break; // case POSE_ENCODER_COUNTS
+      case POSE_OVERRIDE: {
+
+      } break; // case POSE_OVERRIDE
+      }        // switch (counts.type)
     }
-  } break;
+    break;
   default: { errorCheck(POSE_IDENTIFIER, __LINE__); }
-  }
+  } // case POSE_STATE_RECEIVE:
+  } // switch (poseData.state)
 }
