@@ -18,8 +18,10 @@ static int pose_encoder_counts_callback(struct EncoderCounts *counts) {
 static int
 pose_uart_rx_pose_override_Callback(struct UART_RECEIVER_VARIANT *var) {
   if (var->type == UART_RX_POSE_OVERRIDE) {
-    xQueueSendToBack(poseData.poseQueue, &var->data.poseOverride,
-                     portMAX_DELAY);
+    POSE_QUEUE_TYPE pose_var;
+    pose_var.type = POSE_OVERRIDE;
+    pose_var.data.poseOverride = var->data.poseOverride;
+    xQueueSendToBack(poseData.poseQueue, &pose_var, portMAX_DELAY);
     return 1;
   }
   return 0;
@@ -130,7 +132,28 @@ void POSE_Tasks(void) {
         sendToCallbacks(&pose);
       } break; // case POSE_ENCODER_COUNTS
       case POSE_OVERRIDE: {
+        RoverPose new_pose;
+        memcpy(&new_pose, &var.data.poseOverride, sizeof(new_pose));
+        uint32_t seq;
+        if (!RoverPose_from_bytes(&new_pose, (char *)&new_pose, &seq)) {
+          break;
+        }
+        poseData.x = RoverPose_xPosition(&new_pose);
+        poseData.y = RoverPose_yPosition(&new_pose);
+        poseData.yaw = RoverPose_yaw(&new_pose);
 
+        packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
+        packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
+        packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
+
+        RoverPose pose;
+        RoverPose_init(&pose);
+        RoverPose_set_xPosition(&pose, poseData.x);
+        RoverPose_set_yPosition(&pose, poseData.y);
+        RoverPose_set_yaw(&pose, poseData.yaw);
+        RoverPose_to_bytes(&pose, (char *)&pose, 0);
+
+        sendToCallbacks(&pose);
       } break; // case POSE_OVERRIDE
       }        // switch (counts.type)
     }
