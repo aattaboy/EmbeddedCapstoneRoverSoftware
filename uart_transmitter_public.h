@@ -9,7 +9,12 @@ extern "C" {
 #include "generated/DebugInfo.pbo.h"
 #include "pose_position_pair.h"
 
-typedef enum { DEBUG_INFO, TEST_CHAR, RSSI_PAIR } UART_TRANSMITTER_VARIANT_TYPE;
+typedef enum {
+  DEBUG_INFO,
+  TEST_CHAR,
+  RSSI_PAIR,
+  MOVE_COMPLETE
+} UART_TRANSMITTER_VARIANT_TYPE;
 
 struct __attribute__((packed)) UART_TRANSMITTER_VARIANT {
   union {

@@ -185,6 +185,12 @@ void CONTROL_Tasks(void) {
     MotorCommand_set_mode(&motorCommand, MOTOR_COMMAND_SET);
     MotorCommand_to_bytes(&motorCommand, (char *)&motorCommand, 0);
     sendToControlCallbacks(&motorCommand);
+    
+    // Notify Pi that move is complete
+    struct UART_TRANSMITTER_VARIANT var;
+    var.type = MOVE_COMPLETE;
+    sendToUartQueue(&var);
+    
     controlData.state = CONTROL_STATE_RECEIVE;
   } break;
 
