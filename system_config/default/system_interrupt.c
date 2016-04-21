@@ -15,28 +15,29 @@ void IntHandlerDrvTmrInstance0(void) {
 
   static uint32_t prev_cycles;
   uint32_t current_ticks = getCpuCycles();
-  
+
   static uint32_t cycles_lpf[3] = {};
   static size_t lpf_idx = 0;
   size_t i;
-  
+
   struct EncodersISRData data;
   data.encoder_id = ENCODERS_LEFT;
-  cycles_lpf[lpf_idx++]  = positive_modulo_u(current_ticks - prev_cycles, 0xffffffffu);
+  cycles_lpf[lpf_idx++] =
+      positive_modulo_u(current_ticks - prev_cycles, 0xffffffffu);
   if (lpf_idx == 3) {
     lpf_idx = 0;
   }
   uint32_t avg = 0;
-  for (i=0; i<3; i++) {
-    avg += (cycles_lpf[i]/3);
+  for (i = 0; i < 3; i++) {
+    avg += (cycles_lpf[i] / 3);
   }
   data.cycles = avg;
   sendToEncodersQueueFromISR(&data, &higherPriorityTaskWoken);
-  
+
   prev_cycles = current_ticks;
 
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
-  
+
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
 
@@ -45,44 +46,44 @@ void IntHandlerDrvTmrInstance1(void) {
 
   static uint32_t prev_cycles;
   uint32_t current_ticks = getCpuCycles();
-  
+
   static uint32_t cycles_lpf[3] = {};
   static size_t lpf_idx = 0;
   size_t i;
-  
+
   struct EncodersISRData data;
   data.encoder_id = ENCODERS_RIGHT;
- cycles_lpf[lpf_idx++]  = positive_modulo_u(current_ticks - prev_cycles, 0xffffffffu);
+  cycles_lpf[lpf_idx++] =
+      positive_modulo_u(current_ticks - prev_cycles, 0xffffffffu);
   if (lpf_idx == 3) {
     lpf_idx = 0;
   }
   uint32_t avg = 0;
-  for (i=0; i<3; i++) {
-    avg += (cycles_lpf[i]/3);
+  for (i = 0; i < 3; i++) {
+    avg += (cycles_lpf[i] / 3);
   }
   data.cycles = avg;
   sendToEncodersQueueFromISR(&data, &higherPriorityTaskWoken);
-  
+
   prev_cycles = current_ticks;
-  
+
   PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
 
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
 
-static size_t rx_idx __attribute((unused));
-static uint8_t rx_buf[sizeof(struct UART_RECEIVER_VARIANT)]
-    __attribute((unused));
-
-static enum {
-  RX_FRAME_START_1,
-  RX_FRAME_START_2,
-  RX_FRAME_START_3,
-  RX_FRAME_START_4,
-  RX_BYTES_RECEIVE
-} rx_state = RX_FRAME_START_1;
-
 void IntHandlerDrvUsartInstance0(void) {
+  static size_t rx_idx;
+  static uint8_t rx_buf[sizeof(struct UART_RECEIVER_VARIANT)];
+
+  static enum {
+    RX_FRAME_START_1,
+    RX_FRAME_START_2,
+    RX_FRAME_START_3,
+    RX_FRAME_START_4,
+    RX_BYTES_RECEIVE
+  } rx_state = RX_FRAME_START_1;
+
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
   if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_1_TRANSMIT)) {
@@ -97,8 +98,7 @@ void IntHandlerDrvUsartInstance0(void) {
 
   if (PLIB_INT_SourceFlagGet(INT_ID_0, INT_SOURCE_USART_1_RECEIVE)) {
     while (PLIB_USART_ReceiverDataIsAvailable(USART_ID_1)) {
-      uint8_t rxedChar __attribute((unused)) =
-          PLIB_USART_ReceiverByteReceive(USART_ID_1);
+      uint8_t rxedChar = PLIB_USART_ReceiverByteReceive(USART_ID_1);
 
       switch (rx_state) {
       case RX_FRAME_START_1: {
@@ -166,12 +166,12 @@ void IntHandlerDrvAdc(void) {
   portEND_SWITCHING_ISR(higherPriorityTaskWoken);
 }
 
-const uint8_t frame_sequence[] = { 0xab, 0xcd, 0xef, 0x12 };
+static const uint8_t frame_sequence[] = { 0xab, 0xcd, 0xef, 0x12 };
 
 void IntHandlerDrvUsartInstance1(void) {
   BaseType_t higherPriorityTaskWoken = pdFALSE;
 
-  static char rx_buf[sizeof(RSSIData)] __attribute__((unused));
+  static char rx_buf[sizeof(RSSIData)];
   static size_t rx_idx;
 
   static enum {
