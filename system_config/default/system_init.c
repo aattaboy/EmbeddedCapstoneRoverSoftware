@@ -51,6 +51,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_definitions.h"
 
 
+#include <task.h>
+
 // ****************************************************************************
 // ****************************************************************************
 // Section: Configuration Bits

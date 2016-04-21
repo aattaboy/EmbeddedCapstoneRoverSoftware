@@ -41,6 +41,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 *                                           INCLUDES
 *********************************************************************************************************
 */
+
+#define ASSEMBLY_WRAPPER
+    
 #include <xc.h>
 
 #include "ISR_Support.h"

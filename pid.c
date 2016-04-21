@@ -93,17 +93,6 @@ void PID_Initialize(void) {
   pidData.velocity_right = 0;
 }
 
-static int32_t constrain(int val, int max, int min) {
-  if (val > max) {
-    val = max;
-    PORTE = 0x1;
-  } else if (val < min) {
-    val = min;
-    PORTE = 0x2;
-  }
-  return val;
-}
-
 void PID_Tasks(void) {
   switch (pidData.state) {
   case PID_STATE_INIT: {

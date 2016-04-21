@@ -55,6 +55,26 @@ bool sendToFullBufferQueueFromISR(char var,
   return true;
 }
 
+#define TASK_STATUS_ARR_SIZE (20)
+
+static TaskStatus_t statuses[TASK_STATUS_ARR_SIZE] = {};
+
+static void profile_cb(TimerHandle_t timer __attribute__((unused))) {
+  uint32_t total_runtime;
+  BaseType_t written =
+      uxTaskGetSystemState(statuses, TASK_STATUS_ARR_SIZE, &total_runtime);
+  struct UART_TRANSMITTER_VARIANT var;
+  size_t i;
+  for (i = 0; i < written; i++) {
+    var.type = PROFILE_INFO;
+    var.data.profile_info.total_runtime = total_runtime;
+    var.data.profile_info.runtime = statuses[i].ulRunTimeCounter;
+    strncpy(var.data.profile_info.name, statuses[i].pcTaskName,
+            sizeof(var.data.profile_info.name) - 1);
+    sendToUartQueue(&var);
+  }
+}
+
 /*******************************************************************************
   Function:
     void UART_TRANSMITTER_Initialize ( void )
@@ -81,6 +101,12 @@ void UART_TRANSMITTER_Initialize(void) {
   }
   vQueueAddToRegistry(uart_transmitterData.xQueue2,
                       "UART Transmitter Full Queue");
+
+  uart_transmitterData.profile_timer = xTimerCreate(
+      "Profiling Timer", 200 / portTICK_PERIOD_MS, pdTRUE, NULL, profile_cb);
+  if (uart_transmitterData.profile_timer == NULL) {
+    errorCheck(UART_TX_IDENTIFIER, __LINE__);
+  }
 }
 
 /******************************************************************************
@@ -98,6 +124,9 @@ void UART_TRANSMITTER_Tasks(void) {
   /* Application's initial state. */
   case UART_TRANSMITTER_STATE_INIT: {
     uart_transmitterData.state = UART_TRANSMITTER_STATE_RECEIVE;
+    if (xTimerStart(uart_transmitterData.profile_timer, 0) != pdPASS) {
+      errorCheck(UART_TX_IDENTIFIER, __LINE__);
+    }
     break;
   }
   case UART_TRANSMITTER_STATE_RECEIVE: {
@@ -128,6 +157,9 @@ void UART_TRANSMITTER_Tasks(void) {
           case TEST_CHAR:
             memcpy(&var_wire.data.test_char, &receivedMessage.data.test_char,
                    sizeof(uint8_t));
+            break;
+          case PROFILE_INFO:
+            memcpy(&var_wire.data.profile_info, &receivedMessage.data.profile_info, sizeof(receivedMessage.data.profile_info));
             break;
           default:
             break;

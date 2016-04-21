@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <timers.h>
 #include "system_config.h"
 #include "system_definitions.h"
 #include "uart_transmitter_public.h"
@@ -38,6 +39,8 @@ typedef struct {
   char transmit_str[sizeof(struct UART_TRANSMITTER_VARIANT) + 4];
   size_t transmit_idx;
   size_t transmit_size;
+
+  TimerHandle_t profile_timer;
 
 } UART_TRANSMITTER_DATA;
 
