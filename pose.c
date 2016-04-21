@@ -80,7 +80,7 @@ void POSE_Tasks(void) {
       switch (var.type) {
       case POSE_ENCODER_COUNTS: {
         struct EncoderCounts counts = var.data.encoderCounts;
-        uint32_t diff = counts.left - poseData.prev_counts.left;
+        uint32_t diff = counts.right - poseData.prev_counts.right;
 
         uint8_t diff_sw = (counts.left_dir << 1) | (counts.right_dir);
         switch (diff_sw) {
