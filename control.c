@@ -108,7 +108,7 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
         calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
     double sigmoid = offset / (1 + exp(-euclidean_distance / 10.0));
 
-    if (abs(sigmoid) > 2) {
+    if (abs(sigmoid) > 5) {
       return CONTROL_STATE_ROTATE;
     } else {
       return CONTROL_STATE_MOVE;

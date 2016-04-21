@@ -13,13 +13,14 @@ PID_DATA pidData;
 #define MAX (100)
 #define MIN (0)
 
+#define VEL
 #ifdef VEL
-#define KP (150000000.0)
-#define KI (100000000.0)
+#define KP (0.000128)
+#define KI (0.00001285)
 #define KD (0.0)
 #else 
-#define KP (20.0)
-#define KI (10.0)
+#define KP (0.0)
+#define KI (0.0)
 #define KD (0.0)
 #endif
 
@@ -124,7 +125,11 @@ void PID_Tasks(void) {
         double derivative;
         double pid;
         
+#ifdef VEL
+        error = pidData.velocity_left - pidData.velocity_right + 12500;
+#else
         error = pidData.displacement_right - pidData.displacement_left;
+#endif
         
         // Check to see if error is too small
         if (abs(error) > EPSILON) {

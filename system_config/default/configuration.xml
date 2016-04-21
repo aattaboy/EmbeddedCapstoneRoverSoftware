@@ -299,7 +299,8 @@
       <Template>
         <Name>drv_tmr_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum>0E1446C7E9CE8BD96790EC535CE2154D</Checksum>
+        <Checksum>DDADA6E2806B386C1D5C16C04893E1F5</Checksum>
+        <ProjectFileChecksum>2BDDD2F70DD6447D7998D89C9594B990</ProjectFileChecksum>
       </Template>
       <Template>
         <Name>drv_oc_static.h</Name>
