@@ -118,10 +118,15 @@ void POSE_Tasks(void) {
         }
 
         poseData.prev_counts = counts;
-        packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
-        packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
-        packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
-
+        
+        static uint32_t mod;
+        if (mod++ == 20) {
+          packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
+          packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
+          packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
+          mod = 0;
+        }
+        
         RoverPose pose;
         RoverPose_init(&pose);
         RoverPose_set_xPosition(&pose, poseData.x);
@@ -145,7 +150,7 @@ void POSE_Tasks(void) {
         packAndSendDebugInfo(POSE_IDENTIFIER, XUpdated, poseData.x);
         packAndSendDebugInfo(POSE_IDENTIFIER, YUpdated, poseData.y);
         packAndSendDebugInfo(POSE_IDENTIFIER, YawUpdated, poseData.yaw);
-
+        
         RoverPose pose;
         RoverPose_init(&pose);
         RoverPose_set_xPosition(&pose, poseData.x);

@@ -103,7 +103,7 @@ void UART_TRANSMITTER_Initialize(void) {
                       "UART Transmitter Full Queue");
 
   uart_transmitterData.profile_timer = xTimerCreate(
-      "Profiling Timer", 200 / portTICK_PERIOD_MS, pdTRUE, NULL, profile_cb);
+      "Profiling Timer", 1000 / portTICK_PERIOD_MS, pdTRUE, NULL, profile_cb);
   if (uart_transmitterData.profile_timer == NULL) {
     errorCheck(UART_TX_IDENTIFIER, __LINE__);
   }

@@ -79,20 +79,29 @@ void ENCODERS_Tasks(void) {
       switch (data.encoder_id) {
       case ENCODERS_LEFT: {
         encodersData.leftCount++;
-        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
-                             encodersData.leftCount);
-        // Velocity
         encodersData.left_cycles = data.cycles;
-        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftVelocity,
-                             encodersData.left_cycles);
+        
+        static uint32_t mod;
+        if (mod++ == 10) {
+          packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
+                               encodersData.leftCount);
+          // Velocity
+          packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftVelocity,
+                               encodersData.left_cycles);
+          mod = 0;
+        }
       } break;
       case ENCODERS_RIGHT: {
         encodersData.rightCount++;
-        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
-                             encodersData.rightCount);
         encodersData.right_cycles = data.cycles;
-        packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,
-                             encodersData.right_cycles);
+        static uint32_t mod;
+        if (mod++ == 10) {
+          packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
+                               encodersData.rightCount);
+          packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,
+                               encodersData.right_cycles);
+          mod = 0;
+        }
       } break;
       default: { errorCheck(ENCODER1_IDENTIFIER, __LINE__); }
       }
