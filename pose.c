@@ -100,7 +100,7 @@ void POSE_Tasks(void) {
           poseData.yaw = fmod(poseData.yaw, 360.0);
         } break;
         case 0x01: { // LEFT
-          double disp_theta = 0.857  * (diff);
+          double disp_theta = -0.857  * (diff);
           poseData.yaw += disp_theta;
           if (poseData.yaw < 0.0) {
             poseData.yaw = 360.0 + poseData.yaw;
