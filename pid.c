@@ -13,13 +13,12 @@ PID_DATA pidData;
 #define MAX (100)
 #define MIN (0)
 
-#define VEL
 #ifdef VEL
 #define KP (0.000128)
 #define KI (0.00001285)
 #define KD (0.0)
 #else 
-#define KP (0.0)
+#define KP (5.0)
 #define KI (0.0)
 #define KD (0.0)
 #endif

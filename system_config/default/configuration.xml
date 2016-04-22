@@ -299,8 +299,7 @@
       <Template>
         <Name>drv_tmr_static.c</Name>
         <Path>Source Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum>DDADA6E2806B386C1D5C16C04893E1F5</Checksum>
-        <ProjectFileChecksum>2BDDD2F70DD6447D7998D89C9594B990</ProjectFileChecksum>
+        <Checksum>D756103F5E025C7979CACB910CC3DC45</Checksum>
       </Template>
       <Template>
         <Name>drv_oc_static.h</Name>
@@ -311,6 +310,7 @@
         <Name>FreeRTOSConfig.h</Name>
         <Path>Header Files/app/system_config/default</Path>
         <Checksum>8F62C1B6519152BC03452258E7180213</Checksum>
+        <ProjectFileChecksum>458A8C9AA52F954DCC5681496BE56B70</ProjectFileChecksum>
       </Template>
       <Template>
         <Name>pose.h</Name>
@@ -320,6 +320,7 @@
         <Name>system_interrupt_a.S</Name>
         <Path>Source Files/app/system_config/default</Path>
         <Checksum>28C80317B9FCC4E870E7AE377031CDBC</Checksum>
+        <ProjectFileChecksum>6A93FB6F0AFC16CD251F07D05748905F</ProjectFileChecksum>
       </Template>
       <Template>
         <Name>sensor1.c</Name>
