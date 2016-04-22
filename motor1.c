@@ -137,13 +137,21 @@ void MOTOR1_Tasks(void) {
                   rightDutyCycle);
         pidBaseDutyCycle = leftDutyCycle;
         old_direction = MotorCommand_direction(&received);
-        packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1CommandDutyCycleSet,
-                             MotorCommand_dutyCycle(&received));
+        static uint32_t mod;
+        if (mod++ == 10) {
+          packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1CommandDutyCycleSet,
+                               MotorCommand_dutyCycle(&received));
+          mod = 0;
+        }
       } else if (MotorCommand_mode(&received) == MOTOR_PID_SET) {
         rightDutyCycle = MotorCommand_dutyCycle(&received);
         moveRover(old_direction, leftDutyCycle, rightDutyCycle);
-        packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1PIDDutyCycleSet,
-                             MotorCommand_dutyCycle(&received));
+        static uint32_t mod;
+        if (mod++ == 10) {
+          packAndSendDebugInfo(MOTOR1_IDENTIFIER, Motor1PIDDutyCycleSet,
+                               MotorCommand_dutyCycle(&received));
+          mod = 0;
+        }
       } else {
         errorCheck(MOTOR1_IDENTIFIER, __LINE__);
       }

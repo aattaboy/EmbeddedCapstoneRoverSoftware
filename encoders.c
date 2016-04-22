@@ -82,7 +82,7 @@ void ENCODERS_Tasks(void) {
         encodersData.left_cycles = data.cycles;
         
         static uint32_t mod;
-        if (mod++ == 10) {
+        if (mod++ == 20) {
           packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1LeftCount,
                                encodersData.leftCount);
           // Velocity
@@ -95,7 +95,7 @@ void ENCODERS_Tasks(void) {
         encodersData.rightCount++;
         encodersData.right_cycles = data.cycles;
         static uint32_t mod;
-        if (mod++ == 10) {
+        if (mod++ == 20) {
           packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightCount,
                                encodersData.rightCount);
           packAndSendDebugInfo(ENCODER1_IDENTIFIER, Encoder1RightVelocity,

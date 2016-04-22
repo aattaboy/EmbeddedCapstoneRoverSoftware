@@ -231,10 +231,10 @@ void IntHandlerDrvUsartInstance1(void) {
           state = TRANSMIT_ACK;
           sendToRSSICollectorQueueFromISR((RSSIData *)rx_buf,
                                           &higherPriorityTaskWoken);
-          static uint32_t total_msgs_rxed;
-          packAndSendDebugInfoFromISR(
-              RSSI_COLLECTOR_IDENTIFIER, RSSICollectorTotalMsgsRxed,
-              total_msgs_rxed++, &higherPriorityTaskWoken);
+          //static uint32_t total_msgs_rxed;
+          //packAndSendDebugInfoFromISR(
+          //    RSSI_COLLECTOR_IDENTIFIER, RSSICollectorTotalMsgsRxed,
+          //    total_msgs_rxed++, &higherPriorityTaskWoken);
         }
       } break;
       case TRANSMIT_ACK: {

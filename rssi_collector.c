@@ -100,9 +100,9 @@ void RSSI_COLLECTOR_Tasks(void) {
       }
       seq_expected++;
 
-      packAndSendDebugInfo(RSSI_COLLECTOR_IDENTIFIER,
-                           RSSICollectorReceivedMessage,
-                           RSSIData_rssi(&received_obj));
+      //packAndSendDebugInfo(RSSI_COLLECTOR_IDENTIFIER,
+      //                     RSSICollectorReceivedMessage,
+      //                     RSSIData_rssi(&received_obj));
 
       writeToDebug(RSSI_COLLECTOR_RECEIVE_BYTE);
       sendMessageToCallbacks(&received_obj);
