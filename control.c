@@ -108,7 +108,7 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
         calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
     double sigmoid = offset / (1 + exp(-euclidean_distance / 10.0));
 
-    if (abs(sigmoid) > 5) {
+    if (abs(sigmoid) > 1) {
       return CONTROL_STATE_ROTATE;
     } else {
       return CONTROL_STATE_MOVE;
@@ -148,12 +148,6 @@ void CONTROL_Tasks(void) {
   case CONTROL_STATE_RECEIVE_ROVER_POSITION: {
     if (xQueueReceive(controlData.controlQueueRoverPosition,
                       &controlData.currentPosition, portMAX_DELAY)) {
-      // uint32_t seq_out;
-      // if (!RoverPose_from_bytes(&controlData.currentPosition,
-      //                          (char *)&controlData.currentPosition,
-      //                          &seq_out)) {
-      //  break;
-      //}
       controlData.state = figure_necessary_states(&controlData.setPoint,
                                                   &controlData.currentPosition);
     }

@@ -183,6 +183,7 @@ static void _SYS_Tasks ( void )
         /* Maintain Middleware */
 
         /* Task Delay */
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 

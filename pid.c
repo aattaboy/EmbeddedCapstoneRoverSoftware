@@ -7,9 +7,11 @@
 
 PID_DATA pidData;
 
+#define PID_PERIOD_MS (16)
+
 // Define parameters
 #define EPSILON (0.01)
-#define DT (100/1000.0)
+#define DT (PID_PERIOD_MS/1000.0)
 #define MAX (100)
 #define MIN (0)
 
@@ -82,7 +84,7 @@ void PID_Initialize(void) {
 
   registerEncodersCallback(PID_encoder_count_cb);
 
-  pidData.timer = xTimerCreate("PID Timer", 100 / portTICK_PERIOD_MS, pdTRUE,
+  pidData.timer = xTimerCreate("PID Timer", PID_PERIOD_MS / portTICK_PERIOD_MS, pdTRUE,
                                NULL, pidTimerCallback);
   if (pidData.timer == NULL) {
     errorCheck(PID_IDENTIFIER, __LINE__);

@@ -290,7 +290,7 @@
       <Template>
         <Name>system_tasks.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>6EF96F1C1FAA10F640E8F98D3284C90D</Checksum>
+        <Checksum>0BB37308ABA2416784A9D3E312BADCFB</Checksum>
       </Template>
       <Template>
         <Name>rssi_pairs.h</Name>
