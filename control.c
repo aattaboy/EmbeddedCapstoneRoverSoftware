@@ -2,6 +2,7 @@
 #include "debuginfo.h"
 #include "control.h"
 #include "motor1_public.h"
+#include "sensor1.h"
 #include "system_config/default/framework/driver/tmr/drv_tmr_static.h"
 #include "uart_receiver_public.h"
 #include "util.h"
@@ -140,14 +141,22 @@ void CONTROL_Tasks(void) {
                                 (char *)&controlData.setPoint, &seq_out)) {
         break;
       }
+      if (controlData.startPoint.magic == 0xdeadbeefu) {
+        memcpy(&controlData.startPoint, &controlData.currentPosition,
+               sizeof(controlData.startPoint));
+      }
       sendMotorCommand(MOTOR_FORWARD, 50);
       controlData.state = CONTROL_STATE_RECEIVE_ROVER_POSITION;
     }
   } break;
-
+ 
   case CONTROL_STATE_RECEIVE_ROVER_POSITION: {
     if (xQueueReceive(controlData.controlQueueRoverPosition,
                       &controlData.currentPosition, portMAX_DELAY)) {
+      if (controlData.startPoint.magic != 0xdeadbeefu) {
+        memcpy(&controlData.startPoint, &controlData.currentPosition,
+               sizeof(controlData.startPoint));
+      }
       controlData.state = figure_necessary_states(&controlData.setPoint,
                                                   &controlData.currentPosition);
     }
@@ -166,7 +175,15 @@ void CONTROL_Tasks(void) {
   } break;
 
   case CONTROL_STATE_MOVE: {
-    sendMotorCommand(MOTOR_FORWARD, 50);
+    if (forward_sensor_val > 25) {
+      sendMotorCommand(MOTOR_FORWARD, 50);
+    } else if (controlData.startPoint.magic == 0xdeadbeefu) {
+      memcpy(&controlData.setPoint, &controlData.startPoint,
+             sizeof(controlData.setPoint));
+      controlData.state = figure_necessary_states(&controlData.setPoint,
+                                                  &controlData.currentPosition);
+      break;
+    }
 
     controlData.state = CONTROL_STATE_RECEIVE_ROVER_POSITION;
   } break;
@@ -179,12 +196,12 @@ void CONTROL_Tasks(void) {
     MotorCommand_set_mode(&motorCommand, MOTOR_COMMAND_SET);
     MotorCommand_to_bytes(&motorCommand, (char *)&motorCommand, 0);
     sendToControlCallbacks(&motorCommand);
-    
+
     // Notify Pi that move is complete
     struct UART_TRANSMITTER_VARIANT var;
     var.type = MOVE_COMPLETE;
     sendToUartQueue(&var);
-    
+
     controlData.state = CONTROL_STATE_RECEIVE;
   } break;
 

@@ -12,6 +12,8 @@
 
 SENSOR1_DATA sensor1Data;
 
+volatile uint32_t forward_sensor_val = 0xffffffff;
+
 // Public functions
 int registerSensor1Callback(sensor1_callback_t callback) {
   if (sensor1Data.sensor1_callbacks_idx != SENSOR1_CALLBACKS_VECTOR_SIZE) {
@@ -92,19 +94,16 @@ void SENSOR1_Tasks(void) {
       IRSensorData_set_front(&data, received.center);
       IRSensorData_set_left(&data, received.left);
       IRSensorData_set_right(&data, received.right);
+      forward_sensor_val = received.center;
       IRSensorData_to_bytes(&data, (char *)&data, seq_tx++);
       sendMessageToCallbacks(&data);
-
-      static uint32_t mod;
-      if (mod++ == 4) {
-        packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1CenterSensorValue,
-                             received.center);
-        packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1LeftSensorValue,
-                             received.left);
-        packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1RightSensorValue,
-                             received.right);
-        mod = 0;
-      }
+      
+      packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1CenterSensorValue,
+                           received.center);
+      packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1LeftSensorValue,
+                           received.left);
+      packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1RightSensorValue,
+                           received.right);
     }
     break;
   default: { break; }
