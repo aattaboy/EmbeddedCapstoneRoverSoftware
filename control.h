@@ -36,6 +36,8 @@ typedef struct {
   RoverPose currentPosition;
 
   int32_t target_yaw;
+  
+  bool backtracking;
 
 } CONTROL_DATA;
 

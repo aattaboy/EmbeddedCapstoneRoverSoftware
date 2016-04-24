@@ -149,7 +149,7 @@ void CONTROL_Tasks(void) {
       controlData.state = CONTROL_STATE_RECEIVE_ROVER_POSITION;
     }
   } break;
- 
+
   case CONTROL_STATE_RECEIVE_ROVER_POSITION: {
     if (xQueueReceive(controlData.controlQueueRoverPosition,
                       &controlData.currentPosition, portMAX_DELAY)) {
@@ -175,13 +175,18 @@ void CONTROL_Tasks(void) {
   } break;
 
   case CONTROL_STATE_MOVE: {
-    if (forward_sensor_val > 25) {
+    if (forward_sensor_val > 25 && right_sensor_val > 25) {
       sendMotorCommand(MOTOR_FORWARD, 50);
-    } else if (controlData.startPoint.magic == 0xdeadbeefu) {
+    } else if (!controlData.backtracking &&
+               controlData.startPoint.magic == 0xdeadbeefu) {
       memcpy(&controlData.setPoint, &controlData.startPoint,
              sizeof(controlData.setPoint));
       controlData.state = figure_necessary_states(&controlData.setPoint,
                                                   &controlData.currentPosition);
+      struct UART_TRANSMITTER_VARIANT var;
+      var.type = BLOCKED;
+      sendToUartQueue(&var);
+      controlData.backtracking = true;
       break;
     }
 
@@ -201,6 +206,8 @@ void CONTROL_Tasks(void) {
     struct UART_TRANSMITTER_VARIANT var;
     var.type = MOVE_COMPLETE;
     sendToUartQueue(&var);
+
+    controlData.backtracking = false;
 
     controlData.state = CONTROL_STATE_RECEIVE;
   } break;

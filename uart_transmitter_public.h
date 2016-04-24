@@ -14,7 +14,8 @@ typedef enum {
   TEST_CHAR,
   RSSI_PAIR,
   MOVE_COMPLETE,
-  PROFILE_INFO
+  PROFILE_INFO,
+  BLOCKED
 } UART_TRANSMITTER_VARIANT_TYPE;
 
 struct __attribute__((packed)) ProfileInfo {

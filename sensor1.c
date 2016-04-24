@@ -13,6 +13,7 @@
 SENSOR1_DATA sensor1Data;
 
 volatile uint32_t forward_sensor_val = 0xffffffff;
+volatile uint32_t right_sensor_val = 0xffffffff;
 
 // Public functions
 int registerSensor1Callback(sensor1_callback_t callback) {
@@ -95,6 +96,7 @@ void SENSOR1_Tasks(void) {
       IRSensorData_set_left(&data, received.left);
       IRSensorData_set_right(&data, received.right);
       forward_sensor_val = received.center;
+      right_sensor_val = received.right;
       IRSensorData_to_bytes(&data, (char *)&data, seq_tx++);
       sendMessageToCallbacks(&data);
       

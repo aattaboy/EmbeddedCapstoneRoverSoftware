@@ -50,6 +50,7 @@ void SENSOR1_Initialize(void);
 void SENSOR1_Tasks(void);
 
 volatile extern uint32_t forward_sensor_val;
+volatile extern uint32_t right_sensor_val;
 
 #endif
 
