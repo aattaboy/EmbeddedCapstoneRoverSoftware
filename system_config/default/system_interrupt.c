@@ -186,9 +186,9 @@ void IntHandlerDrvUsartInstance1(void) {
   static uint32_t numBufferOverruns;
   if (U4STA & 1 << 1) {
     numBufferOverruns++;
-    packAndSendDebugInfoFromISR(RSSI_COLLECTOR_IDENTIFIER,
-                                RSSICollectorBufferOverrun, numBufferOverruns,
-                                &higherPriorityTaskWoken);
+    //packAndSendDebugInfoFromISR(RSSI_COLLECTOR_IDENTIFIER,
+    //                            RSSICollectorBufferOverrun, numBufferOverruns,
+    //                            &higherPriorityTaskWoken);
     PLIB_USART_TransmitterByteSend(USART_ID_4, 0x15);
     state = FRAME_START_1;
   }
