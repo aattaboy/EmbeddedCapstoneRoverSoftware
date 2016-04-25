@@ -127,8 +127,11 @@ void PID_Tasks(void) {
         }
         derivative = (error - pre_error) / DT;
         pid = KP * error + KI * integral + KD * derivative;
-        packAndSendDebugInfo(PID_IDENTIFIER, PIDValueRecalculated, pid);
-
+        static uint32_t mod;
+        if (mod++ == 20) {
+          packAndSendDebugInfo(PID_IDENTIFIER, PIDValueRecalculated, pid);
+          mod = 0;
+        }
         // Update error
         pre_error = error;
 

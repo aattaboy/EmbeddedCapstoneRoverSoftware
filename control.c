@@ -107,9 +107,9 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
 
     double offset =
         calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
-    double sigmoid = offset / (1 + exp(-euclidean_distance / 10.0));
+    //double sigmoid = offset / (1 + exp(-euclidean_distance / 10.0));
 
-    if (abs(sigmoid) > 1) {
+    if (abs(offset) > 1) {
       return CONTROL_STATE_ROTATE;
     } else {
       return CONTROL_STATE_MOVE;
@@ -166,9 +166,9 @@ void CONTROL_Tasks(void) {
     int32_t yaw_displacement = calculate_mod_yaw_diff(
         controlData.target_yaw, RoverPose_yaw(&controlData.currentPosition));
     if (yaw_displacement > 0) {
-      sendMotorCommand(MOTOR_RIGHT, abs(yaw_displacement));
+      sendMotorCommand(MOTOR_RIGHT, 30+abs(yaw_displacement));
     } else {
-      sendMotorCommand(MOTOR_LEFT, abs(yaw_displacement));
+      sendMotorCommand(MOTOR_LEFT, 30+abs(yaw_displacement));
     }
 
     controlData.state = CONTROL_STATE_RECEIVE_ROVER_POSITION;

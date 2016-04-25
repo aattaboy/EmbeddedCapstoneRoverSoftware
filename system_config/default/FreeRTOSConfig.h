@@ -144,7 +144,7 @@
 
 /* The maximum interrupt priority from which FreeRTOS.org API functions can be called.  
 Only API functions that end in ...FromISR() can be used within interrupts. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    3
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    4
 
 /* Optional functions - most linkers will remove unused functions anyway. */
 #define INCLUDE_vTaskPrioritySet                1
@@ -163,5 +163,10 @@ Only API functions that end in ...FromISR() can be used within interrupts. */
 #define INCLUDE_eTaskGetState                   0
 #define INCLUDE_xEventGroupSetBitFromISR        0
 #define INCLUDE_xTimerPendFunctionCall          0
+
+#ifndef ASSEMBLY_WRAPPER
+void errorCheck(int taskID, int lineNum);
+#define configASSERT(x) if ((x) == 0) errorCheck(0, __LINE__)
+#endif
 
 #endif /* FREERTOS_CONFIG_H */

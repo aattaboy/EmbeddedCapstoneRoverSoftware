@@ -71,7 +71,7 @@ static void profile_cb(TimerHandle_t timer __attribute__((unused))) {
     var.data.profile_info.runtime = statuses[i].ulRunTimeCounter;
     strncpy(var.data.profile_info.name, statuses[i].pcTaskName,
             sizeof(var.data.profile_info.name) - 1);
-    sendToUartQueue(&var);
+    //sendToUartQueue(&var);
   }
 }
 

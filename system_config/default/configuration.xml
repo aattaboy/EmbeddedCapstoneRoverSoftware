@@ -309,7 +309,7 @@
       <Template>
         <Name>FreeRTOSConfig.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>8F62C1B6519152BC03452258E7180213</Checksum>
+        <Checksum>CD3836F264BDAAD1FF96965379C96D69</Checksum>
         <ProjectFileChecksum>458A8C9AA52F954DCC5681496BE56B70</ProjectFileChecksum>
       </Template>
       <Template>
