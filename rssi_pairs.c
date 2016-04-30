@@ -15,7 +15,7 @@ BaseType_t sendToRssiPairsQueue(struct RSSI_PAIRS_VARIANT *info) {
 }
 
 BaseType_t sendToRssiPairsQueueFromISR(struct RSSI_PAIRS_VARIANT *info,
-                                       BaseType_t *higherPriorityTaskWoken) {
+                                        BaseType_t *higherPriorityTaskWoken) {
   BaseType_t retval = xQueueSendToBackFromISR(rssi_pairsData.rssi_pairsQueue,
                                               info, higherPriorityTaskWoken);
   return retval;

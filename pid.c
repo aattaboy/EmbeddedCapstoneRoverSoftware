@@ -21,7 +21,7 @@ PID_DATA pidData;
 #define KD (0.0)
 #else 
 #define KP (5.0)
-#define KI (0.0)
+#define KI (2.5)
 #define KD (0.0)
 #endif
 

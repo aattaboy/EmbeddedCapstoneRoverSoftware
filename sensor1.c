@@ -53,7 +53,7 @@ static void sensor1TimerCallback(TimerHandle_t timer __attribute__((unused))) {
 }
 
 static void initialize_sensor1_timer(void) {
-  sensor1Data.timerHandle = xTimerCreate("ADC Timer", 250 / portTICK_PERIOD_MS,
+  sensor1Data.timerHandle = xTimerCreate("ADC Timer", 50 / portTICK_PERIOD_MS,
                                          pdTRUE, NULL, sensor1TimerCallback);
 
   if (sensor1Data.timerHandle == NULL) {
@@ -89,23 +89,45 @@ void SENSOR1_Tasks(void) {
     if (xQueueReceive(sensor1Data.sensor1Queue, &received, portMAX_DELAY)) {
 
       static uint32_t seq_tx = 0;
+      
+      
+#define LPF_SIZE (5)
+      
+      static uint32_t left_lpf[LPF_SIZE], right_lpf[LPF_SIZE], center_lpf[LPF_SIZE];
+      static size_t lpf_idx;
+      
+      left_lpf[lpf_idx] = received.left;
+      right_lpf[lpf_idx] = received.right;
+      center_lpf[lpf_idx] = received.center;
+      lpf_idx++;
+      
+      if (lpf_idx==LPF_SIZE) lpf_idx = 0;
+      
+      double left = 0, right = 0, center = 0;
+      size_t i;
+      for (i=0; i<LPF_SIZE; i++) {
+        left += left_lpf[i]/((double)LPF_SIZE);
+        right += right_lpf[i]/((double)LPF_SIZE);
+        center += center_lpf[i]/((double)LPF_SIZE);
+      }
 
       IRSensorData data;
       IRSensorData_init(&data);
-      IRSensorData_set_front(&data, received.center);
-      IRSensorData_set_left(&data, received.left);
-      IRSensorData_set_right(&data, received.right);
-      forward_sensor_val = received.center;
-      right_sensor_val = received.right;
+      
+      IRSensorData_set_front(&data, center);
+      IRSensorData_set_left(&data, left);
+      IRSensorData_set_right(&data, right);
+      forward_sensor_val = center;
+      right_sensor_val = right;
       IRSensorData_to_bytes(&data, (char *)&data, seq_tx++);
       sendMessageToCallbacks(&data);
       
       packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1CenterSensorValue,
-                           received.center);
+                           center);
       packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1LeftSensorValue,
-                           received.left);
+                           left);
       packAndSendDebugInfo(SENSOR1_IDENTIFIER, Sensor1RightSensorValue,
-                           received.right);
+                           right);
     }
     break;
   default: { break; }

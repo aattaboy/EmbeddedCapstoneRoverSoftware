@@ -96,7 +96,7 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
       RoverPose_yPosition(setpoint) - RoverPose_yPosition(current);
 
   double euclidean_distance = sqrt(pow(delta_x, 2) + pow(delta_y, 2));
-  if (euclidean_distance < 4) {
+  if (euclidean_distance < 2) {
     return CONTROL_STATE_STOP;
   } else {
     int32_t target_angle = atan2(delta_x, delta_y) * 180.0 / 3.14159;
@@ -107,9 +107,9 @@ static CONTROL_STATES figure_necessary_states(RoverPose *setpoint,
 
     double offset =
         calculate_mod_yaw_diff(target_angle, RoverPose_yaw(current));
-    //double sigmoid = offset / (1 + exp(-euclidean_distance / 10.0));
+    //double sigmoid = offset / (1 + exp(-euclidean_distance));
 
-    if (abs(offset) > 1) {
+    if (abs(offset) > 2.0) {
       return CONTROL_STATE_ROTATE;
     } else {
       return CONTROL_STATE_MOVE;
